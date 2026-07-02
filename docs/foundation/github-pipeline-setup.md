@@ -93,7 +93,7 @@ Mesmas variables com valores de prod.
 
 ## Pré-requisitos
 
-- [ ] Infra task 07 (frontend hosting) deployada
+- [ ] Infra task 06 (frontend hosting) deployada
 - [ ] Infra task 04 (CI/CD base) ou outputs disponíveis
 - [ ] Roles IAM frontend criadas
 

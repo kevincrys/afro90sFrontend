@@ -34,7 +34,7 @@ Implementar a **SPA React** do Afro90s: catálogo, checkout, integração WhatsA
 1. **Mobile-first** com estética anos 90 (ver `ui-ux.md`).
 2. **Integração explícita** — toda env `VITE_*` documentada em `integration.md`.
 3. **Deploy via pipeline** — nunca upload manual para S3.
-4. **Infra first** — hosting deve existir (afro90sInfra task 07) antes do primeiro deploy.
+4. **Infra first** — hosting deve existir (afro90sInfra task 06) antes do primeiro deploy.
 
 ## Roadmap
 

@@ -47,7 +47,7 @@ Guia: [github-pipeline-setup.md](../../foundation/github-pipeline-setup.md)
 
 | Dependência | Repo |
 |-------------|------|
-| S3 bucket + CloudFront | afro90sInfra task 07 |
+| S3 bucket + CloudFront | afro90sInfra task 06 |
 | Outputs API/CDN | afro90sInfra task 11 |
 | OIDC roles frontend | afro90sInfra task 00 (estender) |
 
