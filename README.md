@@ -1,65 +1,94 @@
-# afro90sInfra
+# afro90sFrontend
 
-Repositório de infraestrutura e **documentação central** do projeto **Afro90s** — e-commerce com temática anos 90.
+Repositório do **frontend** do projeto **Afro90s** — SPA React 18 + Vite + TypeScript, hospedada em S3 + CloudFront.
+
+## Ecossistema
+
+| Repositório | Função |
+|-------------|--------|
+| [afro90sInfra](https://github.com/kevincrys/afro90sInfra) | CDK, S3/CloudFront, specs centrais, outputs |
+| [afro90sBackend](https://github.com/kevincrys/afro90sBackend) | API REST consumida por esta SPA |
+| **afro90sFrontend** (este) | Interface web, build estático, deploy |
 
 ## Documentação
 
-### Produto e fundamentação
+### Neste repositório
 
 | Recurso | Descrição |
 |---------|-----------|
-| [Visão do produto](docs/foundation/project-overview.md) | O que é o Afro90s, domínio, fluxos v1 |
-| [Visão do repositório](docs/foundation/vision.md) | Escopo deste repo (infra + specs) |
-| [Arquitetura](docs/foundation/architecture.md) | Sistema completo, ambientes, deploy |
-| [Glossário](docs/foundation/glossary.md) | Termos do domínio |
-| [ADRs](docs/foundation/adr/) | Decisões arquiteturais |
-
-### Esferas de desenvolvimento
-
-| Esfera | Entry point | Destaque |
-|--------|-------------|----------|
-| **CDK / Infra** | [specs/infra/overview.md](docs/specs/infra/overview.md) | AWS, stacks, recursos, outputs |
-| **Backend** | [specs/backend/overview.md](docs/specs/backend/overview.md) | Lambda, DynamoDB, modelos |
-| **Frontend** | [specs/frontend/overview.md](docs/specs/frontend/overview.md) | React SPA, UI, integração |
-| **API (contrato)** | [specs/backend/api-routes.md](docs/specs/backend/api-routes.md) | **Todas as rotas**, headers, payloads |
-
-### Contribuição e agentes
-
-| Recurso | Descrição |
-|---------|-----------|
-| [Como contribuir](CONTRIBUTING.md) | Fluxo de trabalho e convenções |
+| [Visão do repositório](docs/foundation/vision.md) | Escopo e responsabilidades |
+| [Overview frontend](docs/specs/frontend/overview.md) | Stack, estrutura, convenções |
+| [UI/UX](docs/specs/frontend/ui-ux.md) | Tema visual anos 90, componentes |
+| [Integração API](docs/specs/frontend/integration.md) | Variáveis `VITE_*`, client HTTP |
+| [Tasks de implementação](docs/specs/frontend/tasks/) | Checklist faseado |
+| [**Pipeline CI/CD**](docs/specs/pipelines/overview.md) | GitHub Actions deste repo |
+| [**Setup GitHub**](docs/foundation/github-pipeline-setup.md) | Environments, OIDC, deploy S3 |
 | [Guia para agentes](AGENTS.md) | Instruções para assistentes de IA |
+| [Como contribuir](CONTRIBUTING.md) | Fluxo de PR e commits |
 
-## Estrutura do repositório
+### Contrato API
+
+Rotas e payloads: [afro90sBackend — api-routes.md](https://github.com/kevincrys/afro90sBackend/blob/main/docs/specs/backend/api-routes.md) ou cópia local em `docs/specs/backend/api-routes.md`.
+
+### Documentação central
+
+ADRs e arquitetura global: [afro90sInfra](https://github.com/kevincrys/afro90sInfra/tree/main/docs/foundation).
+
+## Stack
+
+| Componente | Tecnologia |
+|------------|------------|
+| Framework | React 18 |
+| Build | Vite |
+| Linguagem | TypeScript |
+| Roteamento | React Router v6 |
+| Data fetching | TanStack Query |
+| Auth admin | Amplify Auth / Cognito |
+| Deploy | S3 sync + invalidação CloudFront |
+| CI/CD | GitHub Actions (OIDC) |
+
+## Estrutura (alvo)
 
 ```
-afro90sInfra/
-├── docs/
-│   ├── foundation/          # visão, arquitetura, ADRs
-│   └── specs/
-│       ├── infra/           # CDK, AWS
-│       ├── backend/         # API, modelos
-│       └── frontend/        # React SPA
-├── infra/                   # CDK (a implementar)
-└── .cursor/rules/
+afro90sFrontend/
+├── src/
+│   ├── api/
+│   ├── components/
+│   ├── pages/
+│   └── hooks/
+├── .github/workflows/
+│   ├── ci.yml
+│   ├── deploy-dev.yml
+│   └── deploy-prod.yml
+└── docs/specs/frontend/
 ```
 
-## Stack (definida)
+## Pipeline
 
-| Camada | Tecnologia |
-|--------|------------|
-| Cloud | AWS |
-| IaC | AWS CDK (TypeScript) |
-| Frontend | React + Vite → S3 + CloudFront |
-| API | API Gateway + Lambda Node.js 20 |
-| Dados | DynamoDB |
-| Auth admin | Cognito |
-| E-mail | SES |
+| Evento | Ação |
+|--------|------|
+| PR / push | CI: build → test → lint |
+| Push `dev` | Deploy para S3/CloudFront **dev** |
+| Push `main` | Deploy para **production** (environment approval) |
+
+Detalhes: [docs/specs/pipelines/overview.md](docs/specs/pipelines/overview.md)
 
 ## Status
 
-- [x] Documentação de produto, arquitetura e specs (3 esferas)
-- [x] ADRs de stack (002–006)
-- [ ] Implementação CDK em `infra/`
-- [ ] Pipeline CI/CD
-- [ ] Repos de aplicação (`afro90s-api`, `afro90s-web`)
+- [x] Specs e tasks de frontend
+- [x] Documentação de pipeline e setup GitHub
+- [ ] Implementação do código (`src/`)
+- [ ] Workflows GitHub Actions
+- [ ] Primeiro deploy em dev
+
+## Desenvolvimento local
+
+```bash
+npm ci
+cp .env.example .env   # preencher VITE_*
+npm run dev
+npm run build
+npm test
+```
+
+Variáveis: ver [integration.md](docs/specs/frontend/integration.md).

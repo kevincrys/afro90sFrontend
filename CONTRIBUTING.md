@@ -1,42 +1,42 @@
-# Como Contribuir
+# Como Contribuir — afro90sFrontend
 
 ## Fluxo de trabalho
 
-1. Crie uma branch a partir de `main`: `feat/descricao-curta` ou `fix/descricao-curta`.
-2. Se a mudança for estrutural, abra ou atualize um ADR em `docs/foundation/adr/`.
-3. Se introduzir nova capacidade de infra, documente em `docs/specs/`.
-4. Abra um Pull Request com descrição clara do **por quê** e do **o quê**.
-5. Aguarde review antes de merge em `main`.
+1. Branch a partir de `main` ou `dev`: `feat/nome-curto`.
+2. Siga a task em [docs/specs/frontend/tasks/](docs/specs/frontend/tasks/).
+3. Atualize [integration.md](docs/specs/frontend/integration.md) se adicionar env `VITE_*`.
+4. Local: `npm run build`, `npm test`, `npm run lint`.
+5. PR com CI verde.
 
 ## Commits
 
-Use mensagens concisas no imperativo, focadas no propósito:
-
 ```
-add módulo de rede para ambiente dev
-fix policy IAM com permissão excessiva
-docs: atualizar spec de ambientes
+feat: add catalog page with product grid
+fix: cart total calculation
+style: apply retro button theme
+docs: update VITE vars in integration.md
 ```
-
-Prefixos opcionais: `feat`, `fix`, `docs`, `refactor`, `chore`.
 
 ## Documentação
 
-| Mudança | Onde documentar |
-|---------|-----------------|
-| Decisão arquitetural | `docs/foundation/adr/NNN-titulo.md` |
-| Novo requisito de infra | `docs/specs/infra/` ou subpasta correspondente |
-| Termo novo do domínio | `docs/foundation/glossary.md` |
-| Mudança de escopo | `docs/foundation/vision.md` |
+| Mudança | Onde |
+|---------|------|
+| Nova env de build | `docs/specs/frontend/integration.md` |
+| Componente/página | task correspondente em `docs/specs/frontend/tasks/` |
+| Pipeline | `docs/specs/pipelines/overview.md` |
 
-## ADRs
+## Revisão de PR
 
-Numere sequencialmente: `001-`, `002-`, etc. Use o template em `docs/foundation/adr/001-repo-structure.md` como referência de formato.
+- [ ] CI verde
+- [ ] UI alinhada com `ui-ux.md` (quando aplicável)
+- [ ] Nenhum secret commitado
+- [ ] Variáveis `VITE_*` documentadas
 
-## Revisão
+## Deploy
 
-PRs devem incluir:
+| Branch | Resultado |
+|--------|-----------|
+| `dev` | Deploy automático para CloudFront dev |
+| `main` | Deploy production (após approval) |
 
-- Link para spec ou ADR relacionado (quando aplicável)
-- Plano de teste ou validação (ex.: `terraform plan`, checklist manual)
-- Confirmação de que nenhum secret foi incluído
+Infra (S3/CloudFront) deve estar provisionada antes do primeiro deploy.

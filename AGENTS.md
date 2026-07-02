@@ -1,59 +1,46 @@
-# Guia para Agentes de IA
+# Guia para Agentes de IA — afro90sFrontend
 
-Este arquivo orienta assistentes de IA (Cursor, Copilot, etc.) ao trabalhar neste repositório.
+Este repositório contém a **SPA React** do Afro90s.
 
 ## Antes de implementar
 
-1. Leia [docs/foundation/project-overview.md](docs/foundation/project-overview.md) para entender o produto Afro90s.
-2. Leia [docs/foundation/vision.md](docs/foundation/vision.md) para o escopo deste repo.
-3. Consulte [docs/foundation/architecture.md](docs/foundation/architecture.md) para alinhar com a arquitetura.
-4. Verifique a spec da **esfera** relevante (tabela abaixo).
-5. Para qualquer endpoint ou contrato HTTP, leia **[docs/specs/backend/api-routes.md](docs/specs/backend/api-routes.md)**.
-6. Siga as regras em [.cursor/rules/](.cursor/rules/).
+1. Leia [docs/foundation/vision.md](docs/foundation/vision.md).
+2. Consulte [docs/specs/frontend/overview.md](docs/specs/frontend/overview.md), [ui-ux.md](docs/specs/frontend/ui-ux.md) e [integration.md](docs/specs/frontend/integration.md).
+3. Para contratos HTTP, veja [docs/specs/backend/api-routes.md](docs/specs/backend/api-routes.md).
+4. Verifique a task em [docs/specs/frontend/tasks/](docs/specs/frontend/tasks/).
+5. Siga [.cursor/rules/](.cursor/rules/).
 
 ## Onde encontrar o quê
 
 | Tipo | Local |
 |------|-------|
-| Visão do produto | `docs/foundation/project-overview.md` |
-| Fundamentação (por quê) | `docs/foundation/` |
-| Especificações (o quê) | `docs/specs/` |
-| **API — rotas, headers, payloads** | `docs/specs/backend/api-routes.md` |
-| Decisões arquiteturais | `docs/foundation/adr/` |
-| Regras de código/convenções | `.cursor/rules/` |
-| Glossário do domínio | `docs/foundation/glossary.md` |
+| Escopo deste repo | `docs/foundation/vision.md` |
+| UI/UX | `docs/specs/frontend/ui-ux.md` |
+| Integração API / VITE_* | `docs/specs/frontend/integration.md` |
+| Tasks | `docs/specs/frontend/tasks/` |
+| Pipeline CI/CD | `docs/specs/pipelines/overview.md` |
+| Setup GitHub | `docs/foundation/github-pipeline-setup.md` |
+| Regras Cursor | `.cursor/rules/` |
 
-## Specs por esfera
-
-| Esfera | Entry point | Documentos principais |
-|--------|-------------|----------------------|
-| **CDK / Infra** | `docs/specs/infra/overview.md` | `cdk.md`, `resources.md`, `outputs.md` |
-| **Backend** | `docs/specs/backend/overview.md` | `data-models.md`, **`api-routes.md`** |
-| **Frontend** | `docs/specs/frontend/overview.md` | `ui-ux.md`, `integration.md` |
-
-## Princípios
-
-- **Spec first**: não implemente infra sem spec ou ADR correspondente quando a decisão for estrutural.
-- **Mínimo escopo**: altere apenas o necessário para a tarefa.
-- **Convenções existentes**: siga padrões já estabelecidos no repo antes de introduzir novos.
-- **Documentar decisões**: mudanças arquiteturais exigem novo ADR em `docs/foundation/adr/`.
-
-## Stack
+## Stack deste repo
 
 | Componente | Decisão |
 |------------|---------|
-| Cloud | AWS |
-| IaC | AWS CDK (TypeScript) |
-| Frontend | React 18 + Vite → S3 + CloudFront |
-| Backend | Lambda Node.js 20 + API Gateway |
-| Banco | DynamoDB |
-| Auth admin | Cognito (sem login de cliente na v1) |
+| UI | React 18 + Vite + TypeScript |
+| Roteamento | React Router v6 |
+| Data | TanStack Query |
+| Auth admin | Cognito (Amplify ou SDK) |
+| Deploy | GitHub Actions → S3 + CloudFront |
 
-Consulte `docs/specs/infra/overview.md` e ADRs 002–006 antes de assumir outras tecnologias.
+## Princípios
+
+- Seguir `ui-ux.md` para tema anos 90.
+- Toda nova env `VITE_*` documentar em `integration.md`.
+- Deploy só via pipeline — não instruir upload manual S3.
 
 ## O que não fazer
 
-- Não commitar secrets, `.env` ou credenciais.
-- Não alterar documentação de fundamentação sem solicitação explícita.
-- Não criar recursos de infra fora do escopo da spec/ADR em vigor.
-- Não implementar endpoints que divergem de `api-routes.md` sem atualizar a spec primeiro.
+- Não commitar secrets ou `.env`.
+- Não implementar lógica de API aqui.
+- Não provisionar AWS (afro90sInfra).
+- Não usar access keys nos workflows — OIDC only.

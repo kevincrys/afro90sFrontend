@@ -1,62 +1,54 @@
-# Visão e Escopo — afro90sInfra
+# Visão e Escopo — afro90sFrontend
 
 ## Objetivo
 
-Provisionar, configurar e operar a infraestrutura necessária para o projeto **Afro90s**, de forma reprodutível, segura e documentada.
-
-Este repositório é a fonte da verdade para:
-
-- Definição de ambientes (`dev`, `production`)
-- Recursos de cloud e rede (AWS via CDK)
-- Políticas de acesso (IAM, secrets)
-- Pipelines de deploy de infraestrutura
-- **Specs centralizadas** de backend e frontend (contratos para repos de aplicação)
+Implementar a **SPA React** do Afro90s: catálogo, checkout, integração WhatsApp e painel admin, com deploy estático em S3 + CloudFront.
 
 ## Escopo
 
-- Infraestrutura como código (AWS CDK em TypeScript)
-- Configuração de ambientes e recursos compartilhados
-- Documentação técnica (specs, ADRs, arquitetura)
-- Automação de provisionamento e deploy
-- Especificações de API, modelos de dados e requisitos de frontend
+- Código-fonte React + Vite + TypeScript
+- Páginas públicas (catálogo, produto, carrinho, checkout)
+- Painel admin (login Cognito, CRUD produtos/pedidos)
+- Client HTTP tipado para a API
+- Testes (unit + e2e na fase 4)
+- Pipeline CI + deploy (GitHub Actions → S3/CloudFront)
+- Specs locais de frontend
 
 ## Fora de escopo
 
-- Código-fonte das aplicações (implementação Lambda e React vive em `afro90s-api` e `afro90s-web`)
-- Lógica de negócio executável
-- Conteúdo editorial ou assets de mídia finais
-- Gerenciamento de dependências de aplicação (npm dos repos de app)
+- API e lógica server-side → **afro90sBackend**
+- Provisionamento S3/CloudFront/Cognito → **afro90sInfra**
+- ADRs e decisões globais → **afro90sInfra**
 
-Repositórios de aplicação consomem **outputs** e seguem **specs** definidas aqui.
+## Contratos
+
+| Documento | Uso |
+|-----------|-----|
+| [overview.md](../specs/frontend/overview.md) | Stack e estrutura |
+| [ui-ux.md](../specs/frontend/ui-ux.md) | Tema visual, acessibilidade |
+| [integration.md](../specs/frontend/integration.md) | Variáveis `VITE_*`, endpoints |
+| [api-routes.md](../specs/backend/api-routes.md) | Contrato HTTP (referência) |
 
 ## Princípios
 
-1. **Reprodutibilidade** — ambientes criados a partir de código versionado, não configuração manual ad hoc.
-2. **Segurança por padrão** — least privilege, secrets fora do repositório, recursos com tags e auditoria.
-3. **Documentação viva** — specs e ADRs acompanham mudanças estruturais.
-4. **Simplicidade** — preferir soluções diretas; complexidade só quando justificada em ADR.
+1. **Mobile-first** com estética anos 90 (ver `ui-ux.md`).
+2. **Integração explícita** — toda env `VITE_*` documentada em `integration.md`.
+3. **Deploy via pipeline** — nunca upload manual para S3.
+4. **Infra first** — hosting deve existir (afro90sInfra task 07) antes do primeiro deploy.
 
-## Stakeholders
+## Roadmap
 
-| Papel | Responsabilidade |
-|-------|------------------|
-| Maintainer de infra | Evolução do repo, review de PRs, ADRs |
-| Desenvolvedores | Consumir outputs e specs; implementar em repos de app |
-| Agentes de IA | Seguir AGENTS.md, specs e rules ao implementar |
+- [ ] Task 00 — setup repo
+- [ ] Task 04 — CI/CD e deploy
+- [ ] Fase 1 — catálogo, produto, carrinho, checkout
+- [ ] Fase 2 — admin login + CRUD
+- [ ] Fase 3 — polish, states, a11y
+- [ ] Fase 4 — e2e, aceite final
 
-## Roadmap inicial
-
-- [x] Definir cloud provider e stack IaC (ADRs 002–004)
-- [x] Specs de backend, frontend e infra
-- [ ] Implementar stacks CDK em `infra/`
-- [ ] Pipeline CI/CD (validate + diff + deploy dev; production manual)
-- [ ] Provisionar ambiente `dev`
-- [ ] Integração com repositórios `afro90s-api` e `afro90s-web`
+Tasks: [docs/specs/frontend/tasks/](../specs/frontend/tasks/)
 
 ## Referências
 
-- [Visão do produto Afro90s](project-overview.md)
-- [Arquitetura](architecture.md)
-- [Glossário](glossary.md)
-- [ADRs](adr/)
-- [Specs](../specs/)
+- [Pipeline CI/CD](../specs/pipelines/overview.md)
+- [Setup GitHub](github-pipeline-setup.md)
+- [Visão do produto](project-overview.md)
