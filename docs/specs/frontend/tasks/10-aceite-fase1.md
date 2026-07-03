@@ -21,7 +21,7 @@ Validar que a loja pública está funcional end-to-end — sem login, sem admin.
 - [x] Adicionar ao carrinho atualiza badge
 - [x] Carrinho persiste após reload
 - [x] Checkout cria pedido (`201`) e abre WhatsApp
-- [ ] Produto esgotado exibe overlay e botão desabilitado
+- [x] Produto esgotado exibe overlay e botão desabilitado
 - [x] Skeletons visíveis durante loading
 - [x] Responsivo em 375px (mobile) e 1280px (desktop)
 - [x] Deploy automático via CI (merge em `dev`)
