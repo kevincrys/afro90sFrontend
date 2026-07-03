@@ -13,7 +13,7 @@
 | Protótipo | Destino |
 |-----------|---------|
 | `ProductModal` — `StorePage.tsx` **L255–564** | `src/components/product/ProductDetailModal.tsx` |
-| Hash `#product/:id` L812–840 | Rota `/produto/:id` + `useParams` |
+| Hash `#product/:id` L812–840 | Rota `/products/:id` + `useParams` |
 | `selectedOptions` / variantes L485–510 | **Remover** — API não suporta |
 | `product.description` | **Remover** — campo não existe na API |
 | `product.rating` / reviews | **Remover** |
@@ -39,7 +39,7 @@
 
 ### Integração em `CatalogPage`
 
-- [ ] Abrir modal ao clicar card ou ao acessar `/produto/:id`
+- [ ] Abrir modal ao clicar card ou ao acessar `/products/:id`
 
 ## Pré-requisitos
 
@@ -49,5 +49,5 @@
 
 - [ ] Modal **visualmente igual** ao protótipo
 - [ ] Dados da API; sem mock
-- [ ] Deep link `/produto/:id` funciona
+- [ ] Deep link `/products/:id` funciona
 - [ ] Atualizar **Status** para `concluída`

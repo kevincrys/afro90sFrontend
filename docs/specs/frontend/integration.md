@@ -7,6 +7,20 @@
 
 Descrever como o frontend consome a API, Cognito e WhatsApp.
 
+## Rotas SPA (React Router)
+
+Implementação: `src/routes/index.tsx`.
+
+| Rota | Componente | Auth | API relacionada |
+|------|------------|------|-----------------|
+| `/` | `CatalogPage` | — | `GET /products` |
+| `/products/:id` | `CatalogPage` (+ modal task 06) | — | `GET /products/{id}` |
+| `/admin/login` | `AdminLoginPage` | — | Cognito |
+| `/admin` | `AdminPage` | Sim (`ProtectedRoute`) | `/admin/*` |
+| `*` | `NotFoundPage` | — | — |
+
+> Deep link de produto: **`/products/:id`** (alinhado à API). Modal na task 06; hoje `useParams().id` já está wired em `CatalogPage`.
+
 ## Variáveis de ambiente
 
 | Variável | Uso |

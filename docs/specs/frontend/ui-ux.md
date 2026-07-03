@@ -31,7 +31,7 @@ Requisitos de interface e experiência do usuário para o Afro90s v1.
 | Carrinho | **Drawer lateral** aberto pelo ícone no header; badge com quantidade |
 | Checkout | Formulário **dentro do drawer** (não rota `/checkout`) |
 
-Clique no card → abre modal de detalhe. Rota `/produto/:id` reutiliza o mesmo modal (deep link).
+Clique no card → abre modal de detalhe. Rota `/products/:id` reutiliza o mesmo modal (deep link).
 
 ## Admin — painel único com tabs
 

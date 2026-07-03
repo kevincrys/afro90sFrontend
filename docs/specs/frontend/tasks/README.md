@@ -34,7 +34,7 @@ Guia completo de port: **[prototype-porting.md](../prototype-porting.md)** — m
 |---|---------|---------------|
 | 00 | [00-setup-repo.md](00-setup-repo.md) | Copiar base do protótipo + deps Afro90s |
 | 01 | [01-tema-visual.md](01-tema-visual.md) | `theme.css` + Header/Footer do `StorePage` |
-| 02 | [02-roteamento-layout.md](02-roteamento-layout.md) | Rotas (adaptar `routes.tsx` do protótipo) |
+| 02 | [02-roteamento-layout.md](02-roteamento-layout.md) | Rotas — `/`, `/products/:id`, `/admin/*` (**concluída**) |
 | 03 | [03-api-client.md](03-api-client.md) | Axios + React Query + tipos |
 | 04 | [04-cicd-deploy.md](04-cicd-deploy.md) | Actions OIDC `afro90s-github-frontend-dev/prod` → S3 + CF |
 

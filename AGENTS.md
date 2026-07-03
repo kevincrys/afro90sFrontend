@@ -17,7 +17,8 @@ Este repositório contém a **SPA React** do Afro90s.
 | Escopo deste repo | `docs/foundation/vision.md` |
 | UI/UX | `docs/specs/frontend/ui-ux.md` |
 | Portar protótipo Canvas | `docs/specs/frontend/prototype-porting.md` |
-| Integração API / VITE_* | `docs/specs/frontend/integration.md` |
+| Integração API / VITE_* / rotas SPA | `docs/specs/frontend/integration.md` |
+| Rotas implementadas | `src/routes/index.tsx` (`/`, `/products/:id`, `/admin/*`) |
 | Tasks | `docs/specs/frontend/tasks/` |
 | Pipeline CI/CD | `docs/specs/pipelines/overview.md` |
 | Setup GitHub | `docs/foundation/github-pipeline-setup.md` |

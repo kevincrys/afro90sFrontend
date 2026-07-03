@@ -1,7 +1,7 @@
 # Frontend — Overview
 
 **Status:** Aprovado  
-**Última atualização:** 2026-07-02
+**Última atualização:** 2026-07-03
 
 ## Objetivo
 
@@ -45,9 +45,12 @@ afro90sFrontend/
 │   ├── pages/
 │   │   ├── catalog/
 │   │   │   └── CatalogPage.tsx
-│   │   └── admin/
-│   │       ├── AdminLoginPage.tsx
-│   │       └── AdminPage.tsx    # painel único com tabs
+│   │   ├── admin/
+│   │   │   ├── AdminLoginPage.tsx
+│   │   │   └── AdminPage.tsx    # painel único com tabs
+│   │   └── NotFoundPage.tsx
+│   ├── routes/
+│   │   └── index.tsx            # createBrowserRouter
 │   ├── stores/                  # Zustand (carrinho)
 │   ├── hooks/
 │   ├── types/                   # espelham data-models.md
@@ -57,14 +60,15 @@ afro90sFrontend/
 └── vite.config.ts
 ```
 
-## Páginas v1
+## Rotas v1 (`src/routes/index.tsx`)
 
-| Rota | Página / UI | Auth |
-|------|-------------|------|
-| `/` | Catálogo (grid + filtros) | Pública |
-| `/produto/:id` | Deep link — abre `ProductDetailModal` sobre o catálogo | Pública |
-| `/admin/login` | Login Cognito | — |
-| `/admin` | Painel admin com tabs **Pedidos** \| **Produtos** | Admin |
+| Rota | Página / UI | Auth | Status |
+|------|-------------|------|--------|
+| `/` | Catálogo (grid + filtros) | Pública | Implementado (shell task 02/05) |
+| `/products/:id` | Deep link — abre `ProductDetailModal` sobre o catálogo | Pública | Rota + `useParams`; modal task 06 |
+| `/admin/login` | Login Cognito (placeholder local) | — | Implementado (shell) |
+| `/admin` | Painel admin com tabs **Pedidos** \| **Produtos** | Admin | Implementado (shell + `ProtectedRoute`) |
+| `*` | `NotFoundPage` | — | Implementado |
 
 > Checkout e detalhe do produto **não são rotas separadas**: formulário de pedido no **drawer** do carrinho; detalhe no **modal** com galeria.
 

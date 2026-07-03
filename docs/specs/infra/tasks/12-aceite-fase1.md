@@ -40,8 +40,8 @@ echo -n "CloudFront index.html (200)... "
 STATUS=$(curl -s -o /dev/null -w "%{http_code}" "${CF}")
 [ "$STATUS" = "200" ] && echo "OK" || (echo "FALHOU ($STATUS)" && exit 1)
 
-echo -n "CloudFront SPA routing /catalogo (200)... "
-STATUS=$(curl -s -o /dev/null -w "%{http_code}" "${CF}/catalogo")
+echo -n "CloudFront SPA routing /products/123 (200)... "
+STATUS=$(curl -s -o /dev/null -w "%{http_code}" "${CF}/products/123")
 [ "$STATUS" = "200" ] && echo "OK" || (echo "FALHOU ($STATUS)" && exit 1)
 
 echo ""
@@ -57,7 +57,7 @@ echo "=== Fase 1 OK ==="
 - [ ] Todas as stacks da fase 1 com status `CREATE_COMPLETE`
 - [ ] Script `smoke-test-fase1.sh dev` passa sem erros
 - [ ] CloudFront URL abre o frontend no browser
-- [ ] Rotas SPA (`/catalogo`, `/produto/123`) servem `index.html`
+- [ ] Rotas SPA (`/`, `/products/123`) servem `index.html`
 - [ ] `GET /products` retorna JSON com `items: []`
 - [ ] `POST /orders` com body válido retorna `201` (sem e-mail)
 - [ ] Pipeline CI: PR → validate/diff; merge dev → deploy automático

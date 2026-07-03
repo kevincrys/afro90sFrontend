@@ -15,7 +15,7 @@ Portar a loja pública de `StorePage.tsx` para `CatalogPage.tsx`, **substituindo
 | L801–810 — estado `activeCategory`, `filtered` | `CatalogPage` + filtros API `category` |
 | L931–967 — hero | **Remover** (fora do escopo v1) |
 | L980–1070 — grid de cards | `ProductCard.tsx` + grid em `CatalogPage` |
-| L812–840 — hash `#product/:id` | Trocar por rota `/produto/:id` (task 06) |
+| L812–840 — hash `#product/:id` | Trocar por rota `/products/:id` (task 06) |
 | `PRODUCTS` array L42+ | **Deletar** — usar `useProducts()` |
 
 ### Adaptar no grid (copiar JSX, mudar dados)
@@ -45,12 +45,12 @@ Portar a loja pública de `StorePage.tsx` para `CatalogPage.tsx`, **substituindo
 - [ ] Intersection Observer no fim do grid
 - [ ] Skeleton durante loading (estilo cards do protótipo)
 - [ ] Empty/error states
-- [ ] `/produto/:id` → abrir modal (task 06)
+- [ ] `/products/:id` → abrir modal (task 06)
 
 ### `src/components/product/ProductCard.tsx`
 
 - [ ] Extrair card do loop do grid (L~1000–1070)
-- [ ] Clique → navegar `/produto/{id}` ou abrir modal
+- [ ] Clique → navegar `/products/{id}` ou abrir modal
 
 ### `src/lib/format.ts`
 

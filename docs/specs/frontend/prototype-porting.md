@@ -82,7 +82,7 @@ Ecommerce Store Prototype (3)/
 | `phone` | `tel` |
 | Preço `$` | `formatPrice()` → `R$` |
 | Categorias EN (`Sunglasses`) | enum `oculos` \| `acessorios` \| `maquiagem` |
-| `#product/:id` hash | rota `/produto/:id` (React Router) |
+| `#product/:id` hash | rota `/products/:id` (React Router) |
 | `/admin` único | `/admin` + `/admin/login` + `ProtectedRoute` |
 | `amazon-cognito-identity-js` | **Amplify Auth SRP** (task 11) |
 | `setDone(true)` no checkout | `POST /orders` → 201 |

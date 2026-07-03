@@ -73,11 +73,26 @@ afro90sFrontend/
 
 Detalhes: [docs/specs/pipelines/overview.md](docs/specs/pipelines/overview.md)
 
+## Rotas SPA
+
+Definidas em `src/routes/index.tsx`:
+
+| Rota | Página |
+|------|--------|
+| `/` | Catálogo |
+| `/products/:id` | Deep link produto (modal na task 06) |
+| `/admin/login` | Login admin |
+| `/admin` | Painel admin (protegido) |
+| `*` | 404 |
+
+Detalhes: [overview](docs/specs/frontend/overview.md) · [integration](docs/specs/frontend/integration.md)
+
 ## Status
 
 - [x] Specs e tasks de frontend
 - [x] Documentação de pipeline e setup GitHub
-- [ ] Implementação do código (`src/`)
+- [x] Roteamento e layout (task 02) — `PublicLayout`, `ProtectedRoute`, `ScrollToTop`, 404
+- [ ] Catálogo conectado à API (task 05)
 - [ ] Workflows GitHub Actions
 - [ ] Primeiro deploy em dev
 
