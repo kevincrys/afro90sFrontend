@@ -1,7 +1,7 @@
 # Task 03 — Cliente API e React Query
 
 **Fase:** 0 — Fundação  
-**Status:** pendente  
+**Status:** concluída  
 **Arquivos alvo:** [`integration.md`](../integration.md), [`prototype-porting.md`](../prototype-porting.md)
 
 ## Objetivo
@@ -43,26 +43,26 @@ const apiClient = axios.create({
 
 ### Módulos por domínio
 
-- [ ] `src/api/products.ts` — `getProducts`, `getProductById`
-- [ ] `src/api/orders.ts` — `createOrder`
-- [ ] `src/api/admin/products.ts` — CRUD (stubs fase 3)
-- [ ] `src/api/admin/orders.ts` — list, get, updateStatus (stubs fase 3)
+- [x] `src/api/products.ts` — `getProducts`, `getProductById`
+- [x] `src/api/orders.ts` — `createOrder`
+- [x] `src/api/admin/products.ts` — CRUD (stubs fase 3)
+- [x] `src/api/admin/orders.ts` — list, get, updateStatus (stubs fase 3)
 
 ### `src/types/` — espelhar backend (não protótipo)
 
-- [ ] `product.ts`, `order.ts`, `errors.ts`
-- [ ] `Category`: `oculos` \| `acessorios` \| `maquiagem` (não `Sunglasses`)
+- [x] `product.ts`, `order.ts`, `errors.ts`
+- [x] `Category`: `oculos` \| `acessorios` \| `maquiagem` (não `Sunglasses`)
 
 ### React Query
 
-- [ ] `QueryClientProvider` em `main.tsx`
-- [ ] Defaults: `staleTime: 30_000`, `retry: 1`
+- [x] `QueryClientProvider` em `main.tsx`
+- [x] Defaults: `staleTime: 30_000`, `retry: 1`
 
 ### Hooks
 
-- [ ] `useProducts({ name, category, cursor })` — infinite query
-- [ ] `useProduct(id)`
-- [ ] `useCreateOrder()` — mutation
+- [x] `useProducts({ name, category, cursor })` — infinite query
+- [x] `useProduct(id)`
+- [x] `useCreateOrder()` — mutation
 
 ## Pré-requisitos
 
@@ -70,6 +70,6 @@ const apiClient = axios.create({
 
 ## Critérios de conclusão
 
-- [ ] `useProducts()` retorna dados da API dev (não array mock)
-- [ ] Erro 404 mapeado para `ApiError`
-- [ ] Atualizar **Status** para `concluída`
+- [x] `useProducts()` retorna dados da API dev (não array mock)
+- [x] Erro 404 mapeado para `ApiError`
+- [x] Atualizar **Status** para `concluída`

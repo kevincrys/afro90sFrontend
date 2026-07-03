@@ -1,9 +1,22 @@
 import { render, screen } from "@testing-library/react";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { describe, expect, it } from "vitest";
 import { RouterProvider, createMemoryRouter } from "react-router-dom";
 import { PublicLayout } from "@/components/layout/PublicLayout";
 import CatalogPage from "@/pages/catalog/CatalogPage";
 import NotFoundPage from "@/pages/NotFoundPage";
+
+function renderWithProviders(router: ReturnType<typeof createMemoryRouter>) {
+  const queryClient = new QueryClient({
+    defaultOptions: { queries: { retry: false } },
+  });
+
+  return render(
+    <QueryClientProvider client={queryClient}>
+      <RouterProvider router={router} />
+    </QueryClientProvider>,
+  );
+}
 
 describe("routing", () => {
   it("renders catalog with Afro90s header", () => {
@@ -17,7 +30,7 @@ describe("routing", () => {
       { initialEntries: ["/"] },
     );
 
-    render(<RouterProvider router={router} />);
+    renderWithProviders(router);
     expect(screen.getByRole("navigation")).toHaveTextContent("AFRO90s");
     expect(screen.getByRole("button", { name: "Óculos" })).toBeInTheDocument();
   });
@@ -34,7 +47,7 @@ describe("routing", () => {
       { initialEntries: [`/products/${productId}`] },
     );
 
-    render(<RouterProvider router={router} />);
+    renderWithProviders(router);
     expect(screen.getByText(new RegExp(`/products/${productId}`))).toBeInTheDocument();
   });
 
@@ -43,7 +56,7 @@ describe("routing", () => {
       initialEntries: ["/rota-inexistente"],
     });
 
-    render(<RouterProvider router={router} />);
+    renderWithProviders(router);
     expect(screen.getByRole("link", { name: "Voltar ao catálogo" })).toBeInTheDocument();
   });
 });
