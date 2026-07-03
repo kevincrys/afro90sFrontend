@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useEffect, useState, type KeyboardEvent } from "react";
+import { useSearchParams } from "react-router-dom";
 import { Menu, Search, ShoppingBag, X } from "lucide-react";
 import { CATEGORIES, type CategoryFilter } from "@/types/category";
 
@@ -16,10 +17,35 @@ export function Header({
   onCartClick,
 }: HeaderProps) {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchQuery, setSearchQuery] = useState(() => searchParams.get("name") ?? "");
+
+  useEffect(() => {
+    setSearchQuery(searchParams.get("name") ?? "");
+  }, [searchParams]);
 
   function selectCategory(category: CategoryFilter) {
     onCategoryChange?.(category);
     setMenuOpen(false);
+  }
+
+  function submitSearch() {
+    const trimmed = searchQuery.trim();
+    const next = new URLSearchParams(searchParams);
+    if (trimmed) next.set("name", trimmed);
+    else next.delete("name");
+    setSearchParams(next, { replace: true });
+    setSearchOpen(false);
+    setMenuOpen(false);
+  }
+
+  function handleSearchKeyDown(event: KeyboardEvent<HTMLInputElement>) {
+    if (event.key === "Enter") submitSearch();
+    if (event.key === "Escape") {
+      setSearchOpen(false);
+      setSearchQuery(searchParams.get("name") ?? "");
+    }
   }
 
   return (
@@ -59,13 +85,37 @@ export function Header({
         </div>
 
         <div className="flex items-center gap-4">
-          <button
-            type="button"
-            className="hidden md:block text-foreground/50 hover:text-primary transition-colors"
-            aria-label="Buscar produtos"
-          >
-            <Search size={17} />
-          </button>
+          <div className="hidden md:flex items-center gap-2">
+            {searchOpen ? (
+              <input
+                type="search"
+                value={searchQuery}
+                onChange={(event) => setSearchQuery(event.target.value)}
+                onKeyDown={handleSearchKeyDown}
+                onBlur={() => {
+                  if (!searchQuery.trim() && !searchParams.get("name")) setSearchOpen(false);
+                }}
+                placeholder="Buscar produtos…"
+                autoFocus
+                className="w-44 bg-transparent border-b border-primary/50 py-1 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary"
+                style={{
+                  fontFamily: "'Courier Prime', monospace",
+                  fontSize: "0.65rem",
+                  letterSpacing: "0.08em",
+                }}
+                aria-label="Buscar produtos"
+              />
+            ) : (
+              <button
+                type="button"
+                className="text-foreground/50 hover:text-primary transition-colors"
+                onClick={() => setSearchOpen(true)}
+                aria-label="Buscar produtos"
+              >
+                <Search size={17} />
+              </button>
+            )}
+          </div>
           <button
             type="button"
             className="relative text-foreground/60 hover:text-primary transition-colors"
@@ -102,6 +152,30 @@ export function Header({
 
       {menuOpen && (
         <div className="md:hidden border-t border-border bg-card px-6 py-5 flex flex-col gap-5">
+          <div className="flex gap-2">
+            <input
+              type="search"
+              value={searchQuery}
+              onChange={(event) => setSearchQuery(event.target.value)}
+              onKeyDown={handleSearchKeyDown}
+              placeholder="Buscar produtos…"
+              className="flex-1 bg-background border border-border px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary"
+              style={{
+                fontFamily: "'Courier Prime', monospace",
+                fontSize: "0.65rem",
+                letterSpacing: "0.08em",
+              }}
+              aria-label="Buscar produtos"
+            />
+            <button
+              type="button"
+              onClick={submitSearch}
+              className="border border-primary px-3 text-primary"
+              aria-label="Buscar"
+            >
+              <Search size={16} />
+            </button>
+          </div>
           {CATEGORIES.map(({ label, value }) => (
             <button
               key={value}

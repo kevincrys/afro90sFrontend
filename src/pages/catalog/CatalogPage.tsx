@@ -1,128 +1,133 @@
-import { useOutletContext, useParams } from "react-router-dom";
-import { Card } from "@/components/ui/card";
-import { Skeleton } from "@/components/ui/skeleton";
+import { useCallback, useRef } from "react";
+import { useOutletContext, useSearchParams } from "react-router-dom";
 import { CatalogGrid } from "@/components/layout/CatalogGrid";
 import type { CatalogOutletContext } from "@/components/layout/PublicLayout";
-import { getClientErrorMessage } from "@/lib/errorMessages";
+import { ProductCard } from "@/components/product/ProductCard";
+import { ProductCardSkeleton } from "@/components/product/ProductCardSkeleton";
+import { useIntersectionObserver } from "@/hooks/useIntersectionObserver";
 import { useProducts } from "@/hooks/useProducts";
+import { getClientErrorMessage } from "@/lib/errorMessages";
 import { ApiError } from "@/types/errors";
 
-function formatPrice(value: number): string {
-  return value.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
-}
-
 export default function CatalogPage() {
-  const { id: productId } = useParams<{ id: string }>();
   const { activeCategory } = useOutletContext<CatalogOutletContext>();
+  const [searchParams] = useSearchParams();
+  const searchName = searchParams.get("name")?.trim() || undefined;
 
-  const { data, isLoading, isError, error, fetchNextPage, hasNextPage, isFetchingNextPage } =
-    useProducts({
-      category: activeCategory === "todos" ? undefined : activeCategory,
-    });
+  const loadMoreRef = useRef<HTMLDivElement>(null);
+
+  const {
+    data,
+    isLoading,
+    isError,
+    error,
+    refetch,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = useProducts({
+    category: activeCategory === "todos" ? undefined : activeCategory,
+    name: searchName,
+  });
 
   const products = data?.pages.flatMap((page) => page.items) ?? [];
 
+  const loadMore = useCallback(() => {
+    if (hasNextPage && !isFetchingNextPage) fetchNextPage();
+  }, [fetchNextPage, hasNextPage, isFetchingNextPage]);
+
+  useIntersectionObserver(loadMoreRef, loadMore, Boolean(hasNextPage));
+
+  const hasActiveFilters = activeCategory !== "todos" || Boolean(searchName);
+
   return (
     <main className="flex-1 max-w-7xl mx-auto w-full px-6 py-16">
-      {productId && (
-        <p
-          className="text-center mb-6 border border-primary/30 px-4 py-3"
+      {!isLoading && !isError && (
+        <div
+          className="mb-8 flex justify-end"
           style={{
             fontFamily: "'Courier Prime', monospace",
-            fontSize: "0.7rem",
+            fontSize: "0.62rem",
             letterSpacing: "0.12em",
-            color: "#FFD21F",
+            color: "#9A7085",
           }}
         >
-          Deep link /products/{productId} — modal na task 06
-        </p>
+          {products.length} {products.length === 1 ? "ITEM" : "ITENS"}
+        </div>
       )}
 
       {isError && (
-        <p className="text-center text-destructive mb-6" role="alert">
-          {error instanceof ApiError
-            ? error.message
-            : getClientErrorMessage("UNKNOWN_ERROR")}
-        </p>
+        <div className="text-center mb-10 space-y-4" role="alert">
+          <p className="text-destructive">
+            {error instanceof ApiError
+              ? error.message
+              : getClientErrorMessage("UNKNOWN_ERROR")}
+          </p>
+          <button
+            type="button"
+            onClick={() => refetch()}
+            className="border border-border px-6 py-2 text-sm text-muted-foreground hover:text-primary hover:border-primary transition-colors"
+            style={{
+              fontFamily: "'Courier Prime', monospace",
+              letterSpacing: "0.12em",
+              fontSize: "0.65rem",
+            }}
+          >
+            Tentar novamente
+          </button>
+        </div>
       )}
 
       {isLoading && (
         <CatalogGrid>
-          {Array.from({ length: 4 }).map((_, index) => (
-            <Card key={index} className="overflow-hidden border-border bg-card">
-              <Skeleton className="aspect-[4/5] w-full rounded-none" />
-              <div className="p-4 space-y-2">
-                <Skeleton className="h-4 w-3/4" />
-                <Skeleton className="h-4 w-1/2" />
-              </div>
-            </Card>
+          {Array.from({ length: 6 }).map((_, index) => (
+            <ProductCardSkeleton key={index} />
           ))}
         </CatalogGrid>
       )}
 
       {!isLoading && !isError && products.length === 0 && (
-        <p
-          className="text-muted-foreground text-center"
-          style={{
-            fontFamily: "'Courier Prime', monospace",
-            letterSpacing: "0.12em",
-            fontSize: "0.75rem",
-          }}
-        >
-          Nenhum produto encontrado
-          {activeCategory !== "todos" && ` · categoria: ${activeCategory}`}
-        </p>
+        <div className="text-center space-y-2 py-12">
+          <p
+            style={{
+              fontFamily: "'Anton', sans-serif",
+              fontSize: "1.25rem",
+              letterSpacing: "0.06em",
+              color: "#FFF8E7",
+            }}
+          >
+            Nenhum produto encontrado
+          </p>
+          {hasActiveFilters && (
+            <p
+              className="text-muted-foreground"
+              style={{
+                fontFamily: "'Courier Prime', monospace",
+                letterSpacing: "0.12em",
+                fontSize: "0.75rem",
+              }}
+            >
+              {searchName && `Busca: “${searchName}”`}
+              {searchName && activeCategory !== "todos" && " · "}
+              {activeCategory !== "todos" && `Categoria: ${activeCategory}`}
+            </p>
+          )}
+        </div>
       )}
 
-      {!isLoading && products.length > 0 && (
+      {!isLoading && !isError && products.length > 0 && (
         <>
           <CatalogGrid>
             {products.map((product) => (
-              <Card key={product.id} className="overflow-hidden border-border bg-card">
-                <div className="aspect-[4/5] bg-muted overflow-hidden">
-                  {product.photos[0] ? (
-                    <img
-                      src={product.photos[0]}
-                      alt={product.name}
-                      className="w-full h-full object-cover object-center"
-                    />
-                  ) : (
-                    <Skeleton className="w-full h-full rounded-none" />
-                  )}
-                </div>
-                <div className="p-4 space-y-1">
-                  <p className="font-medium text-sm leading-tight">{product.name}</p>
-                  <p
-                    style={{
-                      fontFamily: "'Courier Prime', monospace",
-                      fontSize: "0.75rem",
-                      color: "#FFD21F",
-                    }}
-                  >
-                    {formatPrice(product.price)}
-                  </p>
-                </div>
-              </Card>
+              <ProductCard key={product.id} product={product} />
             ))}
+            {isFetchingNextPage &&
+              Array.from({ length: 3 }).map((_, index) => (
+                <ProductCardSkeleton key={`loading-${index}`} />
+              ))}
           </CatalogGrid>
 
-          {hasNextPage && (
-            <div className="flex justify-center mt-10">
-              <button
-                type="button"
-                onClick={() => fetchNextPage()}
-                disabled={isFetchingNextPage}
-                className="border border-border px-6 py-2 text-sm text-muted-foreground hover:text-primary hover:border-primary transition-colors"
-                style={{
-                  fontFamily: "'Courier Prime', monospace",
-                  letterSpacing: "0.12em",
-                  fontSize: "0.65rem",
-                }}
-              >
-                {isFetchingNextPage ? "Carregando…" : "Carregar mais"}
-              </button>
-            </div>
-          )}
+          {hasNextPage && <div ref={loadMoreRef} className="h-8" aria-hidden />}
         </>
       )}
     </main>

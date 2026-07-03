@@ -35,7 +35,7 @@ describe("routing", () => {
     expect(screen.getByRole("button", { name: "Óculos" })).toBeInTheDocument();
   });
 
-  it("renders product deep link at /products/:id", () => {
+  it("renders catalog at product deep link /products/:id", () => {
     const productId = "550e8400-e29b-41d4-a716-446655440000";
     const router = createMemoryRouter(
       [
@@ -48,7 +48,8 @@ describe("routing", () => {
     );
 
     renderWithProviders(router);
-    expect(screen.getByText(new RegExp(`/products/${productId}`))).toBeInTheDocument();
+    expect(screen.getByRole("main")).toBeInTheDocument();
+    expect(screen.getByRole("navigation")).toHaveTextContent("AFRO90s");
   });
 
   it("renders 404 page", () => {
