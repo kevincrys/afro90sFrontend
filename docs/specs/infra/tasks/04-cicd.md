@@ -40,7 +40,7 @@ OIDC + roles (task 00, manual)  →  bootstrap (pipeline, 1×)  →  cdk deploy
 - [ ] Permissions: `id-token: write`, `contents: read`, `pull-requests: write`
 - [ ] Steps:
   1. `actions/checkout@v4`
-  2. `actions/setup-node@v4` (Node 20)
+  2. `actions/setup-node@v4` (Node 24)
   3. `aws-actions/configure-aws-credentials@v4` com `${{ vars.AWS_ROLE_ARN_PR }}`
   4. `npm ci` dentro de `infra/`
   5. `npm run build`
@@ -53,7 +53,7 @@ OIDC + roles (task 00, manual)  →  bootstrap (pipeline, 1×)  →  cdk deploy
 - [ ] Trigger: `push` em branch `dev` com `paths: ['infra/**']`
 - [ ] `environment: dev`
 - [ ] Steps:
-  1. Checkout → Node 20
+  1. Checkout → Node 24
   2. `configure-aws-credentials` com `${{ vars.AWS_ROLE_ARN }}`
   3. `npm ci && npm run build` (dentro de `infra/`)
   4. `npx cdk bootstrap aws://083171867610/us-east-1` *(idempotente — ok em todo deploy)*

@@ -54,7 +54,7 @@ Implementar o HTTP API Gateway com a Lambda de router e as **3 rotas públicas**
 ### Lambda — função única
 
 - [ ] Nome: `afro90s-{env}-lambda-api`
-- [ ] `runtime: Runtime.NODEJS_20_X`
+- [ ] `runtime: Runtime.NODEJS_24_X`
 - [ ] `handler: 'handler.handler'`
 - [ ] `memorySize: 256`, `timeout: Duration.seconds(29)`
 - [ ] **Código inicial (placeholder)** — não usar `NodejsFunction` com source do backend:
