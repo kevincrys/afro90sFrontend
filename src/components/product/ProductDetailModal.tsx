@@ -107,7 +107,7 @@ export function ProductDetailModal({ productId, onClose }: ProductDetailModalPro
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4"
+      className="fixed inset-0 z-50 flex items-end md:items-center justify-center p-0 md:p-4"
       style={{ background: "rgba(0,0,0,0.82)", backdropFilter: "blur(6px)" }}
       onClick={(event) => event.target === event.currentTarget && onClose()}
       role="presentation"
@@ -166,7 +166,7 @@ export function ProductDetailModal({ productId, onClose }: ProductDetailModalPro
       {!isLoading && !isError && product && (
         <div
           ref={panelRef}
-          className="relative w-full max-w-4xl max-h-[92vh] overflow-y-auto flex flex-col md:flex-row"
+          className="relative w-full max-w-4xl max-h-[96vh] md:max-h-[92vh] overflow-y-auto flex flex-col md:flex-row"
           style={{ background: "#0D0009", border: "1px solid rgba(255,210,31,0.22)" }}
           role="dialog"
           aria-modal="true"
@@ -182,7 +182,7 @@ export function ProductDetailModal({ productId, onClose }: ProductDetailModalPro
           </button>
 
           <div className="md:w-1/2 flex flex-col flex-shrink-0">
-            <div className="relative overflow-hidden bg-muted aspect-[4/5]">
+            <div className="relative overflow-hidden bg-muted w-full h-[min(36vh,260px)] md:h-auto md:aspect-[4/5] md:max-h-none">
               {photos[photoIdx] ? (
                 <img
                   key={photoIdx}
@@ -252,16 +252,14 @@ export function ProductDetailModal({ productId, onClose }: ProductDetailModalPro
             </div>
 
             {photos.length > 1 && (
-              <div className="flex gap-2 p-3 border-t border-border overflow-x-auto">
+              <div className="flex gap-1.5 p-2 md:gap-2 md:p-3 border-t border-border overflow-x-auto">
                 {photos.map((photo, index) => (
                   <button
                     key={`${photo}-${index}`}
                     type="button"
                     onClick={() => setPhotoIdx(index)}
-                    className="flex-shrink-0 overflow-hidden transition-all"
+                    className="flex-shrink-0 overflow-hidden transition-all w-11 h-11 md:w-14 md:h-14"
                     style={{
-                      width: 56,
-                      height: 56,
                       border: index === photoIdx ? "2px solid #FFD21F" : "2px solid transparent",
                       opacity: index === photoIdx ? 1 : 0.5,
                     }}
@@ -279,7 +277,7 @@ export function ProductDetailModal({ productId, onClose }: ProductDetailModalPro
             )}
           </div>
 
-          <div className="md:w-1/2 flex flex-col p-7 gap-5 overflow-y-auto">
+          <div className="md:w-1/2 flex flex-col p-4 gap-3 md:p-7 md:gap-5 overflow-y-auto min-h-0">
             <div
               style={{
                 fontFamily: "'Courier Prime', monospace",
@@ -295,10 +293,10 @@ export function ProductDetailModal({ productId, onClose }: ProductDetailModalPro
               id="product-modal-title"
               style={{
                 fontFamily: "'Anton', sans-serif",
-                fontSize: "clamp(1.6rem, 3vw, 2.2rem)",
+                fontSize: "clamp(1.35rem, 4vw, 2.2rem)",
                 letterSpacing: "var(--track-display-title)",
                 color: "#FFF8E7",
-                lineHeight: 1,
+                lineHeight: 1.1,
               }}
             >
               {product.name}
@@ -308,7 +306,7 @@ export function ProductDetailModal({ productId, onClose }: ProductDetailModalPro
               <span
                 style={{
                   fontFamily: "'Anton', sans-serif",
-                  fontSize: "2rem",
+                  fontSize: "clamp(1.35rem, 4vw, 2rem)",
                   color: "#FFD21F",
                   lineHeight: 1,
                 }}
@@ -384,9 +382,9 @@ export function ProductDetailModal({ productId, onClose }: ProductDetailModalPro
               </div>
             )}
 
-            <div className="flex-1" />
+            <div className="hidden md:block flex-1" />
 
-            <div className="flex flex-col gap-3 pt-2">
+            <div className="flex flex-col gap-3 pt-2 md:mt-auto">
               <button
                 type="button"
                 onClick={handleAddToCart}

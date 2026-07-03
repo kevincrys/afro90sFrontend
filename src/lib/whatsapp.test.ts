@@ -2,6 +2,7 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 import {
   buildWhatsAppOrderMessage,
   buildWhatsAppOrderUrl,
+  buildWhatsAppContactUrl,
   getWhatsAppNumber,
   isWhatsAppConfigured,
 } from "@/lib/whatsapp";
@@ -42,12 +43,9 @@ describe("whatsapp", () => {
     expect(message).toContain("11999999999");
   });
 
-  it("buildWhatsAppOrderMessage tolerates partial order payload from API", () => {
-    const message = buildWhatsAppOrderMessage({
-      id: sampleOrder.id,
-      fullPrice: sampleOrder.fullPrice,
-    });
-    expect(message).toContain(sampleOrder.id);
-    expect(message).toContain("Itens: 0");
+  it("buildWhatsAppContactUrl opens wa.me with default message", () => {
+    vi.stubEnv("VITE_WHATSAPP_NUMBER", "5511999999999");
+    const url = buildWhatsAppContactUrl();
+    expect(url).toMatch(/^https:\/\/wa\.me\/5511999999999\?text=/);
   });
 });

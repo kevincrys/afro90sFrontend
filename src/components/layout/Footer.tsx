@@ -1,13 +1,31 @@
-const SHOP_LINKS = ["Todos", "Óculos", "Acessórios", "Maquiagem"];
+import { Link } from "react-router-dom";
+import { getInstagramUrl } from "@/lib/siteLinks";
+import { buildWhatsAppContactUrl } from "@/lib/whatsapp";
+import { CATEGORIES, type CategoryFilter } from "@/types/category";
 
-export function Footer() {
+const linkClassName =
+  "text-muted-foreground hover:text-primary transition-colors text-sm text-left bg-transparent border-0 p-0 cursor-pointer";
+
+const socialLinkStyle = {
+  fontFamily: "'Courier Prime', monospace",
+  fontSize: "0.58rem",
+  letterSpacing: "var(--track-nav)",
+} as const;
+export interface FooterProps {
+  onCategorySelect?: (category: CategoryFilter) => void;
+}
+
+export function Footer({ onCategorySelect }: FooterProps) {
   const year = new Date().getFullYear();
+  const whatsAppUrl = buildWhatsAppContactUrl();
 
   return (
     <footer className="bg-card border-t border-border px-6 py-14 mt-auto">
       <div className="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-10">
         <div className="col-span-2 md:col-span-1">
-          <div
+          <Link
+            to="/"
+            className="inline-block hover:opacity-90 transition-opacity"
             style={{
               fontFamily: "'Anton', sans-serif",
               fontSize: "1.7rem",
@@ -15,10 +33,12 @@ export function Footer() {
               letterSpacing: "var(--track-logo)",
               marginBottom: "10px",
               lineHeight: 1,
+              textDecoration: "none",
             }}
+            aria-label="Afro90s — ir para o início"
           >
             AFRO<span style={{ color: "#7A004B" }}>90s</span>
-          </div>
+          </Link>
           <p className="text-muted-foreground text-sm leading-relaxed mb-5">
             Moda e acessórios com alma anos 90.
           </p>
@@ -47,9 +67,16 @@ export function Footer() {
             LOJA
           </div>
           <ul className="flex flex-col gap-3">
-            {SHOP_LINKS.map((link) => (
-              <li key={link}>
-                <span className="text-muted-foreground text-sm">{link}</span>
+            {CATEGORIES.map(({ label, value }) => (
+              <li key={value}>
+                <button
+                  type="button"
+                  className={linkClassName}
+                  style={{ fontFamily: "'Barlow', sans-serif" }}
+                  onClick={() => onCategorySelect?.(value)}
+                >
+                  {label}
+                </button>
               </li>
             ))}
           </ul>
@@ -69,7 +96,19 @@ export function Footer() {
           </div>
           <ul className="flex flex-col gap-3">
             <li>
-              <span className="text-muted-foreground text-sm">WhatsApp</span>
+              {whatsAppUrl ? (
+                <a
+                  href={whatsAppUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={linkClassName}
+                  style={{ fontFamily: "'Barlow', sans-serif", display: "inline-block" }}
+                >
+                  WhatsApp
+                </a>
+              ) : (
+                <span className="text-muted-foreground text-sm">WhatsApp</span>
+              )}
             </li>
           </ul>
         </div>
@@ -88,7 +127,7 @@ export function Footer() {
           </div>
           <ul className="flex flex-col gap-3">
             <li>
-              <span className="text-muted-foreground text-sm">Nossa história</span>
+              <span className="text-muted-foreground text-sm cursor-default">Nossa história</span>
             </li>
           </ul>
         </div>
@@ -106,19 +145,15 @@ export function Footer() {
           © {year} AFRO90S. TODOS OS DIREITOS RESERVADOS.
         </div>
         <div className="flex gap-8">
-          {["INSTAGRAM", "TIKTOK"].map((social) => (
-            <span
-              key={social}
-              className="text-muted-foreground"
-              style={{
-                fontFamily: "'Courier Prime', monospace",
-                fontSize: "0.58rem",
-                letterSpacing: "var(--track-nav)",
-              }}
-            >
-              {social}
-            </span>
-          ))}
+          <a
+            href={getInstagramUrl()}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-muted-foreground hover:text-primary transition-colors"
+            style={socialLinkStyle}
+          >
+            INSTAGRAM
+          </a>
         </div>
       </div>
     </footer>

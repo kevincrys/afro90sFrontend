@@ -42,6 +42,13 @@ export function buildWhatsAppOrderUrl(
   return `https://wa.me/${phone}?text=${text}`;
 }
 
+/** Link genérico para contato da loja (footer, etc.). */
+export function buildWhatsAppContactUrl(message = "Olá! Vim pelo site Afro90s."): string | null {
+  const phone = getWhatsAppNumber();
+  if (!phone) return null;
+  return `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
+}
+
 /**
  * Abre WhatsApp com resumo do pedido. Retorna false se popup bloqueado ou número ausente.
  */

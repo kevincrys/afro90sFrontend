@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState, type KeyboardEvent } from "react";
-import { useSearchParams } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { Menu, Search, ShoppingBag, X } from "lucide-react";
 import { CATEGORIES, type CategoryFilter } from "@/types/category";
 
@@ -65,18 +65,21 @@ export function Header({
   return (
     <nav className="sticky top-0 z-40 border-b border-border bg-background/95 backdrop-blur-sm">
       <div className="max-w-7xl mx-auto px-6 flex items-center justify-between h-16">
-        <div
-          className="select-none"
+        <Link
+          to="/"
+          className="select-none hover:opacity-90 transition-opacity"
           style={{
             fontFamily: "'Anton', sans-serif",
             fontSize: "1.55rem",
             letterSpacing: "var(--track-logo)",
             color: "#FFD21F",
             lineHeight: 1,
+            textDecoration: "none",
           }}
+          aria-label="Afro90s — ir para o início"
         >
           AFRO<span style={{ color: "#7A004B" }}>90s</span>
-        </div>
+        </Link>
 
         <div className="hidden md:flex items-center gap-8">
           {CATEGORIES.map(({ label, value }) => (

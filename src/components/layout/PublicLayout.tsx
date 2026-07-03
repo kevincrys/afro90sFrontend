@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Outlet } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import { CartDrawer } from "@/components/cart/CartDrawer";
 import { Footer } from "@/components/layout/Footer";
 import { Header } from "@/components/layout/Header";
@@ -12,12 +12,18 @@ export interface CatalogOutletContext {
 }
 
 export function PublicLayout() {
+  const navigate = useNavigate();
   const [activeCategory, setActiveCategory] = useState<CategoryFilter>("todos");
   const cartCount = useCartStore((state) =>
     state.items.reduce((sum, item) => sum + item.quantity, 0),
   );
   const isCartOpen = useCartStore((state) => state.isOpen);
   const openCart = useCartStore((state) => state.openCart);
+
+  function handleCategorySelect(category: CategoryFilter) {
+    setActiveCategory(category);
+    navigate("/");
+  }
 
   return (
     <div
@@ -38,7 +44,7 @@ export function PublicLayout() {
         onCartClick={openCart}
       />
       <Outlet context={{ activeCategory, setActiveCategory } satisfies CatalogOutletContext} />
-      <Footer />
+      <Footer onCategorySelect={handleCategorySelect} />
       {isCartOpen && <CartDrawer />}
     </div>
   );

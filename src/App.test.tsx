@@ -32,7 +32,7 @@ describe("routing", () => {
 
     renderWithProviders(router);
     expect(screen.getByRole("navigation")).toHaveTextContent("AFRO90s");
-    expect(screen.getByRole("button", { name: "Óculos" })).toBeInTheDocument();
+    expect(screen.getAllByRole("button", { name: "Óculos" }).length).toBeGreaterThanOrEqual(1);
   });
 
   it("renders catalog at product deep link /products/:id", () => {

@@ -7,14 +7,14 @@ export function ProductDetailModalSkeleton() {
       style={{ background: "#0D0009", border: "1px solid rgba(255,210,31,0.22)" }}
     >
       <div className="md:w-1/2 flex flex-col flex-shrink-0">
-        <Skeleton className="aspect-[4/5] w-full rounded-none" />
-        <div className="flex gap-2 p-3 border-t border-border">
+        <Skeleton className="w-full h-[min(36vh,260px)] md:h-auto md:aspect-[4/5] rounded-none" />
+        <div className="flex gap-1.5 p-2 md:gap-2 md:p-3 border-t border-border">
           {Array.from({ length: 4 }).map((_, index) => (
-            <Skeleton key={index} className="w-14 h-14 rounded-none flex-shrink-0" />
+            <Skeleton key={index} className="w-11 h-11 md:w-14 md:h-14 rounded-none flex-shrink-0" />
           ))}
         </div>
       </div>
-      <div className="md:w-1/2 flex flex-col p-7 gap-5">
+      <div className="md:w-1/2 flex flex-col p-4 gap-3 md:p-7 md:gap-5">
         <Skeleton className="h-3 w-20" />
         <Skeleton className="h-10 w-3/4" />
         <Skeleton className="h-8 w-32" />

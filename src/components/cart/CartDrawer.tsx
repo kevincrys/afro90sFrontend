@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState, type ReactNode } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ArrowRight, CheckCircle, MessageCircle, Trash2, X } from "lucide-react";
 import { toast } from "sonner";
@@ -8,6 +8,7 @@ import { useFocusTrap } from "@/hooks/useFocusTrap";
 import { checkoutFormSchema, type CheckoutFormValues } from "@/lib/checkout";
 import { getClientErrorMessage } from "@/lib/errorMessages";
 import { formatPrice } from "@/lib/format";
+import { formatPostalCodeDisplay, sanitizePostalCode } from "@/lib/postalCode";
 import {
   isWhatsAppConfigured,
   openWhatsAppOrder,
@@ -79,6 +80,7 @@ export function CartDrawer() {
     handleSubmit,
     reset,
     getValues,
+    control,
     formState: { errors, isSubmitting },
   } = useForm<CheckoutFormValues>({
     resolver: zodResolver(checkoutFormSchema),
@@ -239,7 +241,9 @@ export function CartDrawer() {
                 </div>
                 <div className="text-foreground text-sm">{customerSnapshot.name}</div>
                 <div className="text-muted-foreground text-xs mt-1">{customerSnapshot.address}</div>
-                <div className="text-muted-foreground text-xs">{customerSnapshot.postalCode}</div>
+                <div className="text-muted-foreground text-xs">
+                  {formatPostalCodeDisplay(customerSnapshot.postalCode)}
+                </div>
                 <div className="text-muted-foreground text-xs">{customerSnapshot.tel}</div>
               </div>
               <div style={{ fontFamily: "'Anton', sans-serif", fontSize: "1.5rem", color: "#FFD21F" }}>
@@ -496,14 +500,30 @@ export function CartDrawer() {
                   <div className="grid grid-cols-2 gap-4">
                     <div>
                       <FieldLabel htmlFor="checkout-postal-code">CEP *</FieldLabel>
-                      <input
-                        id="checkout-postal-code"
-                        className={`w-full px-4 py-3 bg-muted border text-foreground placeholder:text-muted-foreground outline-none transition-colors text-sm ${errors.postalCode ? "border-red-500" : "border-border focus:border-primary"}`}
-                        placeholder="00000-000"
-                        style={{ fontFamily: "'Barlow', sans-serif" }}
-                        aria-invalid={Boolean(errors.postalCode)}
-                        aria-describedby={errors.postalCode ? "checkout-postal-code-error" : undefined}
-                        {...register("postalCode")}
+                      <Controller
+                        name="postalCode"
+                        control={control}
+                        render={({ field }) => (
+                          <input
+                            id="checkout-postal-code"
+                            inputMode="numeric"
+                            autoComplete="postal-code"
+                            className={`w-full px-4 py-3 bg-muted border text-foreground placeholder:text-muted-foreground outline-none transition-colors text-sm ${errors.postalCode ? "border-red-500" : "border-border focus:border-primary"}`}
+                            placeholder="00000-000"
+                            style={{ fontFamily: "'Barlow', sans-serif" }}
+                            aria-invalid={Boolean(errors.postalCode)}
+                            aria-describedby={
+                              errors.postalCode ? "checkout-postal-code-error" : undefined
+                            }
+                            value={formatPostalCodeDisplay(field.value ?? "")}
+                            onChange={(event) =>
+                              field.onChange(sanitizePostalCode(event.target.value))
+                            }
+                            onBlur={field.onBlur}
+                            name={field.name}
+                            ref={field.ref}
+                          />
+                        )}
                       />
                       {errors.postalCode && (
                         <p

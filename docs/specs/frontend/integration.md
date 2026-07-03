@@ -27,7 +27,8 @@ Implementação: `src/routes/index.tsx`.
 |----------|-----|
 | `VITE_API_BASE_URL` | Base da API REST |
 | `VITE_ASSETS_CDN_URL` | Prefixo de URLs de imagens (se relativas) |
-| `VITE_WHATSAPP_NUMBER` | Número da loja (somente dígitos, com DDI) |
+| `VITE_WHATSAPP_NUMBER` | Número da loja (somente dígitos, com DDI) — checkout e footer |
+| `VITE_INSTAGRAM_URL` | URL do Instagram (opcional; padrão: perfil `@afroo90s`) |
 | `VITE_COGNITO_USER_POOL_ID` | Login admin |
 | `VITE_COGNITO_CLIENT_ID` | Login admin |
 | `VITE_COGNITO_REGION` | Região Cognito |
