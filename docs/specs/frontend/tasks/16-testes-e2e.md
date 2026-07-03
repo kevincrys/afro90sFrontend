@@ -46,7 +46,7 @@ npm install -D cypress
 ### Testes unitários (Vitest)
 
 - [x] `formatPrice()` — formatação BRL (`src/lib/format.test.ts`)
-- [ ] `cart.store` — add/remove/clear
+- [ ] `cart.store` — add/remove/clear *(parcial: addItem na task 06; persist na task 07)*
 - [x] `errorMessages` — mapeamento pt-BR (`src/lib/errorMessages.test.ts`)
 
 ### CI

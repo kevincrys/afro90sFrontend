@@ -49,7 +49,7 @@ describe("routing", () => {
 
     renderWithProviders(router);
     expect(screen.getByRole("main")).toBeInTheDocument();
-    expect(screen.getByRole("navigation")).toHaveTextContent("AFRO90s");
+    expect(screen.getByRole("button", { name: "Fechar" })).toBeInTheDocument();
   });
 
   it("renders 404 page", () => {

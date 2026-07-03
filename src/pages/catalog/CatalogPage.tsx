@@ -1,18 +1,26 @@
 import { useCallback, useRef } from "react";
-import { useOutletContext, useSearchParams } from "react-router-dom";
+import { useNavigate, useOutletContext, useParams, useSearchParams } from "react-router-dom";
 import { CatalogGrid } from "@/components/layout/CatalogGrid";
 import type { CatalogOutletContext } from "@/components/layout/PublicLayout";
 import { ProductCard } from "@/components/product/ProductCard";
 import { ProductCardSkeleton } from "@/components/product/ProductCardSkeleton";
+import { ProductDetailModal } from "@/components/product/ProductDetailModal";
 import { useIntersectionObserver } from "@/hooks/useIntersectionObserver";
 import { useProducts } from "@/hooks/useProducts";
 import { getClientErrorMessage } from "@/lib/errorMessages";
 import { ApiError } from "@/types/errors";
 
 export default function CatalogPage() {
+  const { id: productId } = useParams<{ id: string }>();
+  const navigate = useNavigate();
   const { activeCategory } = useOutletContext<CatalogOutletContext>();
   const [searchParams] = useSearchParams();
   const searchName = searchParams.get("name")?.trim() || undefined;
+
+  function closeProductModal() {
+    const query = searchParams.toString();
+    navigate({ pathname: "/", search: query ? `?${query}` : "" });
+  }
 
   const loadMoreRef = useRef<HTMLDivElement>(null);
 
@@ -41,7 +49,8 @@ export default function CatalogPage() {
   const hasActiveFilters = activeCategory !== "todos" || Boolean(searchName);
 
   return (
-    <main className="flex-1 max-w-7xl mx-auto w-full px-6 py-16">
+    <>
+      <main className="flex-1 max-w-7xl mx-auto w-full px-6 py-16">
       {!isLoading && !isError && (
         <div
           className="mb-8 flex justify-end"
@@ -130,6 +139,11 @@ export default function CatalogPage() {
           {hasNextPage && <div ref={loadMoreRef} className="h-8" aria-hidden />}
         </>
       )}
-    </main>
+      </main>
+
+      {productId && (
+        <ProductDetailModal productId={productId} onClose={closeProductModal} />
+      )}
+    </>
   );
 }

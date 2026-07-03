@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Outlet } from "react-router-dom";
 import { Footer } from "@/components/layout/Footer";
 import { Header } from "@/components/layout/Header";
+import { useCartStore } from "@/stores/cart.store";
 import type { CategoryFilter } from "@/types/category";
 
 export interface CatalogOutletContext {
@@ -11,6 +12,9 @@ export interface CatalogOutletContext {
 
 export function PublicLayout() {
   const [activeCategory, setActiveCategory] = useState<CategoryFilter>("todos");
+  const cartCount = useCartStore((state) =>
+    state.items.reduce((sum, item) => sum + item.quantity, 0),
+  );
 
   return (
     <div
@@ -20,7 +24,7 @@ export function PublicLayout() {
       <Header
         activeCategory={activeCategory}
         onCategoryChange={setActiveCategory}
-        cartCount={0}
+        cartCount={cartCount}
       />
       <Outlet context={{ activeCategory, setActiveCategory } satisfies CatalogOutletContext} />
       <Footer />

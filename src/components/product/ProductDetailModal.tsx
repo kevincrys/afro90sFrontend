@@ -1,0 +1,422 @@
+import { useCallback, useEffect, useRef, useState } from "react";
+import { ChevronLeft, ChevronRight, Minus, Plus, ShoppingBag, X } from "lucide-react";
+import { ProductDetailModalSkeleton } from "@/components/product/ProductDetailModalSkeleton";
+import { useProduct } from "@/hooks/useProduct";
+import { getCategoryLabel } from "@/lib/categoryLabels";
+import { getClientErrorMessage } from "@/lib/errorMessages";
+import { formatPrice } from "@/lib/format";
+import { useCartStore } from "@/stores/cart.store";
+import { ApiError } from "@/types/errors";
+
+const DEFAULT_TITLE = "Afro90s";
+
+export interface ProductDetailModalProps {
+  productId: string;
+  onClose: () => void;
+}
+
+export function ProductDetailModal({ productId, onClose }: ProductDetailModalProps) {
+  const panelRef = useRef<HTMLDivElement>(null);
+  const { data: product, isLoading, isError, error } = useProduct(productId);
+  const addItem = useCartStore((state) => state.addItem);
+
+  const [photoIdx, setPhotoIdx] = useState(0);
+  const [quantity, setQuantity] = useState(1);
+
+  const photos = product?.photos ?? [];
+  const maxQuantity = product?.quantity ?? 0;
+  const isSoldOut = maxQuantity === 0;
+
+  useEffect(() => {
+    setPhotoIdx(0);
+    setQuantity(1);
+  }, [productId]);
+
+  useEffect(() => {
+    function onKey(event: KeyboardEvent) {
+      if (event.key === "Escape") onClose();
+    }
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [onClose]);
+
+  useEffect(() => {
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = previousOverflow;
+    };
+  }, []);
+
+  useEffect(() => {
+    const previousTitle = document.title;
+    if (product) document.title = `${product.name} · Afro90s`;
+    return () => {
+      document.title = previousTitle || DEFAULT_TITLE;
+    };
+  }, [product]);
+
+  const trapFocus = useCallback(() => {
+    const panel = panelRef.current;
+    if (!panel) return;
+
+    const focusable = panel.querySelectorAll<HTMLElement>(
+      'button:not([disabled]), [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
+    );
+    if (focusable.length === 0) return;
+
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+    first.focus();
+
+    function onKeyDown(event: KeyboardEvent) {
+      if (event.key !== "Tab") return;
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    }
+
+    panel.addEventListener("keydown", onKeyDown);
+    return () => panel.removeEventListener("keydown", onKeyDown);
+  }, []);
+
+  useEffect(() => {
+    if (isLoading || isError || !product) return;
+    return trapFocus();
+  }, [isLoading, isError, product, trapFocus]);
+
+  function prevPhoto() {
+    if (photos.length === 0) return;
+    setPhotoIdx((index) => (index - 1 + photos.length) % photos.length);
+  }
+
+  function nextPhoto() {
+    if (photos.length === 0) return;
+    setPhotoIdx((index) => (index + 1) % photos.length);
+  }
+
+  function handleAddToCart() {
+    if (!product || isSoldOut) return;
+
+    addItem({
+      productId: product.id,
+      name: product.name,
+      price: product.price,
+      quantity,
+      photo: product.photos[0] ?? "",
+      maxQuantity: product.quantity,
+    });
+    onClose();
+  }
+
+  return (
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center p-4"
+      style={{ background: "rgba(0,0,0,0.82)", backdropFilter: "blur(6px)" }}
+      onClick={(event) => event.target === event.currentTarget && onClose()}
+      role="presentation"
+    >
+      {isLoading && (
+        <div className="relative w-full max-w-4xl">
+          <button
+            type="button"
+            onClick={onClose}
+            className="absolute top-4 right-4 z-10 w-9 h-9 flex items-center justify-center border border-border bg-background/80 hover:border-primary text-muted-foreground hover:text-primary transition-colors"
+            aria-label="Fechar"
+          >
+            <X size={16} />
+          </button>
+          <ProductDetailModalSkeleton />
+        </div>
+      )}
+
+      {isError && (
+        <div
+          ref={panelRef}
+          className="relative w-full max-w-md p-8 text-center space-y-4"
+          style={{ background: "#0D0009", border: "1px solid rgba(255,210,31,0.22)" }}
+          role="alertdialog"
+          aria-modal="true"
+          aria-labelledby="product-error-title"
+        >
+          <button
+            type="button"
+            onClick={onClose}
+            className="absolute top-4 right-4 w-9 h-9 flex items-center justify-center border border-border bg-background/80 hover:border-primary text-muted-foreground hover:text-primary transition-colors"
+            aria-label="Fechar"
+          >
+            <X size={16} />
+          </button>
+          <p id="product-error-title" className="text-destructive pt-4">
+            {error instanceof ApiError
+              ? error.message
+              : getClientErrorMessage("UNKNOWN_ERROR")}
+          </p>
+          <button
+            type="button"
+            onClick={onClose}
+            className="w-full py-3 border border-border text-muted-foreground uppercase tracking-widest hover:border-primary/40 hover:text-foreground transition-colors"
+            style={{
+              fontFamily: "'Courier Prime', monospace",
+              fontSize: "0.65rem",
+              letterSpacing: "0.18em",
+            }}
+          >
+            Voltar ao catálogo
+          </button>
+        </div>
+      )}
+
+      {!isLoading && !isError && product && (
+        <div
+          ref={panelRef}
+          className="relative w-full max-w-4xl max-h-[92vh] overflow-y-auto flex flex-col md:flex-row"
+          style={{ background: "#0D0009", border: "1px solid rgba(255,210,31,0.22)" }}
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="product-modal-title"
+        >
+          <button
+            type="button"
+            onClick={onClose}
+            className="absolute top-4 right-4 z-10 w-9 h-9 flex items-center justify-center border border-border bg-background/80 hover:border-primary text-muted-foreground hover:text-primary transition-colors"
+            aria-label="Fechar detalhes do produto"
+          >
+            <X size={16} />
+          </button>
+
+          <div className="md:w-1/2 flex flex-col flex-shrink-0">
+            <div className="relative overflow-hidden bg-muted aspect-[4/5]">
+              {photos[photoIdx] ? (
+                <img
+                  key={photoIdx}
+                  src={photos[photoIdx]}
+                  alt={product.name}
+                  className="w-full h-full object-cover object-center"
+                  style={{ animation: "fadeIn 0.25s ease" }}
+                />
+              ) : (
+                <div className="w-full h-full bg-muted" />
+              )}
+
+              {photos.length > 1 && (
+                <>
+                  <button
+                    type="button"
+                    onClick={prevPhoto}
+                    className="absolute left-3 top-1/2 -translate-y-1/2 w-8 h-8 flex items-center justify-center bg-background/70 border border-border hover:border-primary hover:text-primary text-muted-foreground transition-colors"
+                    aria-label="Foto anterior"
+                  >
+                    <ChevronLeft size={16} />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={nextPhoto}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 w-8 h-8 flex items-center justify-center bg-background/70 border border-border hover:border-primary hover:text-primary text-muted-foreground transition-colors"
+                    aria-label="Próxima foto"
+                  >
+                    <ChevronRight size={16} />
+                  </button>
+                </>
+              )}
+
+              {photos.length > 0 && (
+                <div
+                  className="absolute bottom-3 right-3 px-2 py-1"
+                  style={{
+                    background: "rgba(13,0,9,0.7)",
+                    fontFamily: "'Courier Prime', monospace",
+                    fontSize: "0.58rem",
+                    letterSpacing: "0.15em",
+                    color: "#FFD21F",
+                  }}
+                >
+                  {photoIdx + 1} / {photos.length}
+                </div>
+              )}
+
+              {isSoldOut && (
+                <div
+                  className="absolute inset-0 flex items-center justify-center"
+                  style={{ background: "rgba(13,0,9,0.55)" }}
+                >
+                  <div
+                    className="border border-primary px-5 py-2"
+                    style={{
+                      fontFamily: "'Anton', sans-serif",
+                      fontSize: "0.9rem",
+                      letterSpacing: "0.1em",
+                      color: "#FFD21F",
+                    }}
+                  >
+                    ESGOTADO
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {photos.length > 1 && (
+              <div className="flex gap-2 p-3 border-t border-border overflow-x-auto">
+                {photos.map((photo, index) => (
+                  <button
+                    key={`${photo}-${index}`}
+                    type="button"
+                    onClick={() => setPhotoIdx(index)}
+                    className="flex-shrink-0 overflow-hidden transition-all"
+                    style={{
+                      width: 56,
+                      height: 56,
+                      border: index === photoIdx ? "2px solid #FFD21F" : "2px solid transparent",
+                      opacity: index === photoIdx ? 1 : 0.5,
+                    }}
+                    aria-label={`Foto ${index + 1}`}
+                    aria-current={index === photoIdx}
+                  >
+                    <img
+                      src={photo}
+                      alt=""
+                      className="w-full h-full object-cover"
+                    />
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+
+          <div className="md:w-1/2 flex flex-col p-7 gap-5 overflow-y-auto">
+            <div
+              style={{
+                fontFamily: "'Courier Prime', monospace",
+                fontSize: "0.6rem",
+                letterSpacing: "0.22em",
+                color: "#7A004B",
+              }}
+            >
+              {getCategoryLabel(product.category)}
+            </div>
+
+            <h2
+              id="product-modal-title"
+              style={{
+                fontFamily: "'Anton', sans-serif",
+                fontSize: "clamp(1.6rem, 3vw, 2.2rem)",
+                letterSpacing: "0.03em",
+                color: "#FFF8E7",
+                lineHeight: 1,
+              }}
+            >
+              {product.name}
+            </h2>
+
+            <div className="flex items-baseline gap-3">
+              <span
+                style={{
+                  fontFamily: "'Anton', sans-serif",
+                  fontSize: "2rem",
+                  color: "#FFD21F",
+                  lineHeight: 1,
+                }}
+              >
+                {formatPrice(product.price)}
+              </span>
+            </div>
+
+            <div className="border-t border-border" />
+
+            {!isSoldOut && (
+              <div>
+                <div
+                  className="mb-3"
+                  style={{
+                    fontFamily: "'Courier Prime', monospace",
+                    fontSize: "0.6rem",
+                    letterSpacing: "0.2em",
+                    color: "#9A7085",
+                  }}
+                >
+                  QUANTIDADE
+                </div>
+                <div className="flex items-center gap-4">
+                  <button
+                    type="button"
+                    onClick={() => setQuantity((value) => Math.max(1, value - 1))}
+                    disabled={quantity <= 1}
+                    className="w-9 h-9 flex items-center justify-center border border-border hover:border-primary text-muted-foreground hover:text-primary transition-colors disabled:opacity-40"
+                    aria-label="Diminuir quantidade"
+                  >
+                    <Minus size={14} />
+                  </button>
+                  <span
+                    style={{
+                      fontFamily: "'Anton', sans-serif",
+                      fontSize: "1.25rem",
+                      color: "#FFF8E7",
+                      minWidth: "1.5rem",
+                      textAlign: "center",
+                    }}
+                  >
+                    {quantity}
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => setQuantity((value) => Math.min(maxQuantity, value + 1))}
+                    disabled={quantity >= maxQuantity}
+                    className="w-9 h-9 flex items-center justify-center border border-border hover:border-primary text-muted-foreground hover:text-primary transition-colors disabled:opacity-40"
+                    aria-label="Aumentar quantidade"
+                  >
+                    <Plus size={14} />
+                  </button>
+                  <span
+                    style={{
+                      fontFamily: "'Courier Prime', monospace",
+                      fontSize: "0.62rem",
+                      letterSpacing: "0.1em",
+                      color: "#9A7085",
+                    }}
+                  >
+                    {maxQuantity} em estoque
+                  </span>
+                </div>
+              </div>
+            )}
+
+            <div className="flex-1" />
+
+            <div className="flex flex-col gap-3 pt-2">
+              <button
+                type="button"
+                onClick={handleAddToCart}
+                disabled={isSoldOut}
+                className="w-full py-4 bg-primary text-primary-foreground uppercase tracking-widest hover:opacity-90 transition-opacity flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                style={{
+                  fontFamily: "'Anton', sans-serif",
+                  fontSize: "1rem",
+                  letterSpacing: "0.1em",
+                }}
+              >
+                <ShoppingBag size={18} />
+                {isSoldOut ? "Indisponível" : "Adicionar ao carrinho"}
+              </button>
+              <button
+                type="button"
+                onClick={onClose}
+                className="w-full py-3 border border-border text-muted-foreground uppercase tracking-widest hover:border-primary/40 hover:text-foreground transition-colors"
+                style={{
+                  fontFamily: "'Courier Prime', monospace",
+                  fontSize: "0.65rem",
+                  letterSpacing: "0.18em",
+                }}
+              >
+                Continuar navegando
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
