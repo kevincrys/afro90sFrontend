@@ -13,7 +13,7 @@ Pipelines de **CI** (validação) e **CD** (deploy da SPA para S3 + invalidaçã
 |----------|---------|---------|------|
 | CI | `ci.yml` | PR + push | build → test → lint |
 | Deploy dev | `deploy-dev.yml` | Push `dev` | OIDC role dev → SSM → build → S3 sync + CF invalidation dev |
-| Deploy prod | `deploy-prod.yml` | Push `main` | OIDC role prod → idem (environment `production`) |
+| Deploy prod | `deploy-prod.yml` | Push `main` | OIDC role prod → idem (environment **`prod`**) |
 
 ## Variáveis de build
 
@@ -30,7 +30,7 @@ Detalhes: [integration.md](../frontend/integration.md) · workflow: [04-cicd-dep
 
 Guia: [github-pipeline-setup.md](../../foundation/github-pipeline-setup.md)
 
-- **Environments:** `dev`, `production`
+- **Environments:** `dev`, `prod`
 - **Auth:** OIDC — roles `afro90s-github-frontend-dev` / `-prod`
 - **Policy deploy:** S3 bucket web do ambiente + `CreateInvalidation` na distribuição **daquele env** + SSM read
 - **Variables por environment:** `AWS_ROLE_ARN`, `AWS_REGION`, `S3_BUCKET`, `CLOUDFRONT_DISTRIBUTION_ID` — **sem** `VITE_*` (fase 1)
@@ -54,6 +54,6 @@ Guia: [github-pipeline-setup.md](../../foundation/github-pipeline-setup.md)
 
 - [ ] PR dispara CI com build + test + lint
 - [ ] Push em `dev` publica SPA acessível via CloudFront dev
-- [ ] Push em `main` exige approval do environment production
+- [ ] Push em `main` exige approval do environment **`prod`**
 - [ ] Role dev não invalida distribuição prod
 - [ ] Nenhum secret AWS no repositório

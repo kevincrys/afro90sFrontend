@@ -37,6 +37,6 @@ docs: update VITE vars in integration.md
 | Branch | Resultado |
 |--------|-----------|
 | `dev` | Deploy automático para CloudFront dev |
-| `main` | Deploy production (após approval) |
+| `main` | Deploy **prod** (GitHub Environment, após approval) |
 
 Infra (S3/CloudFront) deve estar provisionada antes do primeiro deploy.

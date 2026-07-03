@@ -64,7 +64,7 @@ OIDC + roles (task 00, manual)  →  bootstrap (pipeline, 1×)  →  cdk deploy
 ### `.github/workflows/cdk-deploy-prod.yml`
 
 - [ ] Trigger: `push` em branch `main` com `paths: ['infra/**']`
-- [ ] `environment: production`
+- [ ] `environment: prod`
 - [ ] Steps idênticos ao deploy-dev (inclui `cdk bootstrap`), substituindo `dev` por `prod`
 
 ### Snippet OIDC (todos os workflows)
@@ -95,6 +95,6 @@ permissions:
 - [ ] PR alterando `infra/**` dispara `cdk-validate.yml`; artifact `cdk.out` disponível
 - [ ] Primeiro deploy cria stack `CDKToolkit` (bootstrap) e em seguida as stacks do app
 - [ ] Merge em `dev` dispara `cdk-deploy-dev.yml` e CloudFormation atualiza
-- [ ] Merge em `main` dispara `cdk-deploy-prod.yml` com environment `production`
+- [ ] Merge em `main` dispara `cdk-deploy-prod.yml` com environment `prod`
 - [ ] Nenhum secret AWS nas variáveis do repositório
 - [ ] Atualizar **Status** para `concluída`

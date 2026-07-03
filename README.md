@@ -69,7 +69,7 @@ afro90sFrontend/
 |--------|------|
 | PR / push | CI: build → test → lint |
 | Push `dev` | Deploy para S3/CloudFront **dev** |
-| Push `main` | Deploy para **production** (environment approval) |
+| Push `main` | Deploy para **`prod`** (GitHub Environment + approval) |
 
 Detalhes: [docs/specs/pipelines/overview.md](docs/specs/pipelines/overview.md)
 

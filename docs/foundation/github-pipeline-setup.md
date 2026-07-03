@@ -17,7 +17,7 @@ Guia para configurar **GitHub Actions**, **Environments**, **OIDC AWS** e **bran
 | Branch | Deploy |
 |--------|--------|
 | `dev` | Automático → ambiente **dev** |
-| `main` | Automático → **production** (com approval) |
+| `main` | Automático → **`prod`** (com approval) |
 
 ## Workflows
 
@@ -25,7 +25,7 @@ Guia para configurar **GitHub Actions**, **Environments**, **OIDC AWS** e **bran
 |---------|---------|-------------|
 | `ci.yml` | PR + push | — |
 | `deploy-dev.yml` | Push `dev` | `dev` |
-| `deploy-prod.yml` | Push `main` | `production` |
+| `deploy-prod.yml` | Push `main` | `prod` |
 
 Spec: [frontend/tasks/04-cicd-deploy.md](../specs/frontend/tasks/04-cicd-deploy.md)
 
@@ -58,7 +58,7 @@ Provisionadas em [`github-oidc-roles.template.yaml`](https://github.com/kevincry
 |------|-----------------|
 | `afro90s-github-frontend-pr` | `repo:kevincrys/afro90sFrontend:pull_request` |
 | `afro90s-github-frontend-dev` | `…:environment:dev` ou `…:ref:refs/heads/dev` |
-| `afro90s-github-frontend-prod` | `…:environment:production` ou `…:ref:refs/heads/main` |
+| `afro90s-github-frontend-prod` | `…:environment:prod` ou `…:ref:refs/heads/main` |
 
 Policy dev/prod (isoladas por ambiente):
 
@@ -67,6 +67,8 @@ Policy dev/prod (isoladas por ambiente):
 - SSM: `GetParameter` em `/afro90s/{env}/*`
 
 Parâmetros OIDC obrigatórios ao aplicar o template: `FrontendDevCloudFrontDistributionId`, `FrontendProdCloudFrontDistributionId` (mesmos IDs do GitHub).
+
+> GitHub Environment de produção: nome **`prod`** (não `production`) — alinhado a backend e infra.
 
 ## GitHub Environments
 
@@ -81,14 +83,16 @@ Parâmetros OIDC obrigatórios ao aplicar o template: `FrontendDevCloudFrontDist
 
 **SSM (workflow, não GitHub):** `api-base-url`, `assets-cdn-url`, `whatsapp-number` em `/afro90s/dev/*`.
 
-### `production`
+### `prod`
 
-Mesmas 4 variables com valores prod.
+Mesmas 4 variables com valores prod (bucket `afro90s-prod-s3-web`, distribution ID prod, SSM `/afro90s/prod/*`).
 
 | Protection | Valor |
 |------------|-------|
 | Required reviewers | 1+ |
 | Deployment branches | `main` only |
+
+> Nome do Environment: **`prod`** (não criar `production`).
 
 ## Branch protection — `main`
 
@@ -108,7 +112,7 @@ Mesmas 4 variables com valores prod.
 ## Checklist
 
 - [ ] Branch `dev` criada
-- [ ] Environments `dev` e `production` com **4 variables** cada
+- [ ] Environments `dev` e `prod` com **4 variables** cada
 - [ ] Workflows commitados
 - [ ] Push em `dev` publica SPA no CloudFront dev
 - [ ] Nenhum `AWS_ACCESS_KEY_ID` no repo
