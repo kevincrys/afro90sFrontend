@@ -26,7 +26,8 @@ Ligar skeletons/toasts do protótipo à API e completar a11y **sem alterar o vis
 
 ### `src/lib/errorMessages.ts`
 
-- [ ] Mapear códigos API para pt-BR
+- [x] Mapear códigos API para pt-BR *(implementado na task 03 — ver [integration.md](../integration.md#tratamento-de-erros))*
+- [ ] Revisar mensagens ao adicionar novos `code` em `api-routes.md`
 
 ### Skeletons
 

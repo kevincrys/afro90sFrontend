@@ -56,7 +56,7 @@ interface CartItem {
 - [ ] **Copiar** JSX/estilos de `CheckoutPanel`
 - [ ] Conectar `useCartStore()` em vez de props `cart`/`onRemove`
 - [ ] `useCreateOrder()` no submit — substituir `setDone(true)`
-- [ ] Erros API em toast pt-BR
+- [ ] Erros API em toast — usar `ApiError.message` ([integration.md](../integration.md#tratamento-de-erros))
 - [ ] Após `201`: limpar carrinho → task 08 WhatsApp
 
 ## Pré-requisitos

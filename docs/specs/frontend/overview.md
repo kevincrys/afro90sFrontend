@@ -16,7 +16,7 @@ Guia de implementação do frontend Afro90s no repositório **afro90sFrontend**.
 | Linguagem | **TypeScript** |
 | Roteamento | React Router v6 |
 | Data fetching | TanStack Query (React Query) |
-| HTTP | fetch ou axios (tipado) |
+| HTTP | Axios (`apiClient`) + `toApiError` |
 | Auth admin | AWS Amplify Auth (SRP) |
 | Deploy | Build estático → S3 + CloudFront |
 
@@ -53,6 +53,8 @@ afro90sFrontend/
 │   │   └── index.tsx            # createBrowserRouter
 │   ├── stores/                  # Zustand (carrinho)
 │   ├── hooks/
+│   ├── lib/
+│   │   └── errorMessages.ts   # code → mensagem pt-BR (UI)
 │   ├── types/                   # espelham data-models.md
 │   └── styles/
 ├── public/
@@ -84,6 +86,8 @@ Tab ativa pode ser controlada por estado local ou query `?tab=produtos` (opciona
 ## Contrato com a API
 
 Rotas e payloads: **[api-routes.md](../backend/api-routes.md)**.
+
+Erros na UI: apenas mensagens pt-BR mapeadas por `code` — ver **[integration.md — Tratamento de erros](integration.md#tratamento-de-erros)**.
 
 Variáveis de ambiente: **[outputs da infra](../infra/outputs.md)**.
 

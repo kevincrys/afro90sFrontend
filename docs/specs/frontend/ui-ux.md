@@ -78,7 +78,7 @@ Guidelines (não design final — editável):
 |--------|---------------|
 | Loading | Skeleton |
 | Empty | Mensagem amigável + CTA (ex.: "Nenhum produto encontrado") |
-| Error | Mensagem clara + botão "Tentar novamente" |
+| Error | Mensagem pt-BR via `ApiError.message` ([integration.md](integration.md#tratamento-de-erros)); sem expor `code` ou texto do backend; botão "Tentar novamente" |
 | Success | Feedback visual breve (toast ou banner) |
 
 ## Acessibilidade

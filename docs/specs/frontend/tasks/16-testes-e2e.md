@@ -47,7 +47,7 @@ npm install -D cypress
 
 - [ ] `formatPrice()` — formatação BRL
 - [ ] `cart.store` — add/remove/clear
-- [ ] `errorMessages` — mapeamento pt-BR
+- [x] `errorMessages` — mapeamento pt-BR (`src/lib/errorMessages.test.ts`)
 
 ### CI
 
