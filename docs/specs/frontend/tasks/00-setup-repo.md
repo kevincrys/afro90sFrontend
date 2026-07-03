@@ -1,7 +1,7 @@
 # Task 00 — Setup do repositório afro90sFrontend
 
 **Fase:** 0 — Fundação  
-**Status:** pendente  
+**Status:** concluída  
 **Repo:** `afro90sFrontend` (`kevincrys/afro90sFrontend`)
 
 ## Objetivo
@@ -92,10 +92,10 @@ src/
 
 ### Configuração
 
-- [ ] `theme.css` do protótipo importado em `styles/globals.css` ou `index.css`
-- [ ] Alias `@/` → `src/` no `vite.config.ts` e `tsconfig`
-- [ ] `tsconfig.json` com `strict: true`
-- [ ] `.env.example`:
+- [x] `theme.css` do protótipo importado em `styles/globals.css` ou `index.css`
+- [x] Alias `@/` → `src/` no `vite.config.ts` e `tsconfig`
+- [x] `tsconfig.json` com `strict: true`
+- [x] `.env.example`:
   ```
   VITE_API_BASE_URL=
   VITE_ASSETS_CDN_URL=
@@ -104,16 +104,16 @@ src/
   VITE_COGNITO_CLIENT_ID=
   VITE_COGNITO_REGION=us-east-1
   ```
-- [ ] `.gitignore`: `node_modules/`, `dist/`, `.env`
-- [ ] ESLint + Prettier configurados
+- [x] `.gitignore`: `node_modules/`, `dist/`, `.env`
+- [x] ESLint + Prettier configurados
 
 ### Scripts `package.json`
 
-- [ ] `"dev": "vite"`
-- [ ] `"build": "tsc -b && vite build"`
-- [ ] `"preview": "vite preview"`
-- [ ] `"test": "vitest run"`
-- [ ] `"lint": "eslint src"`
+- [x] `"dev": "vite"`
+- [x] `"build": "tsc -b && vite build"`
+- [x] `"preview": "vite preview"`
+- [x] `"test": "vitest run"`
+- [x] `"lint": "eslint src"`
 
 ## Pré-requisitos
 
@@ -122,8 +122,8 @@ src/
 
 ## Critérios de conclusão
 
-- [ ] `npm run dev` abre com tema anos 90 do protótipo (cores `#7A004B` / `#FFD21F`)
-- [ ] `components/ui/` do protótipo presente e importável
-- [ ] `npm run build` sem erros
-- [ ] Estrutura de pastas criada
-- [ ] Atualizar **Status** para `concluída`
+- [x] `npm run dev` abre com tema anos 90 do protótipo (cores `#7A004B` / `#FFD21F`)
+- [x] `components/ui/` do protótipo presente e importável
+- [x] `npm run build` sem erros
+- [x] Estrutura de pastas criada
+- [x] Atualizar **Status** para `concluída`
