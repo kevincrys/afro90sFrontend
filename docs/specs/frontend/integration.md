@@ -232,6 +232,16 @@ function openWhatsAppOrder(order: Order) {
 | `['admin', 'products', filters]` | `GET /admin/products` |
 | `['admin', 'orders', filters]` | `GET /admin/orders` |
 
+### Cache (implementado)
+
+| Comportamento | Onde |
+|---------------|------|
+| `staleTime: 30_000`, `retry: 1` | `src/lib/query-client.ts` |
+| Lista anterior visível ao mudar busca/filtro | `useProducts` → `placeholderData` |
+| Modal usa produto do catálogo enquanto refetch | `useProduct` + `findProductInCatalogCache` |
+| Prefetch no hover/focus do card | `ProductCard` → `prefetchProduct` |
+| Invalidação pós-pedido (estoque) | `useCreateOrder` → `invalidateProductCachesAfterOrder` |
+
 ## Referências
 
 - [API routes](../backend/api-routes.md)

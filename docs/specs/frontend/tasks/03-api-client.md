@@ -66,6 +66,13 @@ Documentação: [integration.md — Tratamento de erros](../integration.md#trata
 - [x] `QueryClientProvider` em `main.tsx`
 - [x] Defaults: `staleTime: 30_000`, `retry: 1`
 
+#### Padrões de cache (catálogo v1)
+
+- [x] `useProducts` — `placeholderData: (prev) => prev` (busca/filtro sem piscar)
+- [x] `useProduct` — `placeholderData` a partir do cache do catálogo (`src/lib/product-cache.ts`)
+- [x] `prefetchProduct` no hover/focus do `ProductCard`
+- [x] `useCreateOrder` — `invalidateQueries` em `products` e `product/:id` após pedido (estoque)
+
 ### Hooks
 
 - [x] `useProducts({ name, category, cursor })` — infinite query

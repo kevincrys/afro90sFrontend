@@ -1,4 +1,6 @@
+import { useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
+import { prefetchProduct } from "@/hooks/useProduct";
 import { getCategoryLabel } from "@/lib/categoryLabels";
 import { formatPrice } from "@/lib/format";
 import type { Product } from "@/types/product";
@@ -9,6 +11,7 @@ export interface ProductCardProps {
 
 export function ProductCard({ product }: ProductCardProps) {
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const isSoldOut = product.quantity === 0;
   const photo = product.photos[0];
 
@@ -16,11 +19,17 @@ export function ProductCard({ product }: ProductCardProps) {
     navigate(`/products/${product.id}`);
   }
 
+  function handlePrefetch() {
+    void prefetchProduct(queryClient, product.id);
+  }
+
   return (
     <div className="group relative bg-card border border-border hover:border-primary/40 transition-all duration-300">
       <div
         className="relative overflow-hidden aspect-[4/5] bg-muted cursor-pointer"
         onClick={openProduct}
+        onMouseEnter={handlePrefetch}
+        onFocus={handlePrefetch}
         onKeyDown={(event) => {
           if (event.key === "Enter" || event.key === " ") {
             event.preventDefault();
@@ -116,6 +125,8 @@ export function ProductCard({ product }: ProductCardProps) {
             color: "#FFF8E7",
           }}
           onClick={openProduct}
+          onMouseEnter={handlePrefetch}
+          onFocus={handlePrefetch}
         >
           {product.name}
         </h3>

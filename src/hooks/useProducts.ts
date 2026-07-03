@@ -1,16 +1,10 @@
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { getProducts } from "@/api/products";
-import type { ProductCategory } from "@/types/category";
+import { productsQueryKey, type ProductsQueryFilters } from "@/lib/query-keys";
 
-export interface UseProductsFilters {
-  name?: string;
-  category?: ProductCategory;
-  limit?: number;
-}
+export { productsQueryKey, type ProductsQueryFilters } from "@/lib/query-keys";
 
-export function productsQueryKey(filters: UseProductsFilters = {}) {
-  return ["products", filters] as const;
-}
+export type UseProductsFilters = ProductsQueryFilters;
 
 export function useProducts(filters: UseProductsFilters = {}) {
   return useInfiniteQuery({
@@ -22,5 +16,6 @@ export function useProducts(filters: UseProductsFilters = {}) {
       }),
     initialPageParam: undefined as string | undefined,
     getNextPageParam: (lastPage) => (lastPage.hasMore ? lastPage.nextCursor : undefined),
+    placeholderData: (previousData) => previousData,
   });
 }

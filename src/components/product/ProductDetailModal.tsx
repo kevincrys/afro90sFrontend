@@ -21,11 +21,12 @@ export interface ProductDetailModalProps {
 export function ProductDetailModal({ productId, onClose }: ProductDetailModalProps) {
   const panelRef = useRef<HTMLDivElement>(null);
   const loadingRef = useRef<HTMLDivElement>(null);
-  const { data: product, isLoading, isError, error } = useProduct(productId);
+  const { data: product, isPending, isError, error } = useProduct(productId);
   const addItem = useCartStore((state) => state.addItem);
+  const showSkeleton = isPending && !product;
 
-  useFocusTrap(loadingRef, isLoading);
-  useFocusTrap(panelRef, !isLoading);
+  useFocusTrap(loadingRef, showSkeleton);
+  useFocusTrap(panelRef, !showSkeleton);
 
   const [photoIdx, setPhotoIdx] = useState(0);
   const [quantity, setQuantity] = useState(1);
@@ -112,7 +113,7 @@ export function ProductDetailModal({ productId, onClose }: ProductDetailModalPro
       onClick={(event) => event.target === event.currentTarget && onClose()}
       role="presentation"
     >
-      {isLoading && (
+      {showSkeleton && (
         <div ref={loadingRef} className="relative w-full max-w-4xl">
           <button
             type="button"
@@ -126,7 +127,7 @@ export function ProductDetailModal({ productId, onClose }: ProductDetailModalPro
         </div>
       )}
 
-      {isError && (
+      {isError && !product && (
         <div
           ref={panelRef}
           className="relative w-full max-w-md p-8 text-center space-y-4"
@@ -163,7 +164,7 @@ export function ProductDetailModal({ productId, onClose }: ProductDetailModalPro
         </div>
       )}
 
-      {!isLoading && !isError && product && (
+      {product && (
         <div
           ref={panelRef}
           className="relative w-full max-w-4xl max-h-[96vh] md:max-h-[92vh] overflow-y-auto flex flex-col md:flex-row"
