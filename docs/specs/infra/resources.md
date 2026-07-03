@@ -78,7 +78,7 @@ Runtime: **Node.js 20.x**. Bundling: esbuild.
 | `createdAt` | String | ISO 8601 |
 | `updatedAt` | String | ISO 8601 |
 
-**GSI `gsi-name`**: PK `nameLower`, SK `id` — busca por prefixo de nome (v1).
+**Busca por nome (v1):** `Scan` na tabela base com `begins_with(nameLower, :prefix)` — atributo `nameLower`; **sem GSI**.
 
 Billing: **on-demand**. PITR habilitado em production.
 

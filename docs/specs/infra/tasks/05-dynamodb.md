@@ -15,8 +15,8 @@ Implementar `DatabaseStack`: tabelas `products` e `orders` com GSIs dentro do fr
 | Billing | PROVISIONED (free tier: 25 WCU + 25 RCU total entre tabelas e GSIs) |
 | Auto-scaling | Desativado (para não ultrapassar free tier) |
 | PITR | Somente prod, somente tabela `orders` |
-| GSI products | `gsi-name` (PK: `nameLower`, SK: `id`) |
 | GSI products | `gsi-createdAt` (PK: `createdAt`) para listagem pública |
+| Busca por nome | `Scan` na tabela + `begins_with(nameLower, …)` — atributo `nameLower`, sem GSI |
 | GSI orders | `gsi-status-createdAt` (PK: `status`, SK: `createdAt`) |
 | `nameLower` | lowercase + remoção de acentos |
 | Deletion protection | Prod apenas |
@@ -28,11 +28,10 @@ Implementar `DatabaseStack`: tabelas `products` e `orders` com GSIs dentro do fr
 | Recurso | WCU | RCU |
 |---------|-----|-----|
 | `products` table | 3 | 5 |
-| `gsi-name` | 1 | 2 |
 | `gsi-createdAt` | 1 | 2 |
 | `orders` table | 3 | 5 |
 | `gsi-status-createdAt` | 1 | 2 |
-| **Total** | **9** | **16** |
+| **Total** | **8** | **14** |
 
 ### Tabela `products`
 
@@ -41,7 +40,6 @@ Implementar `DatabaseStack`: tabelas `products` e `orders` com GSIs dentro do fr
 - [ ] `billingMode: BillingMode.PROVISIONED`, WCU 3, RCU 5
 - [ ] `removalPolicy: DESTROY` dev / `RETAIN` prod
 - [ ] `deletionProtection: true` em prod
-- [ ] GSI `gsi-name`: PK `nameLower` (S), SK `id` (S) — WCU 1, RCU 2
 - [ ] GSI `gsi-createdAt`: PK `createdAt` (S) — WCU 1, RCU 2
 
 ### Tabela `orders`

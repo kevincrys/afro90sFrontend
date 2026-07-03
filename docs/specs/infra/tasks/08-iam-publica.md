@@ -16,7 +16,7 @@ Criar a role IAM da Lambda pública (`GET /products`, `GET /products/{id}`, `POS
 
 - [ ] DynamoDB `products`:
   - `dynamodb:GetItem`, `dynamodb:Query`, `dynamodb:Scan`
-  - Em índices: `dynamodb:Query` no `gsi-name` e `gsi-createdAt`
+  - Em índices: `dynamodb:Scan` no `gsi-createdAt`
   - Resource: ARN específico da tabela + `ARN/index/*`
 - [ ] DynamoDB `orders`:
   - `dynamodb:PutItem`
