@@ -19,6 +19,7 @@ export function ProductDetailModal({ productId, onClose }: ProductDetailModalPro
   const panelRef = useRef<HTMLDivElement>(null);
   const { data: product, isLoading, isError, error } = useProduct(productId);
   const addItem = useCartStore((state) => state.addItem);
+  const openCart = useCartStore((state) => state.openCart);
 
   const [photoIdx, setPhotoIdx] = useState(0);
   const [quantity, setQuantity] = useState(1);
@@ -111,6 +112,7 @@ export function ProductDetailModal({ productId, onClose }: ProductDetailModalPro
       maxQuantity: product.quantity,
     });
     onClose();
+    openCart();
   }
 
   return (

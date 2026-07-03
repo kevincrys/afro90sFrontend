@@ -12,7 +12,8 @@ const sampleItem = {
 
 describe("useCartStore", () => {
   beforeEach(() => {
-    useCartStore.setState({ items: [] });
+    localStorage.clear();
+    useCartStore.setState({ items: [], isOpen: false });
   });
 
   it("adds item to cart", () => {
@@ -25,6 +26,29 @@ describe("useCartStore", () => {
     useCartStore.getState().addItem({ ...sampleItem, quantity: 2 });
     useCartStore.getState().addItem({ ...sampleItem, quantity: 3 });
     expect(useCartStore.getState().items[0].quantity).toBe(5);
+  });
+
+  it("removes item from cart", () => {
+    useCartStore.getState().addItem(sampleItem);
+    useCartStore.getState().removeItem(sampleItem.productId);
+    expect(useCartStore.getState().items).toHaveLength(0);
+  });
+
+  it("clears cart", () => {
+    useCartStore.getState().addItem(sampleItem);
+    useCartStore.getState().clearCart();
+    expect(useCartStore.getState().items).toHaveLength(0);
+  });
+
+  it("calculates subtotal", () => {
+    useCartStore.getState().addItem(sampleItem);
+    useCartStore.getState().addItem({
+      ...sampleItem,
+      productId: "id-2",
+      price: 10,
+      quantity: 2,
+    });
+    expect(useCartStore.getState().subtotal()).toBeCloseTo(69.9);
   });
 
   it("totalQuantity sums item quantities", () => {

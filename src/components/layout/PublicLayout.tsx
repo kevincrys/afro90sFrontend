@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Outlet } from "react-router-dom";
+import { CartDrawer } from "@/components/cart/CartDrawer";
 import { Footer } from "@/components/layout/Footer";
 import { Header } from "@/components/layout/Header";
 import { useCartStore } from "@/stores/cart.store";
@@ -15,6 +16,8 @@ export function PublicLayout() {
   const cartCount = useCartStore((state) =>
     state.items.reduce((sum, item) => sum + item.quantity, 0),
   );
+  const isCartOpen = useCartStore((state) => state.isOpen);
+  const openCart = useCartStore((state) => state.openCart);
 
   return (
     <div
@@ -25,9 +28,11 @@ export function PublicLayout() {
         activeCategory={activeCategory}
         onCategoryChange={setActiveCategory}
         cartCount={cartCount}
+        onCartClick={openCart}
       />
       <Outlet context={{ activeCategory, setActiveCategory } satisfies CatalogOutletContext} />
       <Footer />
+      {isCartOpen && <CartDrawer />}
     </div>
   );
 }
