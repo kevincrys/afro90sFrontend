@@ -40,7 +40,7 @@ Guia: [github-pipeline-setup.md](../../foundation/github-pipeline-setup.md)
 | Task | Descrição | Status |
 |------|-----------|--------|
 | [00-setup-repo](../frontend/tasks/00-setup-repo.md) | Estrutura inicial | pendente |
-| [04-cicd-deploy](../frontend/tasks/04-cicd-deploy.md) | Workflows CI/CD + roles OIDC frontend | pendente |
+| [04-cicd-deploy](../frontend/tasks/04-cicd-deploy.md) | Workflows CI/CD + roles OIDC frontend | concluída |
 
 ## Dependências
 

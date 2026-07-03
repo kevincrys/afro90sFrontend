@@ -1,0 +1,32 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - run: npm ci
+
+      - name: Build
+        run: npm run build
+        env:
+          VITE_API_BASE_URL: https://ci.example.com
+          VITE_ASSETS_CDN_URL: https://ci.example.com
+          VITE_WHATSAPP_NUMBER: "5511000000000"
+          VITE_COGNITO_USER_POOL_ID: ""
+          VITE_COGNITO_CLIENT_ID: ""
+          VITE_COGNITO_REGION: us-east-1
+
+      - run: npm test
+
+      - run: npm run lint

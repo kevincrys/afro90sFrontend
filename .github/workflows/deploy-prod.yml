@@ -1,0 +1,51 @@
+name: Deploy prod
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: prod
+    env:
+      DEPLOY_ENV: prod
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ vars.AWS_ROLE_ARN }}
+          aws-region: ${{ vars.AWS_REGION }}
+
+      - name: Load VITE_* from SSM
+        run: |
+          PREFIX="/afro90s/${DEPLOY_ENV}"
+          echo "VITE_API_BASE_URL=$(aws ssm get-parameter --name "${PREFIX}/api-base-url" --query Parameter.Value --output text)" >> "$GITHUB_ENV"
+          echo "VITE_ASSETS_CDN_URL=$(aws ssm get-parameter --name "${PREFIX}/assets-cdn-url" --query Parameter.Value --output text)" >> "$GITHUB_ENV"
+          echo "VITE_WHATSAPP_NUMBER=$(aws ssm get-parameter --name "${PREFIX}/whatsapp-number" --query Parameter.Value --output text)" >> "$GITHUB_ENV"
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - run: npm ci
+
+      - name: Build
+        run: npm run build
+        env:
+          VITE_COGNITO_USER_POOL_ID: ${{ vars.VITE_COGNITO_USER_POOL_ID }}
+          VITE_COGNITO_CLIENT_ID: ${{ vars.VITE_COGNITO_CLIENT_ID }}
+          VITE_COGNITO_REGION: ${{ vars.VITE_COGNITO_REGION || 'us-east-1' }}
+
+      - name: Sync to S3
+        run: aws s3 sync dist/ "s3://${{ vars.S3_BUCKET }}" --delete
+
+      - name: Invalidate CloudFront
+        run: aws cloudfront create-invalidation --distribution-id "${{ vars.CLOUDFRONT_DISTRIBUTION_ID }}" --paths "/*"

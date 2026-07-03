@@ -33,7 +33,7 @@ Spec: [frontend/tasks/04-cicd-deploy.md](../specs/frontend/tasks/04-cicd-deploy.
 
 1. Checkout → OIDC (`configure-aws-credentials`)
 2. Ler `VITE_*` do **SSM** (`/afro90s/{env}/…`)
-3. Node 20 → `npm ci` → `npm run build`
+3. Node 24 → `npm ci` → `npm run build`
 4. `aws s3 sync dist/ s3://$S3_BUCKET --delete`
 5. `aws cloudfront create-invalidation --distribution-id $CLOUDFRONT_DISTRIBUTION_ID --paths "/*"`
 
@@ -113,7 +113,7 @@ Mesmas 4 variables com valores prod (bucket `afro90s-prod-s3-web`, distribution 
 
 - [ ] Branch `dev` criada
 - [ ] Environments `dev` e `prod` com **4 variables** cada
-- [ ] Workflows commitados
+- [x] Workflows commitados
 - [ ] Push em `dev` publica SPA no CloudFront dev
 - [ ] Nenhum `AWS_ACCESS_KEY_ID` no repo
 

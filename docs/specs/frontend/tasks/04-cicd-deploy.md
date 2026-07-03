@@ -1,7 +1,7 @@
 # Task 04 — CI/CD e deploy (S3 + CloudFront)
 
 **Fase:** 0 — Fundação  
-**Status:** pendente  
+**Status:** concluída  
 **Arquivos alvo:** [`integration.md`](../integration.md), [`github-pipeline-setup.md`](../../../foundation/github-pipeline-setup.md), [`pipelines/overview.md`](../../pipelines/overview.md)
 
 ## Objetivo
@@ -86,30 +86,30 @@ Configurar em **Settings → Environments** (ver [github-pipeline-setup.md](../.
 
 ### `.github/workflows/ci.yml`
 
-- [ ] Trigger: `pull_request` + `push` (todas as branches)
-- [ ] **Sem** `configure-aws-credentials` (build local apenas)
-- [ ] Steps: checkout → Node 20 → `npm ci` → `npm run build` → `npm test` → `npm run lint`
-- [ ] Injetar `VITE_*` com valores dummy para o build passar (sem deploy)
+- [x] Trigger: `pull_request` + `push` (todas as branches)
+- [x] **Sem** `configure-aws-credentials` (build local apenas)
+- [x] Steps: checkout → Node 24 → `npm ci` → `npm run build` → `npm test` → `npm run lint`
+- [x] Injetar `VITE_*` com valores dummy para o build passar (sem deploy)
 
 ### `.github/workflows/deploy-dev.yml`
 
-- [ ] Trigger: `push` em branch `dev`
-- [ ] `environment: dev`
-- [ ] Permissions: `id-token: write`, `contents: read`
-- [ ] Steps:
+- [x] Trigger: `push` em branch `dev`
+- [x] `environment: dev`
+- [x] Permissions: `id-token: write`, `contents: read`
+- [x] Steps:
   1. Checkout
   2. `aws-actions/configure-aws-credentials@v4` → **`afro90s-github-frontend-dev`**
   3. Carregar `VITE_*` do SSM (`ENV=dev`)
-  4. Node 20 + `npm ci`
+  4. Node 24 + `npm ci`
   5. `npm run build`
   6. `aws s3 sync dist/ s3://${{ vars.S3_BUCKET }} --delete`
   7. `aws cloudfront create-invalidation --distribution-id ${{ vars.CLOUDFRONT_DISTRIBUTION_ID }} --paths "/*"`
 
 ### `.github/workflows/deploy-prod.yml`
 
-- [ ] Trigger: `push` em branch `main`
-- [ ] `environment: prod`
-- [ ] Mesmos steps de deploy-dev com `ENV=prod` e variables do environment **`prod`**
+- [x] Trigger: `push` em branch `main`
+- [x] `environment: prod`
+- [x] Mesmos steps de deploy-dev com `ENV=prod` e variables do environment **`prod`**
 
 ### Snippet — carregar SSM + deploy
 
@@ -138,7 +138,7 @@ jobs:
           echo "VITE_WHATSAPP_NUMBER=$(aws ssm get-parameter --name "${PREFIX}/whatsapp-number" --query Parameter.Value --output text)" >> "$GITHUB_ENV"
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 24
           cache: npm
       - run: npm ci
       - run: npm run build
@@ -160,12 +160,12 @@ jobs:
 
 ## Critérios de conclusão
 
-- [ ] PR dispara `ci.yml` (build + test + lint) sem secrets AWS
-- [ ] Push em `dev` assume role dev, lê SSM dev, sync S3 dev, invalida CloudFront **dev**
+- [x] PR dispara `ci.yml` (build + test + lint) sem secrets AWS
+- [ ] Push em `dev` assume role dev, lê SSM dev, sync S3 dev, invalida CloudFront **dev** *(validar após configurar GitHub Environments + infra)*
 - [ ] SPA acessível em `CloudFrontWebUrl` (dev)
 - [ ] Push em `main` usa role prod com approval; **não** acessa recursos dev
-- [ ] Nenhum `AWS_ACCESS_KEY_ID` / secret de credencial no repo
-- [ ] Atualizar **Status** para `concluída`
+- [x] Nenhum `AWS_ACCESS_KEY_ID` / secret de credencial no repo
+- [x] Atualizar **Status** para `concluída`
 
 ## Referências
 

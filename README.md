@@ -93,14 +93,14 @@ Detalhes: [overview](docs/specs/frontend/overview.md) · [integration](docs/spec
 - [x] Documentação de pipeline e setup GitHub
 - [x] Roteamento e layout (task 02) — `PublicLayout`, `ProtectedRoute`, `ScrollToTop`, 404
 - [x] Cliente API + React Query (task 03)
-- [ ] Workflows GitHub Actions
+- [x] Workflows GitHub Actions (task 04)
 - [ ] Primeiro deploy em dev
 
 ## Desenvolvimento local
 
 ### Pré-requisitos
 
-- **Node.js** 20+
+- **Node.js** 24+ (LTS ativa — ver `.nvmrc`)
 - **npm** (incluído com o Node)
 - API rodando localmente (`afro90sBackend`) **ou** URL da API **dev** na AWS
 
