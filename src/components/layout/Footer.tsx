@@ -110,6 +110,17 @@ export function Footer({ onCategorySelect }: FooterProps) {
                 <span className="text-muted-foreground text-sm">WhatsApp</span>
               )}
             </li>
+            <li>
+              <a
+                href={getInstagramUrl()}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={linkClassName}
+                style={{ fontFamily: "'Barlow', sans-serif", display: "inline-block" }}
+              >
+                Instagram
+              </a>
+            </li>
           </ul>
         </div>
 
