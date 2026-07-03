@@ -41,4 +41,13 @@ describe("whatsapp", () => {
     expect(message).toContain("Maria Silva");
     expect(message).toContain("11999999999");
   });
+
+  it("buildWhatsAppOrderMessage tolerates partial order payload from API", () => {
+    const message = buildWhatsAppOrderMessage({
+      id: sampleOrder.id,
+      fullPrice: sampleOrder.fullPrice,
+    });
+    expect(message).toContain(sampleOrder.id);
+    expect(message).toContain("Itens: 0");
+  });
 });

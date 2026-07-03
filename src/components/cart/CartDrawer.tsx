@@ -15,6 +15,34 @@ import {
 import { useCartStore } from "@/stores/cart.store";
 import { ApiError } from "@/types/errors";
 import type { Order } from "@/types/order";
+import type { CartItem } from "@/stores/cart.store";
+
+function buildOrderSnapshot(
+  response: Pick<Order, "id" | "status" | "fullPrice"> & Partial<Order>,
+  cartItems: CartItem[],
+  customer: CheckoutFormValues,
+): Order {
+  const now = new Date().toISOString();
+  return {
+    id: response.id,
+    status: response.status,
+    fullPrice: response.fullPrice,
+    items: cartItems.map((item) => ({
+      productId: item.productId,
+      quantity: item.quantity,
+      unitPrice: item.price,
+      ...(item.selectedOption ? { selectedOption: item.selectedOption } : {}),
+    })),
+    customer: {
+      name: customer.name,
+      address: customer.address,
+      postalCode: customer.postalCode,
+      tel: customer.tel,
+    },
+    createdAt: response.createdAt ?? now,
+    updatedAt: response.updatedAt ?? now,
+  };
+}
 
 function FieldLabel({ htmlFor, children }: { htmlFor: string; children: ReactNode }) {
   return (
@@ -86,26 +114,33 @@ export function CartDrawer() {
   }, []);
 
   async function onSubmit(values: CheckoutFormValues) {
-    if (items.length === 0) return;
+    if (items.length === 0 || completedOrder) return;
+
+    const cartSnapshot = items;
+    const customer = {
+      name: values.name,
+      address: values.address,
+      postalCode: values.postalCode,
+      tel: values.tel,
+    };
 
     try {
-      const order = await createOrder.mutateAsync({
-        items: items.map((item) => ({
+      const response = await createOrder.mutateAsync({
+        items: cartSnapshot.map((item) => ({
           productId: item.productId,
           quantity: item.quantity,
           ...(item.selectedOption ? { selectedOption: item.selectedOption } : {}),
         })),
-        customer: {
-          name: values.name,
-          address: values.address,
-          postalCode: values.postalCode,
-          tel: values.tel,
-        },
+        customer,
       });
+
+      const orderSnapshot = buildOrderSnapshot(response, cartSnapshot, values);
+
       clearCart();
-      setCompletedOrder(order);
+      setCompletedOrder(orderSnapshot);
+
       if (isWhatsAppConfigured()) {
-        setWhatsAppBlocked(!openWhatsAppOrder(order));
+        setWhatsAppBlocked(!openWhatsAppOrder(orderSnapshot));
       } else {
         setWhatsAppBlocked(false);
       }
@@ -186,9 +221,9 @@ export function CartDrawer() {
                 sucesso.
                 {isWhatsAppConfigured()
                   ? whatsAppBlocked
-                    ? " O navegador bloqueou a abertura automática — use o botão abaixo para abrir o WhatsApp e enviar o resumo à loja."
-                    : " Abrimos o WhatsApp para você enviar o resumo à loja e concluir a compra."
-                  : " Não foi possível abrir o WhatsApp. Entre em contato com a loja e informe o número do pedido acima para concluir a compra."}
+                    ? " O navegador bloqueou a abertura automática — use o botão abaixo para abrir o WhatsApp Web e enviar o resumo à loja."
+                    : " Use o botão abaixo para abrir o WhatsApp Web e enviar o resumo à loja."
+                  : " Entre em contato com a loja e informe o número do pedido acima para concluir a compra."}
               </p>
               <div className="border border-border px-6 py-4 text-left w-full max-w-xs">
                 <div
@@ -210,7 +245,7 @@ export function CartDrawer() {
               <div style={{ fontFamily: "'Anton', sans-serif", fontSize: "1.5rem", color: "#FFD21F" }}>
                 TOTAL: {formatPrice(completedOrder.fullPrice)}
               </div>
-              {isWhatsAppConfigured() && whatsAppBlocked && (
+              {isWhatsAppConfigured() && (
                 <button
                   type="button"
                   onClick={() => openWhatsAppOrder(completedOrder)}
