@@ -1,7 +1,7 @@
 # Frontend — Overview
 
 **Status:** Aprovado  
-**Última atualização:** 2025-06-23
+**Última atualização:** 2026-07-02
 
 ## Objetivo
 
@@ -17,7 +17,7 @@ Guia de implementação do frontend Afro90s no repositório **afro90sFrontend**.
 | Roteamento | React Router v6 |
 | Data fetching | TanStack Query (React Query) |
 | HTTP | fetch ou axios (tipado) |
-| Auth admin | AWS Amplify Auth ou `amazon-cognito-identity-js` |
+| Auth admin | AWS Amplify Auth (SRP) |
 | Deploy | Build estático → S3 + CloudFront |
 
 ## Estrutura sugerida
@@ -30,17 +30,27 @@ afro90sFrontend/
 │   │   ├── products.ts
 │   │   └── orders.ts
 │   ├── components/
-│   │   ├── ui/              # botões, inputs, skeletons
+│   │   ├── ui/                  # botões, inputs, skeletons
 │   │   ├── product/
-│   │   └── layout/
+│   │   │   ├── ProductCard.tsx
+│   │   │   └── ProductDetailModal.tsx
+│   │   ├── cart/
+│   │   │   └── CartDrawer.tsx
+│   │   ├── admin/
+│   │   │   ├── AdminOrdersTab.tsx
+│   │   │   ├── AdminProductsTab.tsx
+│   │   │   ├── OrderDetailDrawer.tsx
+│   │   │   └── ProductFormModal.tsx
+│   │   └── layout/              # Header, Footer
 │   ├── pages/
-│   │   ├── CatalogPage.tsx
-│   │   ├── ProductDetailPage.tsx
-│   │   ├── CheckoutPage.tsx
+│   │   ├── catalog/
+│   │   │   └── CatalogPage.tsx
 │   │   └── admin/
+│   │       ├── AdminLoginPage.tsx
+│   │       └── AdminPage.tsx    # painel único com tabs
+│   ├── stores/                  # Zustand (carrinho)
 │   ├── hooks/
-│   ├── contexts/            # carrinho (v1 local)
-│   ├── types/               # espelham data-models.md
+│   ├── types/                   # espelham data-models.md
 │   └── styles/
 ├── public/
 ├── index.html
@@ -49,14 +59,23 @@ afro90sFrontend/
 
 ## Páginas v1
 
-| Rota | Página | Auth |
-|------|--------|------|
-| `/` | Catálogo | Pública |
-| `/produto/:id` | Detalhe do produto | Pública |
-| `/checkout` | Formulário de pedido | Pública |
+| Rota | Página / UI | Auth |
+|------|-------------|------|
+| `/` | Catálogo (grid + filtros) | Pública |
+| `/produto/:id` | Deep link — abre `ProductDetailModal` sobre o catálogo | Pública |
 | `/admin/login` | Login Cognito | — |
-| `/admin/produtos` | CRUD produtos | Admin |
-| `/admin/pedidos` | Gestão de pedidos | Admin |
+| `/admin` | Painel admin com tabs **Pedidos** \| **Produtos** | Admin |
+
+> Checkout e detalhe do produto **não são rotas separadas**: formulário de pedido no **drawer** do carrinho; detalhe no **modal** com galeria.
+
+### Admin — tabs internas
+
+| Tab | Conteúdo |
+|-----|----------|
+| **Pedidos** (padrão) | Tabs de status + lista de cards + drawer de detalhe |
+| **Produtos** | Grid de cards + modal CRUD + upload de imagens |
+
+Tab ativa pode ser controlada por estado local ou query `?tab=produtos` (opcional, para bookmark).
 
 ## Contrato com a API
 

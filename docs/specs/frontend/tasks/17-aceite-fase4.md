@@ -12,7 +12,7 @@ Validar frontend v1 completo com regressão de todas as fases e testes E2E.
 
 ### Fase 1 — Loja pública
 
-- [ ] Catálogo, detalhe, carrinho, checkout, WhatsApp OK
+- [ ] Catálogo, modal detalhe, carrinho drawer, checkout, WhatsApp OK
 
 ### Fase 2 — Login
 
@@ -20,7 +20,7 @@ Validar frontend v1 completo com regressão de todas as fases e testes E2E.
 
 ### Fase 3 — Admin
 
-- [ ] CRUD produtos + gestão pedidos OK
+- [ ] CRUD produtos + gestão pedidos em `/admin` OK
 
 ### Fase 4 — Qualidade
 
@@ -37,7 +37,7 @@ Validar frontend v1 completo com regressão de todas as fases e testes E2E.
 
 ### Responsividade
 
-- [ ] Mobile 375px — catálogo, carrinho drawer, admin
+- [ ] Mobile 375px — catálogo, modal, carrinho drawer, admin tabs
 - [ ] Desktop 1280px — grid 4 colunas, modais
 
 ## Pré-requisitos

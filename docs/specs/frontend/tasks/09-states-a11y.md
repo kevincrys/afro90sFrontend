@@ -41,7 +41,7 @@ const ERROR_MESSAGES: Record<string, string> = {
 ### Skeletons por página
 
 - [ ] `CatalogSkeleton` — grid de cards placeholder
-- [ ] `ProductDetailSkeleton` — imagem + texto placeholder
+- [ ] `ProductDetailModalSkeleton` — imagem + texto placeholder
 
 ### Acessibilidade
 
@@ -57,7 +57,7 @@ const ERROR_MESSAGES: Record<string, string> = {
 
 ## Critérios de conclusão
 
-- [ ] Loading/empty/error visíveis em catálogo e detalhe
+- [ ] Loading/empty/error visíveis em catálogo e modal de detalhe
 - [ ] Toasts funcionam para sucesso e erro
 - [ ] Skip link presente
 - [ ] `ui-ux.md` tabela de estados atualizada

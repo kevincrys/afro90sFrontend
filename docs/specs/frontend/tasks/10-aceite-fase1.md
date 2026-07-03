@@ -13,7 +13,7 @@ Validar que a loja pública está funcional end-to-end — sem login, sem admin.
 - [ ] Catálogo carrega e pagina (scroll infinito)
 - [ ] Busca por nome funciona (Enter)
 - [ ] Filtro por categoria funciona
-- [ ] Detalhe do produto abre com galeria
+- [ ] Detalhe do produto abre em modal com galeria
 - [ ] Adicionar ao carrinho atualiza badge
 - [ ] Carrinho persiste após reload
 - [ ] Checkout cria pedido (`201`) e abre WhatsApp

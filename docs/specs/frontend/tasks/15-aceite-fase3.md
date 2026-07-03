@@ -1,32 +1,33 @@
 # Task 15 — Aceite Fase 3 (Painel admin)
 
-**Fase:** 3 — Rotas admin  
+**Fase:** 3 — Painel admin  
 **Status:** pendente
 
 ## Objetivo
 
-Validar painel admin completo: CRUD produtos + gestão de pedidos.
+Validar painel admin completo em `/admin`: CRUD produtos + gestão de pedidos.
 
 ## Checklist de aceite
 
-### Produtos
+### Produtos (tab Produtos)
 
 - [ ] Criar produto com imagem → aparece no catálogo público
 - [ ] Editar nome/preço/estoque
 - [ ] Excluir produto → some do catálogo
 - [ ] Upload multipart funciona
 
-### Pedidos
+### Pedidos (tab Pedidos)
 
-- [ ] Pedido do checkout aparece em `/admin/pedidos`
+- [ ] Pedido do checkout aparece na tab Pedidos de `/admin`
 - [ ] Filtrar por status (tabs)
 - [ ] Alterar status com transição válida
 - [ ] Drawer exibe customer e itens
+- [ ] Paginação por cursor funciona
 
 ### Regressão
 
 - [ ] Login/logout funciona
-- [ ] Loja pública (catálogo, carrinho, checkout) continua OK
+- [ ] Loja pública (catálogo, modal, carrinho drawer) continua OK
 
 ## Pré-requisitos
 

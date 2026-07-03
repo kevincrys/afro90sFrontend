@@ -12,10 +12,12 @@ Configurar React Router com rotas públicas e admin, layout compartilhado e pág
 
 | Decisão | Valor |
 |---------|-------|
-| Layout | Único (`PublicLayout`) — admin usa mesmo header simplificado |
+| Layout público | `PublicLayout` — Header + Footer + `<Outlet>` |
+| Layout admin | Header simplificado dentro de `AdminPage` (logo + logout) |
 | Header público | Logo, carrinho, busca, categorias |
-| Header admin | Logo + logout |
-| Admin redirect pós-login | `/admin/pedidos` |
+| Admin redirect pós-login | `/admin` (tab Pedidos) |
+| Detalhe produto | Modal sobre catálogo; `/produto/:id` como deep link |
+| Checkout | Drawer (sem rota `/checkout`) |
 | 404 | Página customizada com tema anos 90 |
 | Scroll to top | Sim, em mudança de rota |
 
@@ -26,19 +28,23 @@ Configurar React Router com rotas públicas e admin, layout compartilhado e pág
 | Rota | Componente | Auth | Fase |
 |------|------------|------|------|
 | `/` | `CatalogPage` | Não | 1 |
-| `/produto/:id` | `ProductDetailPage` | Não | 1 |
+| `/produto/:id` | `CatalogPage` (abre `ProductDetailModal`) | Não | 1 |
 | `/admin/login` | `AdminLoginPage` | Não | 2 |
-| `/admin/pedidos` | `AdminOrdersPage` | Sim | 3 |
-| `/admin/produtos` | `AdminProductsPage` | Não | 3 |
+| `/admin` | `AdminPage` (tabs Pedidos \| Produtos) | Sim | 3 |
 | `*` | `NotFoundPage` | Não | 0 |
 
 ### `src/routes/index.tsx`
 
 - [ ] `BrowserRouter` com `Routes` e `Route`
 - [ ] `PublicLayout` wrapping rotas públicas (Header + Footer + `<Outlet>`)
-- [ ] `AdminLayout` para `/admin/*` (header simplificado)
-- [ ] `ProtectedRoute` component (implementado na task 11 — fase 2; placeholder que redireciona para `/admin/login`)
+- [ ] `ProtectedRoute` em `/admin` (implementado na task 11 — fase 2; placeholder que redireciona para `/admin/login`)
 - [ ] `ScrollToTop` component
+
+### `AdminPage` (shell — implementação completa na fase 3)
+
+- [ ] Tabs principais: **Pedidos** | **Produtos**
+- [ ] Tab padrão: Pedidos
+- [ ] Query opcional `?tab=produtos` para abrir tab Produtos (bookmark)
 
 ### `NotFoundPage`
 
@@ -53,6 +59,7 @@ Configurar React Router com rotas públicas e admin, layout compartilhado e pág
 
 - [ ] Navegação entre rotas sem reload
 - [ ] `/rota-inexistente` → página 404
+- [ ] `/produto/:id` abre modal de detalhe sem sair do catálogo
 - [ ] Scroll to top funciona
 - [ ] `overview.md` tabela de rotas atualizada
 - [ ] Atualizar **Status** para `concluída`

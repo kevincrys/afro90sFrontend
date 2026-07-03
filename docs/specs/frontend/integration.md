@@ -1,7 +1,7 @@
 # Frontend — Integração com API e serviços
 
 **Status:** Aprovado  
-**Última atualização:** 2025-06-23
+**Última atualização:** 2026-07-02
 
 ## Objetivo
 
@@ -96,14 +96,21 @@ await fetch(`${baseUrl}/admin/products`, {
 ## Fluxo de checkout
 
 ```
-1. Usuário preenche formulário em /checkout
-2. POST /orders com items + customer
-3. Se 201:
-   a. Exibir confirmação com orderId
+1. Usuário abre drawer do carrinho (ícone no header)
+2. Preenche formulário de entrega no drawer
+3. POST /orders com items + customer
+4. Se 201:
+   a. Exibir confirmação breve no drawer (orderId)
    b. Abrir WhatsApp (wa.me)
-   c. Limpar carrinho local
-4. Se erro: exibir mensagem da API (code + message)
+   c. Limpar carrinho local (Zustand + localStorage)
+5. Se erro: exibir mensagem da API (code + message) em toast
 ```
+
+## Painel admin
+
+- Rota única `/admin` com tabs **Pedidos** | **Produtos**
+- Login em `/admin/login` → redirect `/admin` (tab Pedidos)
+- Rotas `/admin/*` protegidas exceto `/admin/login`
 
 ## Integração WhatsApp (v1)
 

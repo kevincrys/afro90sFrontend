@@ -55,12 +55,16 @@ src/
 │   └── AdminRoutes.tsx
 ├── pages/
 │   ├── catalog/
-│   ├── product/
-│   ├── checkout/
+│   │   └── CatalogPage.tsx
 │   └── admin/
+│       ├── AdminLoginPage.tsx
+│       └── AdminPage.tsx       # tabs Pedidos | Produtos
 ├── components/
-│   ├── ui/                 # Button, Input, Card, Skeleton
-│   └── layout/             # Header, Footer
+│   ├── ui/
+│   ├── product/                # ProductCard, ProductDetailModal
+│   ├── cart/                   # CartDrawer
+│   ├── admin/                  # AdminOrdersTab, AdminProductsTab, modais
+│   └── layout/
 ├── api/                    # cliente HTTP (task 03)
 ├── stores/                 # Zustand (carrinho)
 ├── hooks/

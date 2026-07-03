@@ -6,7 +6,7 @@
 
 ## Objetivo
 
-Implementar autenticação admin via AWS Amplify Auth (SRP) e proteção de rotas `/admin/*`.
+Implementar autenticação admin via AWS Amplify Auth (SRP) e proteção da rota `/admin`.
 
 ## Configurações já definidas
 
@@ -15,7 +15,7 @@ Implementar autenticação admin via AWS Amplify Auth (SRP) e proteção de rota
 | Biblioteca | Amplify `configure` + `signIn` (SRP) |
 | Token storage | `sessionStorage` (ou cookie se possível) |
 | Refresh automático | Sim (1h refresh, access token diário) |
-| Redirect pós-login | `/admin/pedidos` |
+| Redirect pós-login | `/admin` (tab Pedidos) |
 | Logout | Limpa token + cache React Query admin |
 | `403` sem grupo admins | Mensagem específica em pt-BR |
 
@@ -41,7 +41,7 @@ Amplify.configure({
 - [ ] `signIn({ username, password })` via Amplify
 - [ ] Loading state no submit
 - [ ] Erro de credenciais → toast em pt-BR
-- [ ] Sucesso → redirect para `/admin/pedidos`
+- [ ] Sucesso → redirect para `/admin`
 
 ### `src/components/ProtectedRoute.tsx`
 
@@ -56,7 +56,7 @@ Amplify.configure({
 
 ### Logout
 
-- [ ] Botão no header admin → `signOut()` + `queryClient.clear()` + redirect `/`
+- [ ] Botão no header de `AdminPage` → `signOut()` + `queryClient.clear()` + redirect `/`
 
 ## Pré-requisitos
 
@@ -66,6 +66,6 @@ Amplify.configure({
 ## Critérios de conclusão
 
 - [ ] Login funcional com usuário admin criado no Cognito
-- [ ] Rotas `/admin/*` redirecionam para login sem sessão
+- [ ] `/admin` redireciona para login sem sessão
 - [ ] Logout limpa sessão e cache
 - [ ] Atualizar **Status** para `concluída`

@@ -31,17 +31,17 @@ npm install -D cypress
 
 **`cypress/e2e/public-store.cy.ts`** (fase 1):
 - [ ] Visitar `/` → catálogo carrega
-- [ ] Clicar produto → detalhe abre
+- [ ] Clicar produto → modal de detalhe abre
 - [ ] Adicionar ao carrinho → badge atualiza
 - [ ] Abrir drawer → checkout com dados válidos → pedido criado
 
 **`cypress/e2e/admin-auth.cy.ts`** (fase 2):
-- [ ] `/admin/pedidos` sem login → redirect `/admin/login`
-- [ ] Login com credenciais → redirect `/admin/pedidos`
+- [ ] `/admin` sem login → redirect `/admin/login`
+- [ ] Login com credenciais → redirect `/admin`
 
 **`cypress/e2e/admin-crud.cy.ts`** (fase 3):
-- [ ] Criar produto → aparece no catálogo
-- [ ] Alterar status de pedido
+- [ ] Tab Produtos: criar produto → aparece no catálogo
+- [ ] Tab Pedidos: alterar status de pedido
 
 ### Testes unitários (Vitest)
 

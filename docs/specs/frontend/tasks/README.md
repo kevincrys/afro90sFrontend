@@ -35,7 +35,7 @@ Organizado em **4 fases** alinhadas com [`infra/tasks/`](../../infra/tasks/READM
 | # | Arquivo | O que entrega |
 |---|---------|---------------|
 | 05 | [05-catalogo.md](05-catalogo.md) | Página `/` com scroll infinito |
-| 06 | [06-produto-detalhe.md](06-produto-detalhe.md) | `/produto/:id` + galeria modal |
+| 06 | [06-produto-detalhe.md](06-produto-detalhe.md) | Modal galeria + deep link `/produto/:id` |
 | 07 | [07-carrinho-checkout.md](07-carrinho-checkout.md) | Drawer carrinho + checkout Zod |
 | 08 | [08-whatsapp.md](08-whatsapp.md) | Abertura automática wa.me pós-pedido |
 | 09 | [09-states-a11y.md](09-states-a11y.md) | Skeletons, toasts, acessibilidade |
@@ -54,7 +54,7 @@ Organizado em **4 fases** alinhadas com [`infra/tasks/`](../../infra/tasks/READM
 | 11 | [11-login-admin.md](11-login-admin.md) | Amplify SRP + `ProtectedRoute` |
 | 12 | [12-aceite-fase2.md](12-aceite-fase2.md) | Checklist aceite fase 2 |
 
-**✓ Resultado:** admin faz login e acessa `/admin/pedidos`.
+**✓ Resultado:** admin faz login e acessa `/admin` (tab Pedidos).
 
 ---
 
@@ -64,8 +64,8 @@ Organizado em **4 fases** alinhadas com [`infra/tasks/`](../../infra/tasks/READM
 
 | # | Arquivo | O que entrega |
 |---|---------|---------------|
-| 13 | [13-admin-produtos.md](13-admin-produtos.md) | Cards + modal CRUD + upload multipart |
-| 14 | [14-admin-pedidos.md](14-admin-pedidos.md) | Tabs status + drawer detalhe |
+| 13 | [13-admin-produtos.md](13-admin-produtos.md) | Tab Produtos: cards + modal CRUD + upload |
+| 14 | [14-admin-pedidos.md](14-admin-pedidos.md) | Tab Pedidos: status tabs + drawer detalhe |
 | 15 | [15-aceite-fase3.md](15-aceite-fase3.md) | Checklist aceite fase 3 |
 
 **✓ Resultado:** admin gerencia produtos e pedidos.

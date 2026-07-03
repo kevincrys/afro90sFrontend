@@ -1,43 +1,51 @@
-# Task 13 — Admin — CRUD de produtos
+# Task 13 — Admin — CRUD de produtos (tab Produtos)
 
-**Fase:** 3 — Rotas admin  
+**Fase:** 3 — Painel admin  
 **Status:** pendente  
 **Arquivos alvo:** [`ui-ux.md`](../ui-ux.md), [`integration.md`](../integration.md)
 
 ## Objetivo
 
-Implementar painel de gestão de produtos: listagem, criar, editar, excluir e upload de imagens.
+Implementar tab **Produtos** em `/admin`: listagem, criar, editar, excluir e upload de imagens.
 
 ## Configurações já definidas
 
 | Decisão | Valor |
 |---------|-------|
+| Container | Tab dentro de `AdminPage` (`/admin?tab=produtos`) |
 | UI listagem | Cards (não tabela) |
 | Formulário | Modal |
-| Upload | Multipart |
+| Upload | Multipart (preferencial) ou URL/base64 |
 | Preview imagens | Sim, antes de salvar |
 | Reordenar fotos | Sim, na v1 |
 | Confirmação delete | Sim |
-| Estoque | Na mesma tela do formulário |
+| Estoque | No mesmo modal do formulário |
+| Campos API | `name`, `price`, `quantity`, `category`, `photos` apenas |
 
 ## O que implementar
 
-### `src/pages/admin/AdminProductsPage.tsx`
+### `src/pages/admin/AdminPage.tsx`
+
+- [ ] Shell com tabs **Pedidos** | **Produtos** e header (logo, e-mail, logout)
+- [ ] Renderizar `AdminProductsTab` quando tab Produtos ativa
+
+### `src/components/admin/AdminProductsTab.tsx`
 
 - [ ] Grid de cards com imagem, nome, preço, estoque
-- [ ] `useAdminProducts()` com paginação
+- [ ] `useAdminProducts()` com paginação por cursor
 - [ ] Botão "Novo produto" → abre modal
 - [ ] Ações por card: editar, excluir
+- [ ] Filtro por categoria (tabs ou select) — opcional
 
 ### `src/components/admin/ProductFormModal.tsx`
 
 - [ ] Campos: `name`, `price`, `quantity`, `category`
-- [ ] Upload de imagens (input file, multipart)
+- [ ] Abas ou seções: URL de imagem + upload de arquivo
 - [ ] Preview das imagens selecionadas com reordenação (drag ou botões ↑↓)
 - [ ] Validação Zod
-- [ ] Modo create: `POST /admin/products`
+- [ ] Modo create: `POST /admin/products` (multipart)
 - [ ] Modo edit: `PUT /admin/products/{id}`
-- [ ] Campo estoque atualiza via `PUT /admin/products/{id}/stock` ou junto no PUT
+- [ ] Estoque atualizado junto no PUT ou via `PATCH /admin/products/{id}/stock`
 
 ### Delete
 
@@ -57,7 +65,7 @@ Implementar painel de gestão de produtos: listagem, criar, editar, excluir e up
 
 ## Critérios de conclusão
 
-- [ ] CRUD completo funcional com token admin
+- [ ] CRUD completo funcional com token admin na tab Produtos
 - [ ] Upload de imagem → produto aparece no catálogo público
 - [ ] Delete remove produto do catálogo
 - [ ] Atualizar **Status** para `concluída`
