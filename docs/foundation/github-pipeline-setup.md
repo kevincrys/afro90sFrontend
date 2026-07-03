@@ -2,7 +2,7 @@
 
 Guia para configurar **GitHub Actions**, **Environments**, **OIDC AWS** e **branch protection** neste repositório.
 
-> OIDC provider e conta AWS: [afro90sInfra — github-pipeline-setup.md](https://github.com/kevincrys/afro90sInfra/blob/main/docs/foundation/github-pipeline-setup.md).
+> OIDC provider, roles e parâmetros CloudFront: [afro90sInfra — github-pipeline-setup.md](https://github.com/kevincrys/afro90sInfra/blob/main/docs/foundation/github-pipeline-setup.md).
 
 ## Repositório
 
@@ -31,9 +31,9 @@ Spec: [frontend/tasks/04-cicd-deploy.md](../specs/frontend/tasks/04-cicd-deploy.
 
 ### Steps deploy (resumo)
 
-1. Checkout → Node 20 → `npm ci`
-2. Injetar `VITE_*` (variables do environment ou artifact da infra)
-3. `npm run build`
+1. Checkout → OIDC (`configure-aws-credentials`)
+2. Ler `VITE_*` do **SSM** (`/afro90s/{env}/…`)
+3. Node 20 → `npm ci` → `npm run build`
 4. `aws s3 sync dist/ s3://$S3_BUCKET --delete`
 5. `aws cloudfront create-invalidation --distribution-id $CLOUDFRONT_DISTRIBUTION_ID --paths "/*"`
 
@@ -52,13 +52,21 @@ permissions:
 
 ## AWS — Roles IAM
 
-| Role | Trigger |
-|------|---------|
-| `afro90s-github-frontend-pr` | `repo:kevincrys/afro90sFrontend:pull_request` |
-| `afro90s-github-frontend-dev` | `repo:kevincrys/afro90sFrontend:ref:refs/heads/dev` |
-| `afro90s-github-frontend-prod` | `repo:kevincrys/afro90sFrontend:ref:refs/heads/main` |
+Provisionadas em [`github-oidc-roles.template.yaml`](https://github.com/kevincrys/afro90sInfra/blob/main/infra/iam/github-oidc-roles.template.yaml).
 
-Policy dev/prod: S3 no bucket web do ambiente + `cloudfront:CreateInvalidation`.
+| Role | Trigger (`sub`) |
+|------|-----------------|
+| `afro90s-github-frontend-pr` | `repo:kevincrys/afro90sFrontend:pull_request` |
+| `afro90s-github-frontend-dev` | `…:environment:dev` ou `…:ref:refs/heads/dev` |
+| `afro90s-github-frontend-prod` | `…:environment:production` ou `…:ref:refs/heads/main` |
+
+Policy dev/prod (isoladas por ambiente):
+
+- S3: `afro90s-{env}-s3-web`
+- CloudFront: `CreateInvalidation` **somente** na distribuição web daquele env (ID fixo na policy — sem wildcard)
+- SSM: `GetParameter` em `/afro90s/{env}/*`
+
+Parâmetros OIDC obrigatórios ao aplicar o template: `FrontendDevCloudFrontDistributionId`, `FrontendProdCloudFrontDistributionId` (mesmos IDs do GitHub).
 
 ## GitHub Environments
 
@@ -68,15 +76,14 @@ Policy dev/prod: S3 no bucket web do ambiente + `cloudfront:CreateInvalidation`.
 |----------|--------|
 | `AWS_ROLE_ARN` | Role `afro90s-github-frontend-dev` |
 | `AWS_REGION` | `us-east-1` |
-| `S3_BUCKET` | Output infra `WebBucketName` (dev) |
-| `CLOUDFRONT_DISTRIBUTION_ID` | Output infra (dev) |
-| `VITE_API_BASE_URL` | Output `ApiBaseUrl` |
-| `VITE_ASSETS_CDN_URL` | Output `AssetsCdnUrl` |
-| `VITE_WHATSAPP_NUMBER` | SSM `/afro90s/dev/whatsapp-number` |
+| `S3_BUCKET` | `afro90s-dev-s3-web` |
+| `CLOUDFRONT_DISTRIBUTION_ID` | CloudFront web dev (console) |
+
+**SSM (workflow, não GitHub):** `api-base-url`, `assets-cdn-url`, `whatsapp-number` em `/afro90s/dev/*`.
 
 ### `production`
 
-Mesmas variables com valores de prod.
+Mesmas 4 variables com valores prod.
 
 | Protection | Valor |
 |------------|-------|
@@ -94,13 +101,14 @@ Mesmas variables com valores de prod.
 ## Pré-requisitos
 
 - [ ] Infra task 06 (frontend hosting) deployada
-- [ ] Infra task 04 (CI/CD base) ou outputs disponíveis
-- [ ] Roles IAM frontend criadas
+- [ ] Infra task 10 (SSM api-base-url, whatsapp-number, …)
+- [ ] Roles IAM frontend criadas/atualizadas no stack OIDC (IDs CloudFront por env)
+- [ ] Distribution ID dev ≠ prod na policy IAM e no GitHub
 
 ## Checklist
 
 - [ ] Branch `dev` criada
-- [ ] Environments `dev` e `production` com variables
+- [ ] Environments `dev` e `production` com **4 variables** cada
 - [ ] Workflows commitados
 - [ ] Push em `dev` publica SPA no CloudFront dev
 - [ ] Nenhum `AWS_ACCESS_KEY_ID` no repo
@@ -109,4 +117,5 @@ Mesmas variables com valores de prod.
 
 - [Pipeline overview](../specs/pipelines/overview.md)
 - [integration.md](../specs/frontend/integration.md)
+- [outputs.md (infra)](https://github.com/kevincrys/afro90sInfra/blob/main/docs/specs/infra/outputs.md) — § Frontend deploy
 - [Guia completo (infra)](https://github.com/kevincrys/afro90sInfra/blob/main/docs/foundation/github-pipeline-setup.md)
