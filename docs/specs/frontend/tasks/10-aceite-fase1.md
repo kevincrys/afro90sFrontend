@@ -7,6 +7,10 @@
 
 Validar que a loja pública está funcional end-to-end — sem login, sem admin.
 
+### Automação pós-deploy
+
+- [x] `scripts/smoke-test-api-fase1.sh` no CI backend (ver infra task 12)
+
 ## Checklist de aceite
 
 - [ ] `https://*.cloudfront.net` abre o site
