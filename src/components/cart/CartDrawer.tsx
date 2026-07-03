@@ -1,12 +1,16 @@
 import { useCallback, useEffect, useState, type ReactNode } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ArrowRight, CheckCircle, Trash2, X } from "lucide-react";
+import { ArrowRight, CheckCircle, MessageCircle, Trash2, X } from "lucide-react";
 import { toast, Toaster } from "sonner";
 import { useCreateOrder } from "@/hooks/useCreateOrder";
 import { checkoutFormSchema, type CheckoutFormValues } from "@/lib/checkout";
-import { formatPrice } from "@/lib/format";
 import { getClientErrorMessage } from "@/lib/errorMessages";
+import { formatPrice } from "@/lib/format";
+import {
+  isWhatsAppConfigured,
+  openWhatsAppOrder,
+} from "@/lib/whatsapp";
 import { useCartStore } from "@/stores/cart.store";
 import { ApiError } from "@/types/errors";
 import type { Order } from "@/types/order";
@@ -36,6 +40,7 @@ export function CartDrawer() {
 
   const createOrder = useCreateOrder();
   const [completedOrder, setCompletedOrder] = useState<Order | null>(null);
+  const [whatsAppBlocked, setWhatsAppBlocked] = useState(false);
 
   const {
     register,
@@ -55,6 +60,7 @@ export function CartDrawer() {
 
   const handleClose = useCallback(() => {
     setCompletedOrder(null);
+    setWhatsAppBlocked(false);
     reset();
     closeCart();
   }, [closeCart, reset]);
@@ -93,6 +99,11 @@ export function CartDrawer() {
       });
       clearCart();
       setCompletedOrder(order);
+      if (isWhatsAppConfigured()) {
+        setWhatsAppBlocked(!openWhatsAppOrder(order));
+      } else {
+        setWhatsAppBlocked(false);
+      }
     } catch (error) {
       toast.error(
         error instanceof ApiError
@@ -160,8 +171,13 @@ export function CartDrawer() {
                 <span style={{ color: "#FFD21F" }}>REGISTRADO!</span>
               </h2>
               <p className="text-muted-foreground text-sm leading-relaxed max-w-xs">
-                Recebemos seu pedido #{completedOrder.id.slice(0, 8).toUpperCase()}. Em breve
-                entraremos em contato pelo telefone informado.
+                Pedido <span className="text-foreground">{completedOrder.id}</span> registrado com
+                sucesso.
+                {isWhatsAppConfigured()
+                  ? whatsAppBlocked
+                    ? " O navegador bloqueou a abertura automática — use o botão abaixo para abrir o WhatsApp e enviar o resumo à loja."
+                    : " Abrimos o WhatsApp para você enviar o resumo à loja e concluir a compra."
+                  : " Guarde o número do pedido — em breve a loja entrará em contato."}
               </p>
               <div className="border border-border px-6 py-4 text-left w-full max-w-xs">
                 <div
@@ -183,6 +199,21 @@ export function CartDrawer() {
               <div style={{ fontFamily: "'Anton', sans-serif", fontSize: "1.5rem", color: "#FFD21F" }}>
                 TOTAL: {formatPrice(completedOrder.fullPrice)}
               </div>
+              {isWhatsAppConfigured() && whatsAppBlocked && (
+                <button
+                  type="button"
+                  onClick={() => openWhatsAppOrder(completedOrder)}
+                  className="w-full max-w-xs py-3 bg-primary text-primary-foreground uppercase tracking-widest hover:opacity-90 transition-opacity flex items-center justify-center gap-2"
+                  style={{
+                    fontFamily: "'Anton', sans-serif",
+                    fontSize: "0.9rem",
+                    letterSpacing: "0.1em",
+                  }}
+                >
+                  <MessageCircle size={18} />
+                  Abrir WhatsApp
+                </button>
+              )}
               <button
                 type="button"
                 onClick={handleClose}
