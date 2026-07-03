@@ -6,78 +6,94 @@
 
 ## Objetivo
 
-Criar e configurar o repositório `afro90sFrontend` com stack React + Vite antes de implementar qualquer página.
+Inicializar o repo **portando a base do protótipo Canvas** e adicionando dependências que o Afro90s exige (Zustand, Axios, Amplify, etc.).
+
+> **Não** usar `npm create vite` em branco e redesenhar depois. Copiar do protótipo e complementar.
+
+**Guia completo:** [prototype-porting.md](../prototype-porting.md)
+
+## Fonte visual — protótipo Canvas
+
+| Copiar de | Para |
+|-----------|------|
+| `Ecommerce Store Prototype (3)/src/styles/` | `src/styles/` |
+| `Ecommerce Store Prototype (3)/src/app/components/ui/` | `src/components/ui/` |
+| `Ecommerce Store Prototype (3)/vite.config.ts` | `vite.config.ts` (adaptar aliases `@/`) |
+| `Ecommerce Store Prototype (3)/index.html` | `index.html` (título → `Afro90s`) |
+| `Ecommerce Store Prototype (3)/src/main.tsx` | `src/main.tsx` (base) |
 
 ## Configurações já definidas
 
 | Decisão | Valor |
 |---------|-------|
+| Base UI | **Protótipo Canvas** (copiar + adaptar) |
 | Framework | React 18 + Vite + TypeScript |
-| CSS | Tailwind CSS |
-| Estado carrinho | Zustand |
-| HTTP | Axios |
-| Auth admin | AWS Amplify Auth (SRP) |
+| CSS | Tailwind CSS (já no protótipo v4) |
+| Estado carrinho | Zustand (**adicionar** — protótipo usa `useState`) |
+| HTTP | Axios (**adicionar** — protótipo usa mock local) |
+| Auth admin | AWS Amplify Auth SRP (**substituir** `amazon-cognito-identity-js` do protótipo) |
 | Testes unitários | Vitest + Testing Library |
 | Testes E2E | Cypress (fase 4) |
-| Gerenciador | npm |
+| Gerenciador | **npm** (protótipo usa pnpm — migrar lockfile) |
 
 ## O que implementar
 
-### Criar projeto
+### 1. Scaffold mínimo + cópia do protótipo
 
 ```bash
-npm create vite@latest afro90sFrontend -- --template react-ts
-cd afro90sFrontend
-npm install
+# Se o repo ainda não tem src/:
+npm create vite@latest . -- --template react-ts
+# Depois copiar (manual ou script) styles, components/ui, theme do protótipo
 ```
 
-### Dependências
+### 2. Dependências do protótipo a manter (UI)
+
+Do `package.json` do protótipo, instalar via npm (versões compatíveis):
+
+- `lucide-react`, `class-variance-authority`, `clsx`, `tailwind-merge`
+- `@radix-ui/*` usados em `components/ui/`
+- `sonner`, `vaul` (drawer), `tw-animate-css`
+
+**Não instalar:** `@mui/material`, `@emotion/*` (não usados na UI portada).
+
+### 3. Dependências Afro90s (adicionar ao protótipo)
 
 ```bash
 npm install react-router-dom @tanstack/react-query axios zustand
-npm install aws-amplify @aws-amplify/ui-react
+npm install aws-amplify
 npm install zod react-hook-form @hookform/resolvers
-npm install sonner
-npm install -D tailwindcss postcss autoprefixer
 npm install -D vitest @testing-library/react @testing-library/jest-dom jsdom
 npm install -D eslint prettier @typescript-eslint/eslint-plugin @typescript-eslint/parser
 ```
 
-### Estrutura `src/`
+### 4. Estrutura `src/` (criar pastas vazias; páginas vêm nas tasks 05+)
 
 ```
 src/
 ├── main.tsx
 ├── App.tsx
 ├── routes/
-│   ├── index.tsx           # definição de rotas
-│   ├── PublicRoutes.tsx
-│   └── AdminRoutes.tsx
 ├── pages/
 │   ├── catalog/
-│   │   └── CatalogPage.tsx
 │   └── admin/
-│       ├── AdminLoginPage.tsx
-│       └── AdminPage.tsx       # tabs Pedidos | Produtos
 ├── components/
-│   ├── ui/
-│   ├── product/                # ProductCard, ProductDetailModal
-│   ├── cart/                   # CartDrawer
-│   ├── admin/                  # AdminOrdersTab, AdminProductsTab, modais
+│   ├── ui/                 # ← copiado do protótipo
+│   ├── product/
+│   ├── cart/
+│   ├── admin/
 │   └── layout/
-├── api/                    # cliente HTTP (task 03)
-├── stores/                 # Zustand (carrinho)
+├── api/
+├── stores/
 ├── hooks/
-├── types/                  # espelha backend data-models
+├── types/
 ├── lib/
-│   └── amplify.ts          # config Cognito (fase 2)
-└── styles/
-    └── globals.css
+└── styles/                 # ← copiado do protótipo
 ```
 
 ### Configuração
 
-- [ ] `tailwind.config.js` com content `['./index.html', './src/**/*.{js,ts,jsx,tsx}']`
+- [ ] `theme.css` do protótipo importado em `styles/globals.css` ou `index.css`
+- [ ] Alias `@/` → `src/` no `vite.config.ts` e `tsconfig`
 - [ ] `tsconfig.json` com `strict: true`
 - [ ] `.env.example`:
   ```
@@ -101,11 +117,13 @@ src/
 
 ## Pré-requisitos
 
-Nenhum — primeira task do frontend.
+- Protótipo `Ecommerce Store Prototype (3)` disponível localmente
+- Nenhuma outra task do frontend
 
 ## Critérios de conclusão
 
-- [ ] `npm run dev` abre em `localhost:5173`
+- [ ] `npm run dev` abre com tema anos 90 do protótipo (cores `#7A004B` / `#FFD21F`)
+- [ ] `components/ui/` do protótipo presente e importável
 - [ ] `npm run build` sem erros
 - [ ] Estrutura de pastas criada
 - [ ] Atualizar **Status** para `concluída`

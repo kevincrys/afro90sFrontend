@@ -5,7 +5,7 @@ Este repositório contém a **SPA React** do Afro90s.
 ## Antes de implementar
 
 1. Leia [docs/foundation/vision.md](docs/foundation/vision.md).
-2. Consulte [docs/specs/frontend/overview.md](docs/specs/frontend/overview.md), [ui-ux.md](docs/specs/frontend/ui-ux.md) e [integration.md](docs/specs/frontend/integration.md).
+2. Consulte [docs/specs/frontend/overview.md](docs/specs/frontend/overview.md), [ui-ux.md](docs/specs/frontend/ui-ux.md), [prototype-porting.md](docs/specs/frontend/prototype-porting.md) e [integration.md](docs/specs/frontend/integration.md).
 3. Para contratos HTTP, veja [docs/specs/backend/api-routes.md](docs/specs/backend/api-routes.md).
 4. Verifique a task em [docs/specs/frontend/tasks/](docs/specs/frontend/tasks/).
 5. Siga [.cursor/rules/](.cursor/rules/).
@@ -16,6 +16,7 @@ Este repositório contém a **SPA React** do Afro90s.
 |------|-------|
 | Escopo deste repo | `docs/foundation/vision.md` |
 | UI/UX | `docs/specs/frontend/ui-ux.md` |
+| Portar protótipo Canvas | `docs/specs/frontend/prototype-porting.md` |
 | Integração API / VITE_* | `docs/specs/frontend/integration.md` |
 | Tasks | `docs/specs/frontend/tasks/` |
 | Pipeline CI/CD | `docs/specs/pipelines/overview.md` |
@@ -34,7 +35,7 @@ Este repositório contém a **SPA React** do Afro90s.
 
 ## Princípios
 
-- Seguir `ui-ux.md` para tema anos 90.
+- UI v1: **copiar e adaptar** o protótipo Canvas — ver `prototype-porting.md`; não redesenhar do zero.
 - Toda nova env `VITE_*` documentar em `integration.md`.
 - Deploy só via pipeline — não instruir upload manual S3.
 

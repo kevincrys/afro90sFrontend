@@ -2,45 +2,34 @@
 
 **Fase:** 1 — Site público  
 **Status:** pendente  
-**Arquivos alvo:** [`integration.md`](../integration.md), [ADR-006](../../../foundation/adr/006-whatsapp-integration.md)
+**Arquivos alvo:** [`integration.md`](../integration.md), [`prototype-porting.md`](../prototype-porting.md)
 
 ## Objetivo
 
-Após pedido criado com sucesso, abrir WhatsApp automaticamente com mensagem de resumo.
+Integrar abertura do WhatsApp após pedido — **feature ausente no protótipo** (só confirmação local).
 
-## Configurações já definidas
+## Fonte visual — protótipo
 
-| Decisão | Valor |
-|---------|-------|
-| Abertura | Automática em nova aba ao finalizar |
-| Mensagem | Só resumo (não lista de itens) |
-| `VITE_WHATSAPP_NUMBER` | Validar formato DDI+DDD+número |
-| `orderId` | Incluído na mensagem |
-| Mobile | Deep link `whatsapp://` |
-| Fallback | Link clicável se popup bloqueado |
+O protótipo termina em `setDone(true)` no `CheckoutPanel` (L598) com tela "ORDER PLACED" — **sem WhatsApp**.
+
+### O que reutilizar do protótipo
+
+- [ ] Manter tela de confirmação do drawer (L645–668) como passo **antes** de abrir WhatsApp
+- [ ] Adaptar copy para pt-BR e Afro90s
 
 ## O que implementar
 
 ### `src/lib/whatsapp.ts`
 
 ```typescript
-export function openWhatsAppOrder(order: { id: string; customerName: string; fullPrice: number }): void {
-  const number = import.meta.env.VITE_WHATSAPP_NUMBER;
-  const text = encodeURIComponent(
-    `Olá! Fiz um pedido no Afro90s.\nID: ${order.id}\nTotal: R$ ${order.fullPrice.toFixed(2).replace('.', ',')}`
-  );
-  const isMobile = /iPhone|iPad|Android/i.test(navigator.userAgent);
-  const url = isMobile
-    ? `whatsapp://send?phone=${number}&text=${text}`
-    : `https://wa.me/${number}?text=${text}`;
-  window.open(url, '_blank');
+export function openWhatsAppOrder(order: { id: string; fullPrice: number; customer: { name: string; tel: string } }): void {
+  // Ver integration.md
 }
 ```
 
-- [ ] Validar `VITE_WHATSAPP_NUMBER` no boot (warn se ausente)
-- [ ] Integrar em `CartDrawer` após `201` do `POST /orders`
-- [ ] Tela de confirmação breve no drawer antes de abrir WhatsApp
-- [ ] Fallback: se `window.open` bloqueado, exibir botão "Continuar no WhatsApp"
+- [ ] Validar `VITE_WHATSAPP_NUMBER` no boot
+- [ ] Chamar após `201` em `CartDrawer` (substituir fim do fluxo mock)
+- [ ] Fallback se popup bloqueado
 
 ## Pré-requisitos
 
@@ -48,8 +37,5 @@ export function openWhatsAppOrder(order: { id: string; customerName: string; ful
 
 ## Critérios de conclusão
 
-- [ ] Finalizar pedido abre WhatsApp com mensagem correta
-- [ ] `orderId` presente na mensagem
-- [ ] Fallback funciona com popup bloqueado
-- [ ] `integration.md` fluxo documentado
+- [ ] Confirmação visual (estilo protótipo) + WhatsApp abre com `orderId`
 - [ ] Atualizar **Status** para `concluída`

@@ -2,11 +2,23 @@
 
 **Fase:** 0 — Fundação  
 **Status:** pendente  
-**Arquivos alvo:** [`integration.md`](../integration.md)
+**Arquivos alvo:** [`integration.md`](../integration.md), [`prototype-porting.md`](../prototype-porting.md)
 
 ## Objetivo
 
-Implementar camada HTTP tipada com Axios, React Query e tratamento de erros da API.
+Implementar camada HTTP tipada — **substituir todos os mocks do protótipo** (`PRODUCTS`, `MOCK_ORDERS`, arrays locais) por chamadas à API.
+
+> Esta task **não existe no protótipo** — é código novo. As tasks 05–14 **removem** `const PRODUCTS = [...]` e `useState` local ao integrar.
+
+## O que o protótipo usa hoje (remover na integração)
+
+| Mock no protótipo | Substituir por |
+|-------------------|----------------|
+| `PRODUCTS` em `StorePage.tsx` | `useProducts()` / `useProduct(id)` |
+| `cart` `useState` | `useCartStore()` (task 07) |
+| `MOCK_ORDERS` / `MOCK_PRODUCTS` em `AdminPage.tsx` | `useAdminOrders()` / `useAdminProducts()` |
+| `onSave` local no CRUD | mutations `POST/PUT/DELETE` |
+| `setDone(true)` no checkout | `useCreateOrder()` → `201` |
 
 ## Configurações já definidas
 
@@ -14,8 +26,8 @@ Implementar camada HTTP tipada com Axios, React Query e tratamento de erros da A
 |---------|-------|
 | Cliente | Axios com wrapper `apiClient` |
 | Erros | Classe `ApiError` com `code` e `message` |
-| Tipos | Importados/espelhados de `data-models` do backend |
-| Auth admin | Interceptor `Authorization: Bearer` (fase 2) |
+| Tipos | Espelhar `data-models.md` (não tipos do protótipo) |
+| Auth admin | Interceptor Bearer (fase 2) |
 | Cursor | `encodeURIComponent` nas query strings |
 
 ## O que implementar
@@ -27,49 +39,37 @@ const apiClient = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL,
   headers: { 'Content-Type': 'application/json' },
 });
-
-// Response interceptor: ApiError em erros 4xx/5xx
-// Request interceptor (fase 2): adicionar Bearer token para /admin/*
 ```
 
 ### Módulos por domínio
 
 - [ ] `src/api/products.ts` — `getProducts`, `getProductById`
 - [ ] `src/api/orders.ts` — `createOrder`
-- [ ] `src/api/admin/products.ts` — CRUD (fase 3, criar stubs)
-- [ ] `src/api/admin/orders.ts` — list, get, updateStatus (fase 3, stubs)
+- [ ] `src/api/admin/products.ts` — CRUD (stubs fase 3)
+- [ ] `src/api/admin/orders.ts` — list, get, updateStatus (stubs fase 3)
 
-### `src/types/` — espelhar backend
+### `src/types/` — espelhar backend (não protótipo)
 
-- [ ] `product.ts`, `order.ts`, `errors.ts` — mesmos tipos do `afro90s-api`
+- [ ] `product.ts`, `order.ts`, `errors.ts`
+- [ ] `Category`: `oculos` \| `acessorios` \| `maquiagem` (não `Sunglasses`)
 
 ### React Query
 
 - [ ] `QueryClientProvider` em `main.tsx`
 - [ ] Defaults: `staleTime: 30_000`, `retry: 1`
-- [ ] Query keys documentadas:
-
-| Key | Uso |
-|-----|-----|
-| `['products', filters]` | Listagem catálogo |
-| `['product', id]` | Detalhe |
-| `['admin', 'products', filters]` | Admin listagem |
-| `['admin', 'orders', filters]` | Admin pedidos |
 
 ### Hooks
 
-- [ ] `useProducts({ name, category, cursor })`
+- [ ] `useProducts({ name, category, cursor })` — infinite query
 - [ ] `useProduct(id)`
 - [ ] `useCreateOrder()` — mutation
 
 ## Pré-requisitos
 
 - Task 00 concluída
-- Backend fase 1 deployada (ou mock local) para testar integração
 
 ## Critérios de conclusão
 
-- [ ] `useProducts()` retorna dados da API dev
+- [ ] `useProducts()` retorna dados da API dev (não array mock)
 - [ ] Erro 404 mapeado para `ApiError`
-- [ ] `integration.md` atualizado
 - [ ] Atualizar **Status** para `concluída`

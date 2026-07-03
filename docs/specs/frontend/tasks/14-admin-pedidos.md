@@ -2,77 +2,58 @@
 
 **Fase:** 3 — Painel admin  
 **Status:** pendente  
-**Arquivos alvo:** [`integration.md`](../integration.md), [`ui-ux.md`](../ui-ux.md), [`data-models.md`](../../backend/data-models.md)
+**Arquivos alvo:** [`integration.md`](../integration.md), [`prototype-porting.md`](../prototype-porting.md), [`data-models.md`](../../backend/data-models.md)
 
 ## Objetivo
 
-Implementar tab **Pedidos** em `/admin`: listagem com filtros, paginação e atualização de status via drawer.
+**Extrair `OrdersTab` e `OrderDetailPanel`** de `AdminPage.tsx` e conectar à API com transições válidas.
 
-## Configurações já definidas
+## Fonte visual — protótipo
 
-| Decisão | Valor |
-|---------|-------|
-| Container | Tab padrão em `AdminPage` (`/admin`) |
-| Filtro status | Tabs secundárias (enum completo do backend) |
-| Ordenação | Mais recentes primeiro |
-| Detalhe | Drawer lateral |
-| Transições status | Apenas válidas — ver `data-models.md` |
-| Dados customer | Exibir no drawer |
-| Paginação | Cursor (`nextCursor` + scroll ou "Carregar mais") |
+| Protótipo | Destino |
+|-----------|---------|
+| `OrdersTab` — **L720–831** | `src/components/admin/AdminOrdersTab.tsx` |
+| `OrderDetailPanel` — **L319–410** | `src/components/admin/OrderDetailDrawer.tsx` |
+| `STATUS_CONFIG` + `STATUS_ORDER` — **L77–90** | `src/lib/orderStatus.ts` |
+| `StatusBadge` L207–215 | Reutilizar em `AdminOrdersTab` |
+| `MOCK_ORDERS` | `useAdminOrders()` |
+
+### O protótipo já acerta o enum de status
+
+Copiar `STATUS_CONFIG` quase intacto — labels e cores já batem com `data-models.md`.
+
+### Adaptar
+
+- [ ] `onStatusChange` local → `PATCH /admin/orders/{id}/status`
+- [ ] Lista de **todos** os status no drawer (L342–355): mostrar só **transições válidas** (`ALLOWED_TRANSITIONS`)
+- [ ] `customer.postal` → `postalCode`
+- [ ] Paginação: adicionar cursor (protótipo lista mock fixo)
+- [ ] `order.fullPrice` → `formatPrice` BRL
 
 ## O que implementar
 
 ### `src/components/admin/AdminOrdersTab.tsx`
 
-- [ ] Tabs de status: **Todos**, Solicitado, Em Atendimento, Aguardando Pagamento, Em Preparação, Enviado, Concluído, Cancelado
-- [ ] `useAdminOrders({ status, cursor })` com paginação por cursor
-- [ ] Ao trocar tab de status → resetar cursor e refetch
-- [ ] Lista de cards: `id`, `customer.name`, `fullPrice`, `status`, `createdAt`
-- [ ] Clique no card → abre drawer de detalhe
+- [ ] **Copiar** tabs de filtro + cards de `OrdersTab`
+- [ ] `useAdminOrders({ status, cursor })`
+- [ ] Reset cursor ao trocar tab
 
 ### `src/components/admin/OrderDetailDrawer.tsx`
 
-- [ ] Dados do `customer` (nome, endereço, `postalCode`, `tel`)
-- [ ] Lista de itens com `productId`, quantidade, `unitPrice`
-- [ ] Seletor de status com **apenas transições válidas** a partir do status atual
-- [ ] `PATCH /admin/orders/{id}/status` ao mudar status
-- [ ] Toast de sucesso/erro (`INVALID_STATUS_TRANSITION` em pt-BR)
+- [ ] **Copiar** `OrderDetailPanel` (drawer lateral direito)
+- [ ] Seletor de status filtrado por `ALLOWED_TRANSITIONS`
+- [ ] Toast em `INVALID_STATUS_TRANSITION`
 
 ### `src/lib/orderStatus.ts`
 
-```typescript
-import type { OrderStatus } from '@/types';
-
-export const STATUS_LABELS: Record<OrderStatus, string> = {
-  SOLICITADO: 'Solicitado',
-  EM_ATENDIMENTO: 'Em Atendimento',
-  AGUARDANDO_PAGAMENTO: 'Aguardando Pagamento',
-  EM_PREPARACAO: 'Em Preparação',
-  ENVIADO: 'Enviado',
-  CONCLUIDO: 'Concluído',
-  CANCELADO: 'Cancelado',
-};
-
-/** Transições permitidas — espelha data-models.md */
-export const ALLOWED_TRANSITIONS: Record<OrderStatus, OrderStatus[]> = {
-  SOLICITADO: ['EM_ATENDIMENTO', 'CANCELADO'],
-  EM_ATENDIMENTO: ['AGUARDANDO_PAGAMENTO', 'CANCELADO'],
-  AGUARDANDO_PAGAMENTO: ['EM_PREPARACAO', 'CANCELADO'],
-  EM_PREPARACAO: ['ENVIADO', 'CANCELADO'],
-  ENVIADO: ['CONCLUIDO', 'CANCELADO'],
-  CONCLUIDO: [],
-  CANCELADO: [],
-};
-```
+- [ ] Portar `STATUS_CONFIG` do protótipo + `ALLOWED_TRANSITIONS` de `data-models.md`
 
 ## Pré-requisitos
 
-- Task 13 concluída (ou `AdminPage` shell já existente da task 13)
+- `AdminPage` shell (task 13)
 
 ## Critérios de conclusão
 
-- [ ] Pedido criado no checkout aparece na tab Pedidos
-- [ ] Filtro por status (tabs) funciona com paginação
-- [ ] Mudança de status funciona com transições válidas
-- [ ] Drawer exibe dados completos do pedido
+- [ ] Tab Pedidos **visual igual** ao protótipo, dados da API
+- [ ] Transições válidas enforced
 - [ ] Atualizar **Status** para `concluída`

@@ -2,70 +2,60 @@
 
 **Fase:** 3 — Painel admin  
 **Status:** pendente  
-**Arquivos alvo:** [`ui-ux.md`](../ui-ux.md), [`integration.md`](../integration.md)
+**Arquivos alvo:** [`ui-ux.md`](../ui-ux.md), [`prototype-porting.md`](../prototype-porting.md)
 
 ## Objetivo
 
-Implementar tab **Produtos** em `/admin`: listagem, criar, editar, excluir e upload de imagens.
+**Extrair `ProductsTab` e `ProductFormModal`** de `AdminPage.tsx` e conectar à API admin.
 
-## Configurações já definidas
+## Fonte visual — protótipo
 
-| Decisão | Valor |
-|---------|-------|
-| Container | Tab dentro de `AdminPage` (`/admin?tab=produtos`) |
-| UI listagem | Cards (não tabela) |
-| Formulário | Modal |
-| Upload | Multipart (preferencial) ou URL/base64 |
-| Preview imagens | Sim, antes de salvar |
-| Reordenar fotos | Sim, na v1 |
-| Confirmação delete | Sim |
-| Estoque | No mesmo modal do formulário |
-| Campos API | `name`, `price`, `quantity`, `category`, `photos` apenas |
+| Protótipo | Destino |
+|-----------|---------|
+| `AdminDashboard` shell L998–1055 | `src/pages/admin/AdminPage.tsx` (tabs + header) |
+| `ProductsTab` — **L833–991** | `src/components/admin/AdminProductsTab.tsx` |
+| `ProductFormModal` — **L421–717** | `src/components/admin/ProductFormModal.tsx` |
+| `MOCK_PRODUCTS` / estado local | `useAdminProducts()` + mutations |
+
+### Campos do modal — copiar UI, podar dados
+
+| Manter (API) | Remover do protótipo |
+|--------------|----------------------|
+| `name`, `price`, `stock`→`quantity`, `category` | `description`, `badge`, `badgeColor` |
+| `images` → `photos` (URL + upload L608–660) | `rating`, `reviews`, `originalPrice` |
+| Upload URL + arquivo | `options` / variantes L664–673 |
+
+### Adaptar
+
+- [ ] `saveProduct` local → `POST/PUT /admin/products` multipart
+- [ ] `DELETE` com dialog (protótipo já tem confirmação — manter)
+- [ ] Categorias select → enum `oculos`, `acessorios`, `maquiagem`
+- [ ] Preço USD → BRL `formatPrice`
 
 ## O que implementar
 
 ### `src/pages/admin/AdminPage.tsx`
 
-- [ ] Shell com tabs **Pedidos** | **Produtos** e header (logo, e-mail, logout)
-- [ ] Renderizar `AdminProductsTab` quando tab Produtos ativa
+- [ ] **Copiar** `AdminDashboard` (header + tabs Pedidos/Produtos)
+- [ ] Renderizar `AdminProductsTab` na tab Produtos
 
 ### `src/components/admin/AdminProductsTab.tsx`
 
-- [ ] Grid de cards com imagem, nome, preço, estoque
-- [ ] `useAdminProducts()` com paginação por cursor
-- [ ] Botão "Novo produto" → abre modal
-- [ ] Ações por card: editar, excluir
-- [ ] Filtro por categoria (tabs ou select) — opcional
+- [ ] **Copiar** grid de cards de `ProductsTab`
+- [ ] Paginação cursor API
 
 ### `src/components/admin/ProductFormModal.tsx`
 
-- [ ] Campos: `name`, `price`, `quantity`, `category`
-- [ ] Abas ou seções: URL de imagem + upload de arquivo
-- [ ] Preview das imagens selecionadas com reordenação (drag ou botões ↑↓)
-- [ ] Validação Zod
-- [ ] Modo create: `POST /admin/products` (multipart)
-- [ ] Modo edit: `PUT /admin/products/{id}`
-- [ ] Estoque atualizado junto no PUT ou via `PATCH /admin/products/{id}/stock`
-
-### Delete
-
-- [ ] Dialog de confirmação "Tem certeza?"
-- [ ] `DELETE /admin/products/{id}`
-- [ ] Invalidar cache `['admin', 'products']`
-
-### Skeleton e estados
-
-- [ ] Skeleton de cards admin
-- [ ] Empty: "Nenhum produto cadastrado"
+- [ ] **Copiar** `ProductFormModal` do protótipo
+- [ ] Remover campos fora da API
+- [ ] Zod + `POST/PUT` multipart
 
 ## Pré-requisitos
 
 - Fase 2 entregue (task 12)
-- Backend fase 3 + infra fase 3 deployados
 
 ## Critérios de conclusão
 
-- [ ] CRUD completo funcional com token admin na tab Produtos
-- [ ] Upload de imagem → produto aparece no catálogo público
-- [ ] Delete remove produto do catálogo
+- [ ] Tab Produtos **visual igual** ao protótipo, dados da API
+- [ ] Upload → produto no catálogo público
 - [ ] Atualizar **Status** para `concluída`

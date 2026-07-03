@@ -2,42 +2,55 @@
 
 **Fase:** 1 — Site público  
 **Status:** pendente  
-**Arquivos alvo:** [`ui-ux.md`](../ui-ux.md), [`integration.md`](../integration.md)
+**Arquivos alvo:** [`ui-ux.md`](../ui-ux.md), [`prototype-porting.md`](../prototype-porting.md)
 
 ## Objetivo
 
-Implementar listagem pública de produtos com busca, filtro por categoria, scroll infinito e abertura do modal de detalhe.
+Portar a loja pública de `StorePage.tsx` para `CatalogPage.tsx`, **substituindo mock por API**.
+
+## Fonte visual — protótipo
+
+| Extrair de `StorePage.tsx` | Destino |
+|----------------------------|---------|
+| L801–810 — estado `activeCategory`, `filtered` | `CatalogPage` + filtros API `category` |
+| L931–967 — hero | **Remover** (fora do escopo v1) |
+| L980–1070 — grid de cards | `ProductCard.tsx` + grid em `CatalogPage` |
+| L812–840 — hash `#product/:id` | Trocar por rota `/produto/:id` (task 06) |
+| `PRODUCTS` array L42+ | **Deletar** — usar `useProducts()` |
+
+### Adaptar no grid (copiar JSX, mudar dados)
+
+- [ ] `product.images[0]` → `product.photos[0]`
+- [ ] `product.id` number → string UUID
+- [ ] `$${product.price}` → `formatPrice(product.price)`
+- [ ] Overlay esgotado: protótipo não tem — **adicionar** se `quantity === 0`
+- [ ] **Remover** wishlist/coração (L1023)
+- [ ] **Remover** rating/reviews nos cards (L1057–1061)
+- [ ] Categorias: mapear tabs do protótipo para enum API
 
 ## Configurações já definidas
 
 | Decisão | Valor |
 |---------|-------|
-| Paginação | Scroll infinito |
-| Busca | Disparo ao Enter (não em tempo real) |
-| Filtro categoria | Tabs no header (`oculos`, `acessorios`, `maquiagem`, Todos) |
-| Preço | `R$ 49,90` (pt-BR) |
-| `quantity=0` | Overlay "Esgotado" no card |
-| Detalhe | Clique no card → `ProductDetailModal` (task 06) |
+| Paginação | Scroll infinito (`nextCursor`) — protótipo lista tudo local |
+| Busca | Enter → `?name=` — protótipo tem ícone sem função |
+| Filtro categoria | Tabs no header (já no protótipo) |
 
 ## O que implementar
 
 ### `src/pages/catalog/CatalogPage.tsx`
 
-- [ ] Grid de `ProductCard` (1→4 colunas responsivo)
-- [ ] `useProducts({ name, category, cursor })` com infinite query
-- [ ] Barra de busca no Header — submit ao Enter
-- [ ] Tabs de categorias no header
-- [ ] Intersection Observer para carregar próxima página (`nextCursor`)
-- [ ] Skeleton de cards durante loading
-- [ ] Empty state: "Nenhum produto encontrado"
-- [ ] Error state com botão "Tentar novamente"
-- [ ] Se rota `/produto/:id` → abrir `ProductDetailModal` com `useProduct(id)`
+- [ ] Copiar estrutura do grid + filtros do `StorePage` (sem hero/ticker/testimonials)
+- [ ] `useInfiniteQuery` com `useProducts` — **substituir** `filtered = PRODUCTS.filter(...)`
+- [ ] Intersection Observer no fim do grid
+- [ ] Skeleton durante loading (estilo cards do protótipo)
+- [ ] Empty/error states
+- [ ] `/produto/:id` → abrir modal (task 06)
 
 ### `src/components/product/ProductCard.tsx`
 
-- [ ] Imagem principal (`photos[0]`), nome, preço formatado
-- [ ] Badge "Esgotado" se `quantity === 0`
-- [ ] Clique abre modal de detalhe (atualizar URL para `/produto/{id}` opcional)
+- [ ] Extrair card do loop do grid (L~1000–1070)
+- [ ] Clique → navegar `/produto/{id}` ou abrir modal
 
 ### `src/lib/format.ts`
 
@@ -46,13 +59,10 @@ Implementar listagem pública de produtos com busca, filtro por categoria, scrol
 ## Pré-requisitos
 
 - Tasks 00–04 concluídas
-- Backend fase 1 + infra fase 1 deployados
+- Backend fase 1 deployado
 
 ## Critérios de conclusão
 
-- [ ] Catálogo carrega produtos da API
-- [ ] Busca por nome funciona (Enter)
-- [ ] Scroll infinito carrega mais itens
-- [ ] Produto esgotado exibe overlay
-- [ ] Clique no card abre modal de detalhe
+- [ ] Visual do grid **igual ao protótipo**, dados da API
+- [ ] Busca, filtro, scroll infinito funcionam
 - [ ] Atualizar **Status** para `concluída`

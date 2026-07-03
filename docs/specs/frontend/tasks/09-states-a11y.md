@@ -2,54 +2,42 @@
 
 **Fase:** 1 — Site público  
 **Status:** pendente  
-**Arquivos alvo:** [`ui-ux.md`](../ui-ux.md)
+**Arquivos alvo:** [`ui-ux.md`](../ui-ux.md), [`prototype-porting.md`](../prototype-porting.md)
 
 ## Objetivo
 
-Padronizar loading, empty, error e requisitos de acessibilidade nas páginas da fase 1.
+Ligar skeletons/toasts do protótipo à API e completar a11y **sem alterar o visual**.
 
-## Configurações já definidas
+## Fonte visual — protótipo
 
-| Decisão | Valor |
-|---------|-------|
-| Toasts | Sonner |
-| Skeletons | Por página (não global) |
-| Erros API | Mapear `ApiError.message` para pt-BR |
-| Foco em modais | Sim |
-| `aria-live` | Sim, para feedback de pedido |
-| Skip link | Sim |
+| Protótipo | Uso |
+|-----------|-----|
+| `components/ui/sonner.tsx` | Copiado na task 00 — montar `<Toaster />` em `App.tsx` |
+| `components/ui/skeleton.tsx` | Base para `CatalogSkeleton`, `ProductDetailModalSkeleton` |
+| Labels inline no `CheckoutPanel` (`FieldLabel` L618–624) | Já existem — validar em todos os inputs |
+| Focus trap | **Adicionar** — protótipo não implementa |
 
 ## O que implementar
 
 ### Toasts (Sonner)
 
-- [ ] `<Toaster />` em `App.tsx`
-- [ ] Sucesso: "Pedido realizado com sucesso!"
-- [ ] Erro: mensagem mapeada em português
+- [ ] `<Toaster />` em `App.tsx` — componente já copiado do protótipo
+- [ ] Sucesso/erro de pedido e API
 
-### Mapeamento de erros `src/lib/errorMessages.ts`
+### `src/lib/errorMessages.ts`
 
-```typescript
-const ERROR_MESSAGES: Record<string, string> = {
-  INSUFFICIENT_STOCK: 'Produto fora de estoque.',
-  VALIDATION_ERROR: 'Verifique os dados informados.',
-  NOT_FOUND: 'Produto não encontrado.',
-  INTERNAL_ERROR: 'Erro interno. Tente novamente.',
-};
-```
+- [ ] Mapear códigos API para pt-BR
 
-### Skeletons por página
+### Skeletons
 
-- [ ] `CatalogSkeleton` — grid de cards placeholder
-- [ ] `ProductDetailModalSkeleton` — imagem + texto placeholder
+- [ ] `CatalogSkeleton` — imitar layout do grid de cards do protótipo
+- [ ] `ProductDetailModalSkeleton` — imitar modal L255+
 
-### Acessibilidade
+### Acessibilidade (incremental sobre protótipo)
 
-- [ ] Skip link "Ir para o conteúdo" no topo
-- [ ] `aria-live="polite"` na confirmação de pedido
-- [ ] Foco trap no modal de galeria e no CartDrawer
-- [ ] Labels em todos os inputs do checkout
-- [ ] Contraste mínimo WCAG AA nas cores primárias
+- [ ] Skip link "Ir para o conteúdo"
+- [ ] `aria-live="polite"` na confirmação do drawer
+- [ ] Focus trap em `ProductDetailModal` e `CartDrawer`
 
 ## Pré-requisitos
 
@@ -57,8 +45,6 @@ const ERROR_MESSAGES: Record<string, string> = {
 
 ## Critérios de conclusão
 
-- [ ] Loading/empty/error visíveis em catálogo e modal de detalhe
-- [ ] Toasts funcionam para sucesso e erro
-- [ ] Skip link presente
-- [ ] `ui-ux.md` tabela de estados atualizada
+- [ ] Loading/empty/error no catálogo e modal
+- [ ] Toasts funcionam
 - [ ] Atualizar **Status** para `concluída`

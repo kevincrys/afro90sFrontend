@@ -3,6 +3,19 @@
 Backlog de implementação da SPA no repositório **`afro90sFrontend`** (`kevincrys/afro90sFrontend`).
 Organizado em **4 fases** alinhadas com [`infra/tasks/`](../../infra/tasks/README.md) e [`backend/tasks/`](../../backend/tasks/README.md).
 
+## Fonte visual — protótipo Canvas
+
+> **Não implementar UI do zero.** Copiar e adaptar o protótipo local `Ecommerce Store Prototype (3)`.
+
+Guia completo de port: **[prototype-porting.md](../prototype-porting.md)** — mapa arquivo-a-arquivo, o que copiar/remover/adaptar.
+
+| Arquivo protótipo | ~linhas | Uso |
+|------------------|---------|-----|
+| `StorePage.tsx` | 1.200 | Catálogo, modal, drawer |
+| `AdminPage.tsx` | 1.000 | Login, tabs admin, CRUD |
+| `src/styles/theme.css` | — | Tema anos 90 |
+| `src/app/components/ui/` | — | shadcn/ui |
+
 ## Legenda de status
 
 | Status | Significado |
@@ -19,9 +32,9 @@ Organizado em **4 fases** alinhadas com [`infra/tasks/`](../../infra/tasks/READM
 
 | # | Arquivo | O que entrega |
 |---|---------|---------------|
-| 00 | [00-setup-repo.md](00-setup-repo.md) | Vite + React + TS + Tailwind + Zustand |
-| 01 | [01-tema-visual.md](01-tema-visual.md) | Paleta `#7A004B`/`#FFD21F`, componentes base |
-| 02 | [02-roteamento-layout.md](02-roteamento-layout.md) | React Router, layouts, 404 |
+| 00 | [00-setup-repo.md](00-setup-repo.md) | Copiar base do protótipo + deps Afro90s |
+| 01 | [01-tema-visual.md](01-tema-visual.md) | `theme.css` + Header/Footer do `StorePage` |
+| 02 | [02-roteamento-layout.md](02-roteamento-layout.md) | Rotas (adaptar `routes.tsx` do protótipo) |
 | 03 | [03-api-client.md](03-api-client.md) | Axios + React Query + tipos |
 | 04 | [04-cicd-deploy.md](04-cicd-deploy.md) | GitHub Actions → S3 + CloudFront |
 
@@ -34,9 +47,9 @@ Organizado em **4 fases** alinhadas com [`infra/tasks/`](../../infra/tasks/READM
 
 | # | Arquivo | O que entrega |
 |---|---------|---------------|
-| 05 | [05-catalogo.md](05-catalogo.md) | Página `/` com scroll infinito |
-| 06 | [06-produto-detalhe.md](06-produto-detalhe.md) | Modal galeria + deep link `/produto/:id` |
-| 07 | [07-carrinho-checkout.md](07-carrinho-checkout.md) | Drawer carrinho + checkout Zod |
+| 05 | [05-catalogo.md](05-catalogo.md) | Portar grid do `StorePage` + API |
+| 06 | [06-produto-detalhe.md](06-produto-detalhe.md) | Extrair `ProductModal` (L255) |
+| 07 | [07-carrinho-checkout.md](07-carrinho-checkout.md) | Extrair `CheckoutPanel` (L569) + Zustand |
 | 08 | [08-whatsapp.md](08-whatsapp.md) | Abertura automática wa.me pós-pedido |
 | 09 | [09-states-a11y.md](09-states-a11y.md) | Skeletons, toasts, acessibilidade |
 | 10 | [10-aceite-fase1.md](10-aceite-fase1.md) | Checklist aceite fase 1 |
@@ -51,7 +64,7 @@ Organizado em **4 fases** alinhadas com [`infra/tasks/`](../../infra/tasks/READM
 
 | # | Arquivo | O que entrega |
 |---|---------|---------------|
-| 11 | [11-login-admin.md](11-login-admin.md) | Amplify SRP + `ProtectedRoute` |
+| 11 | [11-login-admin.md](11-login-admin.md) | Portar `AdminLogin` + Amplify SRP |
 | 12 | [12-aceite-fase2.md](12-aceite-fase2.md) | Checklist aceite fase 2 |
 
 **✓ Resultado:** admin faz login e acessa `/admin` (tab Pedidos).
@@ -64,8 +77,8 @@ Organizado em **4 fases** alinhadas com [`infra/tasks/`](../../infra/tasks/READM
 
 | # | Arquivo | O que entrega |
 |---|---------|---------------|
-| 13 | [13-admin-produtos.md](13-admin-produtos.md) | Tab Produtos: cards + modal CRUD + upload |
-| 14 | [14-admin-pedidos.md](14-admin-pedidos.md) | Tab Pedidos: status tabs + drawer detalhe |
+| 13 | [13-admin-produtos.md](13-admin-produtos.md) | Extrair `ProductsTab` + `ProductFormModal` |
+| 14 | [14-admin-pedidos.md](14-admin-pedidos.md) | Extrair `OrdersTab` + `OrderDetailPanel` |
 | 15 | [15-aceite-fase3.md](15-aceite-fase3.md) | Checklist aceite fase 3 |
 
 **✓ Resultado:** admin gerencia produtos e pedidos.
@@ -102,6 +115,7 @@ Organizado em **4 fases** alinhadas com [`infra/tasks/`](../../infra/tasks/READM
 
 ## Referências
 
+- [Portar do protótipo](../prototype-porting.md)
 - [UI/UX](../ui-ux.md)
 - [Integration](../integration.md)
 - [API routes](../../backend/api-routes.md)

@@ -2,22 +2,27 @@
 
 **Fase:** 2 — Login admin  
 **Status:** pendente  
-**Arquivos alvo:** [`integration.md`](../integration.md)
+**Arquivos alvo:** [`integration.md`](../integration.md), [`prototype-porting.md`](../prototype-porting.md)
 
 ## Objetivo
 
-Implementar autenticação admin via AWS Amplify Auth (SRP) e proteção da rota `/admin`.
+Portar tela de login do protótipo e **substituir** `amazon-cognito-identity-js` por Amplify Auth (SRP).
 
-## Configurações já definidas
+## Fonte visual — protótipo
 
-| Decisão | Valor |
-|---------|-------|
-| Biblioteca | Amplify `configure` + `signIn` (SRP) |
-| Token storage | `sessionStorage` (ou cookie se possível) |
-| Refresh automático | Sim (1h refresh, access token diário) |
-| Redirect pós-login | `/admin` (tab Pedidos) |
-| Logout | Limpa token + cache React Query admin |
-| `403` sem grupo admins | Mensagem específica em pt-BR |
+| Protótipo | Destino |
+|-----------|---------|
+| `AdminLogin` — `AdminPage.tsx` **L220–314** | `src/pages/admin/AdminLoginPage.tsx` |
+| Layout centralizado, logo, campos e-mail/senha | **Copiar JSX/estilos** |
+| Fallback "qualquer login aceito" L232–236 | **Remover** — exigir Cognito |
+| `getCognitoPool` L185–188 | Substituir por `src/lib/amplify.ts` |
+
+### Adaptar
+
+- [ ] Logo: Afro90s (não "DA CROWN")
+- [ ] `signIn` via Amplify em vez de `user.authenticateUser`
+- [ ] Redirect sucesso → `/admin`
+- [ ] Link "Voltar à loja" → `/` (já no protótipo L305–310)
 
 ## O que implementar
 
@@ -25,47 +30,30 @@ Implementar autenticação admin via AWS Amplify Auth (SRP) e proteção da rota
 
 ```typescript
 import { Amplify } from 'aws-amplify';
-Amplify.configure({
-  Auth: {
-    Cognito: {
-      userPoolId: import.meta.env.VITE_COGNITO_USER_POOL_ID,
-      userPoolClientId: import.meta.env.VITE_COGNITO_CLIENT_ID,
-    },
-  },
-});
+Amplify.configure({ Auth: { Cognito: { ... } } });
 ```
 
 ### `src/pages/admin/AdminLoginPage.tsx`
 
-- [ ] Formulário email + senha
-- [ ] `signIn({ username, password })` via Amplify
-- [ ] Loading state no submit
-- [ ] Erro de credenciais → toast em pt-BR
-- [ ] Sucesso → redirect para `/admin`
+- [ ] **Copiar** UI de `AdminLogin` do protótipo
+- [ ] Amplify `signIn({ username, password })`
+- [ ] Toast erro pt-BR
 
 ### `src/components/ProtectedRoute.tsx`
 
-- [ ] Verificar sessão Amplify (`fetchAuthSession`)
-- [ ] Sem sessão → `<Navigate to="/admin/login" />`
-- [ ] Com sessão → renderizar `<Outlet>`
+- [ ] Proteger `/admin` — protótipo mistura login e dashboard no mesmo arquivo
 
-### Interceptor Axios (task 03)
+### Interceptor + Logout
 
-- [ ] Adicionar `Authorization: Bearer {accessToken}` em requests para `/admin/*`
-- [ ] Em `401` → redirect para `/admin/login` + limpar sessão
-
-### Logout
-
-- [ ] Botão no header de `AdminPage` → `signOut()` + `queryClient.clear()` + redirect `/`
+- [ ] Bearer em `/admin/*` (task 03)
+- [ ] Logout no header de `AdminPage` (copiar botão L1020–1025 de `AdminDashboard`)
 
 ## Pré-requisitos
 
 - Fase 1 entregue (task 10)
-- Infra fase 2 (Cognito) + backend fase 2 deployados
 
 ## Critérios de conclusão
 
-- [ ] Login funcional com usuário admin criado no Cognito
-- [ ] `/admin` redireciona para login sem sessão
-- [ ] Logout limpa sessão e cache
+- [ ] Login **visual igual** ao protótipo, auth via Amplify
+- [ ] `/admin` protegida
 - [ ] Atualizar **Status** para `concluída`

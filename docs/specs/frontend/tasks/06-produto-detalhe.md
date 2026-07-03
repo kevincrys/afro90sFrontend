@@ -2,44 +2,44 @@
 
 **Fase:** 1 — Site público  
 **Status:** pendente  
-**Arquivos alvo:** [`ui-ux.md`](../ui-ux.md)
+**Arquivos alvo:** [`ui-ux.md`](../ui-ux.md), [`prototype-porting.md`](../prototype-porting.md)
 
 ## Objetivo
 
-Implementar **modal de detalhe** com galeria, informações e botão adicionar ao carrinho. Rota `/produto/:id` serve como deep link.
+**Extrair `ProductModal`** de `StorePage.tsx` para `ProductDetailModal.tsx` e conectar à API.
 
-## Configurações já definidas
+## Fonte visual — protótipo
 
-| Decisão | Valor |
-|---------|-------|
-| UI principal | **Modal** sobre o catálogo (não página dedicada) |
-| Deep link | `/produto/:id` abre o mesmo modal |
-| Galeria | Imagem principal + carrossel de `photos[]` no modal |
-| URLs `photos[]` | Sempre absolutas (não relativas) |
-| Quantidade | Seletor 1..N limitado a `product.quantity` |
-| Esgotado | Botão desabilitado |
-| SEO | `document.title` = nome do produto enquanto modal aberto |
+| Protótipo | Destino |
+|-----------|---------|
+| `ProductModal` — `StorePage.tsx` **L255–564** | `src/components/product/ProductDetailModal.tsx` |
+| Hash `#product/:id` L812–840 | Rota `/produto/:id` + `useParams` |
+| `selectedOptions` / variantes L485–510 | **Remover** — API não suporta |
+| `product.description` | **Remover** — campo não existe na API |
+| `product.rating` / reviews | **Remover** |
+
+### Adaptar no modal (manter layout, trocar dados)
+
+- [ ] Props: receber `productId: string` — carregar com `useProduct(id)`
+- [ ] `images[]` → `photos[]`
+- [ ] Galeria/carrossel: **copiar JSX** do protótipo (thumbnails L375–385)
+- [ ] Seletor quantidade: manter lógica, limitar a `product.quantity`
+- [ ] `addToCart(product, selectedOptions)` → `cartStore.addItem({ productId, name, price, quantity, photo, maxQuantity })`
+- [ ] Fechar modal: `navigate('/')` em vez de `history.pushState` + hash
 
 ## O que implementar
 
 ### `src/components/product/ProductDetailModal.tsx`
 
+- [ ] **Copiar** `ProductModal` do protótipo como ponto de partida
 - [ ] `useProduct(id)` com React Query
-- [ ] Carrossel de `photos[]` no modal
-- [ ] Nome, preço formatado (BRL), categoria
-- [ ] Seletor de quantidade (1 até `product.quantity`)
-- [ ] Botão "Adicionar ao carrinho" → Zustand store (task 07)
-- [ ] Botão desabilitado se `quantity === 0`
-- [ ] Botão fechar + overlay; ao fechar, voltar para `/` (limpar deep link)
-- [ ] Skeleton durante loading
+- [ ] Skeleton enquanto loading
 - [ ] `document.title = product.name` enquanto aberto
-- [ ] `alt` em imagens = `product.name`
-- [ ] Focus trap no modal (task 09)
+- [ ] Focus trap (task 09)
 
 ### Integração em `CatalogPage`
 
-- [ ] Estado `selectedProductId` ou leitura de `useParams` em `/produto/:id`
-- [ ] Abrir/fechar modal sincronizado com a URL
+- [ ] Abrir modal ao clicar card ou ao acessar `/produto/:id`
 
 ## Pré-requisitos
 
@@ -47,8 +47,7 @@ Implementar **modal de detalhe** com galeria, informações e botão adicionar a
 
 ## Critérios de conclusão
 
-- [ ] Modal carrega produto por ID via API
-- [ ] Galeria/carrossel funciona
-- [ ] `/produto/:id` abre o modal diretamente
-- [ ] Adicionar ao carrinho atualiza badge no header
+- [ ] Modal **visualmente igual** ao protótipo
+- [ ] Dados da API; sem mock
+- [ ] Deep link `/produto/:id` funciona
 - [ ] Atualizar **Status** para `concluída`

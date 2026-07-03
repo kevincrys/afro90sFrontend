@@ -83,10 +83,15 @@ Rotas e payloads: **[api-routes.md](../backend/api-routes.md)**.
 
 Variáveis de ambiente: **[outputs da infra](../infra/outputs.md)**.
 
+## Implementação
+
+A UI v1 é portada do **protótipo Canvas** (`Ecommerce Store Prototype (3)`). Ver **[prototype-porting.md](prototype-porting.md)** para mapa de cópia e adaptação.
+
 Refinamento incremental das specs: **[tasks/README.md](tasks/README.md)** (backlog por tarefa).
 
 ## Referências
 
+- [Portar do protótipo](prototype-porting.md)
 - [UI/UX](ui-ux.md)
 - [Integração](integration.md)
 - [Visão do produto](../../foundation/project-overview.md)
