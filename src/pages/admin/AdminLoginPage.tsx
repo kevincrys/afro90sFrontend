@@ -5,6 +5,7 @@ import { Link, Navigate, useLocation, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { isCognitoConfigured } from "@/lib/amplify";
 import {
+  adminConfirmNewPassword,
   adminSignIn,
   checkAdminAuth,
   getCognitoErrorMessage,
@@ -33,10 +34,17 @@ export default function AdminLoginPage() {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [name, setName] = useState("");
+  const [needsNewPassword, setNeedsNewPassword] = useState(false);
+  const [missingAttributes, setMissingAttributes] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [authChecked, setAuthChecked] = useState(false);
   const [alreadyAuthenticated, setAlreadyAuthenticated] = useState(false);
+
+  const needsName = missingAttributes.includes("name");
 
   const cognitoConfigured = isCognitoConfigured();
 
@@ -86,9 +94,29 @@ export default function AdminLoginPage() {
   async function handleSubmit(event: FormEvent) {
     event.preventDefault();
 
-    if (!email || !password) {
+    if (!email) {
+      setError("Informe o e-mail.");
+      return;
+    }
+
+    if (!needsNewPassword && !password) {
       setError("Preencha todos os campos.");
       return;
+    }
+
+    if (needsNewPassword) {
+      if (!newPassword || !confirmPassword) {
+        setError("Informe e confirme a nova senha.");
+        return;
+      }
+      if (newPassword !== confirmPassword) {
+        setError("As senhas não coincidem.");
+        return;
+      }
+      if (needsName && !name.trim()) {
+        setError("Informe seu nome.");
+        return;
+      }
     }
 
     if (!cognitoConfigured) {
@@ -102,7 +130,25 @@ export default function AdminLoginPage() {
     setError("");
 
     try {
-      await adminSignIn(email, password);
+      if (needsNewPassword) {
+        await adminConfirmNewPassword(email, newPassword, {
+          missingAttributes,
+          name: name.trim() || undefined,
+        });
+        navigate(from, { replace: true });
+        return;
+      }
+
+      const result = await adminSignIn(email, password);
+      if (result.step === "new_password_required") {
+        setNeedsNewPassword(true);
+        setMissingAttributes(result.missingAttributes);
+        setNewPassword("");
+        setConfirmPassword("");
+        toast.message("Primeiro acesso — defina uma nova senha.");
+        return;
+      }
+
       navigate(from, { replace: true });
     } catch (err) {
       const message = getCognitoErrorMessage(err);
@@ -164,6 +210,26 @@ export default function AdminLoginPage() {
           </div>
         )}
 
+        {needsNewPassword && (
+          <div
+            className="flex gap-3 p-4 mb-6 border"
+            style={{ borderColor: "#FFD21F44", background: "#2A1E00" }}
+          >
+            <AlertCircle size={16} style={{ color: "#FFD21F", flexShrink: 0, marginTop: "1px" }} />
+            <div
+              style={{
+                fontFamily: "'Courier Prime', monospace",
+                fontSize: "0.62rem",
+                letterSpacing: "0.08em",
+                color: "#FFD21F",
+                lineHeight: 1.6,
+              }}
+            >
+              Primeiro acesso — defina uma senha permanente para continuar.
+            </div>
+          </div>
+        )}
+
         <form onSubmit={handleSubmit} className="flex flex-col gap-5">
           <div>
             <AdminLabel>E-MAIL</AdminLabel>
@@ -172,21 +238,63 @@ export default function AdminLoginPage() {
               autoComplete="username"
               value={email}
               onChange={(event) => setEmail(event.target.value)}
+              readOnly={needsNewPassword}
               placeholder="admin@afro90s.com"
-              className="w-full px-4 py-3 bg-muted border border-border text-foreground placeholder:text-muted-foreground outline-none focus:border-primary transition-colors text-sm"
+              className="w-full px-4 py-3 bg-muted border border-border text-foreground placeholder:text-muted-foreground outline-none focus:border-primary transition-colors text-sm disabled:opacity-70"
             />
           </div>
-          <div>
-            <AdminLabel>SENHA</AdminLabel>
-            <input
-              type="password"
-              autoComplete="current-password"
-              value={password}
-              onChange={(event) => setPassword(event.target.value)}
-              placeholder="••••••••"
-              className="w-full px-4 py-3 bg-muted border border-border text-foreground placeholder:text-muted-foreground outline-none focus:border-primary transition-colors text-sm"
-            />
-          </div>
+
+          {!needsNewPassword ? (
+            <div>
+              <AdminLabel>SENHA</AdminLabel>
+              <input
+                type="password"
+                autoComplete="current-password"
+                value={password}
+                onChange={(event) => setPassword(event.target.value)}
+                placeholder="••••••••"
+                className="w-full px-4 py-3 bg-muted border border-border text-foreground placeholder:text-muted-foreground outline-none focus:border-primary transition-colors text-sm"
+              />
+            </div>
+          ) : (
+            <>
+              {needsName && (
+                <div>
+                  <AdminLabel>NOME</AdminLabel>
+                  <input
+                    type="text"
+                    autoComplete="name"
+                    value={name}
+                    onChange={(event) => setName(event.target.value)}
+                    placeholder="Seu nome"
+                    className="w-full px-4 py-3 bg-muted border border-border text-foreground placeholder:text-muted-foreground outline-none focus:border-primary transition-colors text-sm"
+                  />
+                </div>
+              )}
+              <div>
+                <AdminLabel>NOVA SENHA</AdminLabel>
+                <input
+                  type="password"
+                  autoComplete="new-password"
+                  value={newPassword}
+                  onChange={(event) => setNewPassword(event.target.value)}
+                  placeholder="••••••••"
+                  className="w-full px-4 py-3 bg-muted border border-border text-foreground placeholder:text-muted-foreground outline-none focus:border-primary transition-colors text-sm"
+                />
+              </div>
+              <div>
+                <AdminLabel>CONFIRMAR SENHA</AdminLabel>
+                <input
+                  type="password"
+                  autoComplete="new-password"
+                  value={confirmPassword}
+                  onChange={(event) => setConfirmPassword(event.target.value)}
+                  placeholder="••••••••"
+                  className="w-full px-4 py-3 bg-muted border border-border text-foreground placeholder:text-muted-foreground outline-none focus:border-primary transition-colors text-sm"
+                />
+              </div>
+            </>
+          )}
 
           {error && (
             <div
@@ -214,7 +322,13 @@ export default function AdminLoginPage() {
               letterSpacing: "0.1em",
             }}
           >
-            {loading ? "ENTRANDO..." : "ENTRAR"}
+            {loading
+              ? needsNewPassword
+                ? "SALVANDO..."
+                : "ENTRANDO..."
+              : needsNewPassword
+                ? "DEFINIR SENHA"
+                : "ENTRAR"}
           </button>
         </form>
 

@@ -8,10 +8,10 @@ describe("getCognitoErrorMessage", () => {
     ).toBe("E-mail ou senha incorretos.");
   });
 
-  it("maps NewPasswordRequired to pt-BR", () => {
+  it("maps InvalidPasswordException to pt-BR", () => {
     expect(
-      getCognitoErrorMessage(Object.assign(new Error("x"), { name: "NewPasswordRequired" })),
-    ).toBe("Nova senha necessária — configure no console do Cognito.");
+      getCognitoErrorMessage(Object.assign(new Error("x"), { name: "InvalidPasswordException" })),
+    ).toBe("A senha não atende aos requisitos de segurança.");
   });
 
   it("falls back for unknown errors", () => {
