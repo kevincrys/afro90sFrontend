@@ -12,7 +12,7 @@ export function Footer() {
               fontFamily: "'Anton', sans-serif",
               fontSize: "1.7rem",
               color: "#FFD21F",
-              letterSpacing: "0.04em",
+              letterSpacing: "var(--track-logo)",
               marginBottom: "10px",
               lineHeight: 1,
             }}
@@ -26,7 +26,7 @@ export function Footer() {
             style={{
               fontFamily: "'Courier Prime', monospace",
               fontSize: "0.58rem",
-              letterSpacing: "0.18em",
+              letterSpacing: "var(--track-label-sm)",
               color: "#7A004B",
             }}
           >
@@ -40,7 +40,7 @@ export function Footer() {
               fontFamily: "'Anton', sans-serif",
               fontSize: "0.88rem",
               color: "#FFD21F",
-              letterSpacing: "0.1em",
+              letterSpacing: "var(--track-ui-lg)",
               marginBottom: "18px",
             }}
           >
@@ -61,7 +61,7 @@ export function Footer() {
               fontFamily: "'Anton', sans-serif",
               fontSize: "0.88rem",
               color: "#FFD21F",
-              letterSpacing: "0.1em",
+              letterSpacing: "var(--track-ui-lg)",
               marginBottom: "18px",
             }}
           >
@@ -80,7 +80,7 @@ export function Footer() {
               fontFamily: "'Anton', sans-serif",
               fontSize: "0.88rem",
               color: "#FFD21F",
-              letterSpacing: "0.1em",
+              letterSpacing: "var(--track-ui-lg)",
               marginBottom: "18px",
             }}
           >
@@ -99,7 +99,7 @@ export function Footer() {
           style={{
             fontFamily: "'Courier Prime', monospace",
             fontSize: "0.6rem",
-            letterSpacing: "0.12em",
+            letterSpacing: "var(--track-caption)",
             color: "#9A7085",
           }}
         >
@@ -113,7 +113,7 @@ export function Footer() {
               style={{
                 fontFamily: "'Courier Prime', monospace",
                 fontSize: "0.58rem",
-                letterSpacing: "0.16em",
+                letterSpacing: "var(--track-nav)",
               }}
             >
               {social}

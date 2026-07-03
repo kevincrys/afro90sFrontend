@@ -48,7 +48,7 @@ export function ProductCard({ product }: ProductCardProps) {
               background: "rgba(13,0,9,0.75)",
               fontFamily: "'Courier Prime', monospace",
               fontSize: "0.55rem",
-              letterSpacing: "0.15em",
+              letterSpacing: "var(--track-badge)",
               color: "#FFD21F",
             }}
           >
@@ -66,7 +66,7 @@ export function ProductCard({ product }: ProductCardProps) {
               style={{
                 fontFamily: "'Anton', sans-serif",
                 fontSize: "0.9rem",
-                letterSpacing: "0.1em",
+                letterSpacing: "var(--track-ui-lg)",
                 color: "#FFD21F",
               }}
             >
@@ -85,7 +85,7 @@ export function ProductCard({ product }: ProductCardProps) {
               style={{
                 fontFamily: "'Anton', sans-serif",
                 fontSize: "0.9rem",
-                letterSpacing: "0.1em",
+                letterSpacing: "var(--track-ui-lg)",
                 color: "#FFD21F",
               }}
             >
@@ -100,7 +100,7 @@ export function ProductCard({ product }: ProductCardProps) {
           style={{
             fontFamily: "'Courier Prime', monospace",
             fontSize: "0.58rem",
-            letterSpacing: "0.22em",
+            letterSpacing: "var(--track-label-lg)",
             color: "#7A004B",
             marginBottom: "6px",
           }}
@@ -112,7 +112,7 @@ export function ProductCard({ product }: ProductCardProps) {
           style={{
             fontFamily: "'Anton', sans-serif",
             fontSize: "1.15rem",
-            letterSpacing: "0.03em",
+            letterSpacing: "var(--track-display-title)",
             color: "#FFF8E7",
           }}
           onClick={openProduct}
@@ -125,6 +125,7 @@ export function ProductCard({ product }: ProductCardProps) {
               fontFamily: "'Anton', sans-serif",
               fontSize: "1.4rem",
               color: "#FFD21F",
+              letterSpacing: "var(--track-heading)",
             }}
           >
             {formatPrice(product.price)}

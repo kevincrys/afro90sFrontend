@@ -19,7 +19,6 @@ export function ProductDetailModal({ productId, onClose }: ProductDetailModalPro
   const panelRef = useRef<HTMLDivElement>(null);
   const { data: product, isLoading, isError, error } = useProduct(productId);
   const addItem = useCartStore((state) => state.addItem);
-  const openCart = useCartStore((state) => state.openCart);
 
   const [photoIdx, setPhotoIdx] = useState(0);
   const [quantity, setQuantity] = useState(1);
@@ -112,7 +111,6 @@ export function ProductDetailModal({ productId, onClose }: ProductDetailModalPro
       maxQuantity: product.quantity,
     });
     onClose();
-    openCart();
   }
 
   return (
@@ -165,7 +163,7 @@ export function ProductDetailModal({ productId, onClose }: ProductDetailModalPro
             style={{
               fontFamily: "'Courier Prime', monospace",
               fontSize: "0.65rem",
-              letterSpacing: "0.18em",
+              letterSpacing: "var(--track-label-sm)",
             }}
           >
             Voltar ao catálogo
@@ -233,7 +231,7 @@ export function ProductDetailModal({ productId, onClose }: ProductDetailModalPro
                     background: "rgba(13,0,9,0.7)",
                     fontFamily: "'Courier Prime', monospace",
                     fontSize: "0.58rem",
-                    letterSpacing: "0.15em",
+                    letterSpacing: "var(--track-badge)",
                     color: "#FFD21F",
                   }}
                 >
@@ -251,7 +249,7 @@ export function ProductDetailModal({ productId, onClose }: ProductDetailModalPro
                     style={{
                       fontFamily: "'Anton', sans-serif",
                       fontSize: "0.9rem",
-                      letterSpacing: "0.1em",
+                      letterSpacing: "var(--track-ui-lg)",
                       color: "#FFD21F",
                     }}
                   >
@@ -294,7 +292,7 @@ export function ProductDetailModal({ productId, onClose }: ProductDetailModalPro
               style={{
                 fontFamily: "'Courier Prime', monospace",
                 fontSize: "0.6rem",
-                letterSpacing: "0.22em",
+                letterSpacing: "var(--track-label-lg)",
                 color: "#7A004B",
               }}
             >
@@ -306,7 +304,7 @@ export function ProductDetailModal({ productId, onClose }: ProductDetailModalPro
               style={{
                 fontFamily: "'Anton', sans-serif",
                 fontSize: "clamp(1.6rem, 3vw, 2.2rem)",
-                letterSpacing: "0.03em",
+                letterSpacing: "var(--track-display-title)",
                 color: "#FFF8E7",
                 lineHeight: 1,
               }}
@@ -336,7 +334,7 @@ export function ProductDetailModal({ productId, onClose }: ProductDetailModalPro
                   style={{
                     fontFamily: "'Courier Prime', monospace",
                     fontSize: "0.6rem",
-                    letterSpacing: "0.2em",
+                    letterSpacing: "var(--track-label)",
                     color: "#9A7085",
                   }}
                 >
@@ -376,7 +374,7 @@ export function ProductDetailModal({ productId, onClose }: ProductDetailModalPro
                     style={{
                       fontFamily: "'Courier Prime', monospace",
                       fontSize: "0.62rem",
-                      letterSpacing: "0.1em",
+                      letterSpacing: "var(--track-ui-lg)",
                       color: "#9A7085",
                     }}
                   >
@@ -397,7 +395,7 @@ export function ProductDetailModal({ productId, onClose }: ProductDetailModalPro
                 style={{
                   fontFamily: "'Anton', sans-serif",
                   fontSize: "1rem",
-                  letterSpacing: "0.1em",
+                  letterSpacing: "var(--track-ui-lg)",
                 }}
               >
                 <ShoppingBag size={18} />
@@ -410,7 +408,7 @@ export function ProductDetailModal({ productId, onClose }: ProductDetailModalPro
                 style={{
                   fontFamily: "'Courier Prime', monospace",
                   fontSize: "0.65rem",
-                  letterSpacing: "0.18em",
+                  letterSpacing: "var(--track-label-sm)",
                 }}
               >
                 Continuar navegando

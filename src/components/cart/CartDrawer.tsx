@@ -21,7 +21,7 @@ function FieldLabel({ children }: { children: ReactNode }) {
       style={{
         fontFamily: "'Courier Prime', monospace",
         fontSize: "0.58rem",
-        letterSpacing: "0.2em",
+        letterSpacing: "var(--track-label)",
         color: "#7A004B",
         marginBottom: "6px",
       }}
@@ -139,7 +139,7 @@ export function CartDrawer() {
                 fontFamily: "'Anton', sans-serif",
                 fontSize: "1.4rem",
                 color: "#FFD21F",
-                letterSpacing: "0.05em",
+                letterSpacing: "var(--track-heading)",
               }}
             >
               {isDone ? "PEDIDO CONFIRMADO ★" : "SEU CARRINHO"}
@@ -162,7 +162,7 @@ export function CartDrawer() {
                   fontFamily: "'Anton', sans-serif",
                   fontSize: "2.2rem",
                   color: "#FFF8E7",
-                  letterSpacing: "0.03em",
+                  letterSpacing: "var(--track-display-title)",
                   lineHeight: 1,
                 }}
               >
@@ -184,7 +184,7 @@ export function CartDrawer() {
                   style={{
                     fontFamily: "'Courier Prime', monospace",
                     fontSize: "0.58rem",
-                    letterSpacing: "0.18em",
+                    letterSpacing: "var(--track-label-sm)",
                     color: "#7A004B",
                     marginBottom: "8px",
                   }}
@@ -207,7 +207,7 @@ export function CartDrawer() {
                   style={{
                     fontFamily: "'Anton', sans-serif",
                     fontSize: "0.9rem",
-                    letterSpacing: "0.1em",
+                    letterSpacing: "var(--track-ui-lg)",
                   }}
                 >
                   <MessageCircle size={18} />
@@ -221,7 +221,7 @@ export function CartDrawer() {
                 style={{
                   fontFamily: "'Courier Prime', monospace",
                   fontSize: "0.68rem",
-                  letterSpacing: "0.18em",
+                  letterSpacing: "var(--track-label-sm)",
                 }}
               >
                 Continuar comprando →
@@ -236,7 +236,7 @@ export function CartDrawer() {
                     style={{
                       fontFamily: "'Courier Prime', monospace",
                       fontSize: "0.75rem",
-                      letterSpacing: "0.12em",
+                      letterSpacing: "var(--track-caption)",
                     }}
                   >
                     SEU CARRINHO ESTÁ VAZIO.
@@ -318,7 +318,7 @@ export function CartDrawer() {
                       fontFamily: "'Anton', sans-serif",
                       fontSize: "0.85rem",
                       color: "#FFD21F",
-                      letterSpacing: "0.08em",
+                      letterSpacing: "var(--track-ui)",
                       marginBottom: "14px",
                     }}
                   >
@@ -350,7 +350,7 @@ export function CartDrawer() {
                           fontFamily: "'Anton', sans-serif",
                           fontSize: "0.9rem",
                           color: "#FFF8E7",
-                          letterSpacing: "0.06em",
+                          letterSpacing: "var(--track-heading)",
                         }}
                       >
                         TOTAL
@@ -380,7 +380,7 @@ export function CartDrawer() {
                       fontFamily: "'Anton', sans-serif",
                       fontSize: "0.88rem",
                       color: "#FFD21F",
-                      letterSpacing: "0.08em",
+                      letterSpacing: "var(--track-ui)",
                     }}
                   >
                     DADOS DE ENTREGA
@@ -467,7 +467,7 @@ export function CartDrawer() {
                     style={{
                       fontFamily: "'Anton', sans-serif",
                       fontSize: "1.1rem",
-                      letterSpacing: "0.1em",
+                      letterSpacing: "var(--track-ui-lg)",
                     }}
                   >
                     Finalizar pedido — {formatPrice(subtotal)}{" "}

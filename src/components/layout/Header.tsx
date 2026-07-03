@@ -56,7 +56,7 @@ export function Header({
           style={{
             fontFamily: "'Anton', sans-serif",
             fontSize: "1.55rem",
-            letterSpacing: "0.04em",
+            letterSpacing: "var(--track-logo)",
             color: "#FFD21F",
             lineHeight: 1,
           }}
@@ -74,7 +74,7 @@ export function Header({
               style={{
                 fontFamily: "'Courier Prime', monospace",
                 fontSize: "0.68rem",
-                letterSpacing: "0.16em",
+                letterSpacing: "var(--track-nav)",
                 color: activeCategory === value ? "#FFD21F" : "rgba(255,248,231,0.55)",
                 textTransform: "uppercase",
               }}
@@ -101,7 +101,7 @@ export function Header({
                 style={{
                   fontFamily: "'Courier Prime', monospace",
                   fontSize: "0.65rem",
-                  letterSpacing: "0.08em",
+                  letterSpacing: "var(--track-ui)",
                 }}
                 aria-label="Buscar produtos"
               />
@@ -163,7 +163,7 @@ export function Header({
               style={{
                 fontFamily: "'Courier Prime', monospace",
                 fontSize: "0.65rem",
-                letterSpacing: "0.08em",
+                letterSpacing: "var(--track-ui)",
               }}
               aria-label="Buscar produtos"
             />
@@ -184,7 +184,7 @@ export function Header({
               style={{
                 fontFamily: "'Anton', sans-serif",
                 fontSize: "1.1rem",
-                letterSpacing: "0.06em",
+                letterSpacing: "var(--track-heading)",
                 color: activeCategory === value ? "#FFD21F" : "#FFF8E7",
               }}
               onClick={() => selectCategory(value)}

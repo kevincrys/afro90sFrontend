@@ -1,3 +1,22 @@
+:root {
+  --track-body: 0.035em;
+  --track-display-title: 0.07em;
+  --track-logo: 0.08em;
+  --track-heading: 0.1em;
+  --track-ui: 0.12em;
+  --track-ui-lg: 0.14em;
+  --track-caption: 0.16em;
+  --track-badge: 0.18em;
+  --track-nav: 0.2em;
+  --track-label-sm: 0.22em;
+  --track-label: 0.24em;
+  --track-label-lg: 0.26em;
+}
+
+body {
+  letter-spacing: var(--track-body);
+}
+
 @keyframes ticker {
   from {
     transform: translateX(0);

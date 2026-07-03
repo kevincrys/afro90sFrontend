@@ -57,7 +57,7 @@ export default function CatalogPage() {
           style={{
             fontFamily: "'Courier Prime', monospace",
             fontSize: "0.62rem",
-            letterSpacing: "0.12em",
+            letterSpacing: "var(--track-caption)",
             color: "#9A7085",
           }}
         >
@@ -78,7 +78,7 @@ export default function CatalogPage() {
             className="border border-border px-6 py-2 text-sm text-muted-foreground hover:text-primary hover:border-primary transition-colors"
             style={{
               fontFamily: "'Courier Prime', monospace",
-              letterSpacing: "0.12em",
+              letterSpacing: "var(--track-caption)",
               fontSize: "0.65rem",
             }}
           >
@@ -101,7 +101,7 @@ export default function CatalogPage() {
             style={{
               fontFamily: "'Anton', sans-serif",
               fontSize: "1.25rem",
-              letterSpacing: "0.06em",
+              letterSpacing: "var(--track-heading)",
               color: "#FFF8E7",
             }}
           >
@@ -112,7 +112,7 @@ export default function CatalogPage() {
               className="text-muted-foreground"
               style={{
                 fontFamily: "'Courier Prime', monospace",
-                letterSpacing: "0.12em",
+                letterSpacing: "var(--track-caption)",
                 fontSize: "0.75rem",
               }}
             >
