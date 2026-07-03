@@ -3,6 +3,7 @@ import { Card } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { CatalogGrid } from "@/components/layout/CatalogGrid";
 import type { CatalogOutletContext } from "@/components/layout/PublicLayout";
+import { getClientErrorMessage } from "@/lib/errorMessages";
 import { useProducts } from "@/hooks/useProducts";
 import { ApiError } from "@/types/errors";
 
@@ -40,8 +41,8 @@ export default function CatalogPage() {
       {isError && (
         <p className="text-center text-destructive mb-6" role="alert">
           {error instanceof ApiError
-            ? `${error.code}: ${error.message}`
-            : "Não foi possível carregar os produtos."}
+            ? error.message
+            : getClientErrorMessage("UNKNOWN_ERROR")}
         </p>
       )}
 
