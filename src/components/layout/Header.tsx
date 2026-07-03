@@ -1,7 +1,9 @@
-import { useEffect, useState, type KeyboardEvent } from "react";
+import { useCallback, useEffect, useState, type KeyboardEvent } from "react";
 import { useSearchParams } from "react-router-dom";
 import { Menu, Search, ShoppingBag, X } from "lucide-react";
 import { CATEGORIES, type CategoryFilter } from "@/types/category";
+
+const SEARCH_DEBOUNCE_MS = 350;
 
 export interface HeaderProps {
   activeCategory?: CategoryFilter;
@@ -30,18 +32,30 @@ export function Header({
     setMenuOpen(false);
   }
 
-  function submitSearch() {
-    const trimmed = searchQuery.trim();
-    const next = new URLSearchParams(searchParams);
-    if (trimmed) next.set("name", trimmed);
-    else next.delete("name");
-    setSearchParams(next, { replace: true });
-    setSearchOpen(false);
-    setMenuOpen(false);
-  }
+  const applySearch = useCallback(
+    (query: string) => {
+      const trimmed = query.trim();
+      const current = (searchParams.get("name") ?? "").trim();
+      if (trimmed === current) return;
+
+      const next = new URLSearchParams(searchParams);
+      if (trimmed) next.set("name", trimmed);
+      else next.delete("name");
+      setSearchParams(next, { replace: true });
+    },
+    [searchParams, setSearchParams],
+  );
+
+  useEffect(() => {
+    const current = searchParams.get("name") ?? "";
+    if (searchQuery.trim() === current.trim()) return;
+
+    const timer = window.setTimeout(() => applySearch(searchQuery), SEARCH_DEBOUNCE_MS);
+    return () => window.clearTimeout(timer);
+  }, [applySearch, searchQuery, searchParams]);
 
   function handleSearchKeyDown(event: KeyboardEvent<HTMLInputElement>) {
-    if (event.key === "Enter") submitSearch();
+    if (event.key === "Enter") applySearch(searchQuery);
     if (event.key === "Escape") {
       setSearchOpen(false);
       setSearchQuery(searchParams.get("name") ?? "");
@@ -169,7 +183,10 @@ export function Header({
             />
             <button
               type="button"
-              onClick={submitSearch}
+              onClick={() => {
+                applySearch(searchQuery);
+                setMenuOpen(false);
+              }}
               className="border border-primary px-3 text-primary"
               aria-label="Buscar"
             >
