@@ -1,7 +1,7 @@
 # Task 11 — Login admin (Cognito + Amplify)
 
 **Fase:** 2 — Login admin  
-**Status:** pendente  
+**Status:** concluída  
 **Arquivos alvo:** [`integration.md`](../integration.md), [`prototype-porting.md`](../prototype-porting.md)
 
 ## Objetivo
@@ -19,10 +19,10 @@ Portar tela de login do protótipo e **substituir** `amazon-cognito-identity-js`
 
 ### Adaptar
 
-- [ ] Logo: Afro90s (não "DA CROWN")
-- [ ] `signIn` via Amplify em vez de `user.authenticateUser`
-- [ ] Redirect sucesso → `/admin`
-- [ ] Link "Voltar à loja" → `/` (já no protótipo L305–310)
+- [x] Logo: Afro90s (não "DA CROWN")
+- [x] `signIn` via Amplify em vez de `user.authenticateUser`
+- [x] Redirect sucesso → `/admin`
+- [x] Link "Voltar à loja" → `/` (já no protótipo L305–310)
 
 ## O que implementar
 
@@ -35,18 +35,24 @@ Amplify.configure({ Auth: { Cognito: { ... } } });
 
 ### `src/pages/admin/AdminLoginPage.tsx`
 
-- [ ] **Copiar** UI de `AdminLogin` do protótipo
-- [ ] Amplify `signIn({ username, password })`
-- [ ] Toast erro pt-BR
+- [x] **Copiar** UI de `AdminLogin` do protótipo
+- [x] Amplify `signIn({ username, password })`
+- [x] Toast erro pt-BR
 
 ### `src/components/ProtectedRoute.tsx`
 
-- [ ] Proteger `/admin` — protótipo mistura login e dashboard no mesmo arquivo
+- [x] Proteger `/admin` — protótipo mistura login e dashboard no mesmo arquivo
 
 ### Interceptor + Logout
 
-- [ ] Bearer em `/admin/*` (task 03)
-- [ ] Logout no header de `AdminPage` (copiar botão L1020–1025 de `AdminDashboard`)
+- [x] Bearer em `/admin/*` (task 03)
+- [x] Logout no header de `AdminPage` (copiar botão L1020–1025 de `AdminDashboard`)
+
+### Segurança da sessão (pós-implementação)
+
+- [x] Token **não** duplicado em `sessionStorage` — só Amplify (`fetchAuthSession`)
+- [x] `checkAdminAuth()` valida sessão antes de renderizar `/admin`
+- [x] `401` em `/admin/*` → `signOut` + redirect `/admin/login`
 
 ## Pré-requisitos
 
@@ -54,6 +60,6 @@ Amplify.configure({ Auth: { Cognito: { ... } } });
 
 ## Critérios de conclusão
 
-- [ ] Login **visual igual** ao protótipo, auth via Amplify
-- [ ] `/admin` protegida
-- [ ] Atualizar **Status** para `concluída`
+- [x] Login **visual igual** ao protótipo, auth via Amplify
+- [x] `/admin` protegida
+- [x] Atualizar **Status** para `concluída`

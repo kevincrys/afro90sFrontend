@@ -218,10 +218,13 @@ function openWhatsAppOrder(order: Order) {
 
 ## Autenticação admin (Cognito)
 
-- Login em `/admin/login`
-- Armazenar `accessToken` em memória (ou sessionStorage)
-- Interceptor adiciona header em rotas `/admin/*`
-- Redirect para login se `401` em rota protegida
+- Login em `/admin/login` via Amplify Auth (`signIn` SRP) — `src/lib/amplify.ts`, `src/lib/auth.ts`
+- **Token de acesso:** gerenciado só pelo Amplify (`fetchAuthSession`) — **não** duplicar em `sessionStorage`
+- E-mail do admin em `sessionStorage` (`admin_email`) — apenas para exibição no header
+- Interceptor Axios: `getAdminBearerToken()` → `Authorization: Bearer` em rotas `/admin/*`
+- `ProtectedRoute` e login: `checkAdminAuth()` valida usuário + token (inclui expiração/refresh via Amplify)
+- `401` em rota admin: `handleAdminUnauthorized()` → `signOut` + redirect `/admin/login`
+- Logout manual: `adminSignOut()` no header do painel
 
 ## React Query — chaves sugeridas
 

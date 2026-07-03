@@ -1,6 +1,6 @@
 import { LogOut, Package, ShoppingCart } from "lucide-react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
-import { clearAdminSession, getAdminEmail } from "@/components/layout/ProtectedRoute";
+import { adminSignOut, getAdminEmail } from "@/lib/auth";
 
 type AdminTab = "orders" | "products";
 
@@ -27,8 +27,8 @@ export default function AdminPage() {
     }
   }
 
-  function handleLogout() {
-    clearAdminSession();
+  async function handleLogout() {
+    await adminSignOut();
     navigate("/admin/login", { replace: true });
   }
 

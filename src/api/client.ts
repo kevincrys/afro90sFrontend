@@ -1,20 +1,7 @@
 import axios, { type AxiosError, type InternalAxiosRequestConfig } from "axios";
 import { getClientErrorMessage } from "@/lib/errorMessages";
+import { getAdminBearerToken, handleAdminUnauthorized } from "@/lib/auth";
 import { ApiError, type ApiErrorBody } from "@/types/errors";
-
-const ADMIN_TOKEN_KEY = "admin_access_token";
-
-export function getAdminAccessToken(): string | null {
-  return sessionStorage.getItem(ADMIN_TOKEN_KEY);
-}
-
-export function setAdminAccessToken(token: string): void {
-  sessionStorage.setItem(ADMIN_TOKEN_KEY, token);
-}
-
-export function clearAdminAccessToken(): void {
-  sessionStorage.removeItem(ADMIN_TOKEN_KEY);
-}
 
 function parseErrorBody(data: unknown): ApiErrorBody | undefined {
   if (data === null || data === undefined) return undefined;
@@ -84,10 +71,10 @@ export const apiClient = axios.create({
   },
 });
 
-apiClient.interceptors.request.use((config: InternalAxiosRequestConfig) => {
+apiClient.interceptors.request.use(async (config: InternalAxiosRequestConfig) => {
   const isAdminRoute = config.url?.startsWith("/admin");
   if (isAdminRoute) {
-    const token = getAdminAccessToken();
+    const token = await getAdminBearerToken();
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
@@ -99,6 +86,9 @@ apiClient.interceptors.response.use(
   (response) => response,
   (error: unknown) => {
     if (axios.isAxiosError(error)) {
+      if (error.response?.status === 401 && error.config?.url?.startsWith("/admin")) {
+        void handleAdminUnauthorized();
+      }
       throw toApiError(error);
     }
     throw error;
