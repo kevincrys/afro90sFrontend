@@ -1,7 +1,7 @@
 # Tasks — Frontend Afro90s (entregas faseadas)
 
 Backlog de implementação da SPA no repositório **`afro90sFrontend`** (`kevincrys/afro90sFrontend`).
-Organizado em **4 fases** alinhadas com [`infra/tasks/`](../../infra/tasks/README.md) e [`backend/tasks/`](../../backend/tasks/README.md).
+Organizado em **5 fases** alinhadas com [`infra/tasks/`](../../infra/tasks/README.md) e [`backend/tasks/`](../../backend/tasks/README.md).
 
 ## Fonte visual — protótipo Canvas
 
@@ -98,6 +98,18 @@ Guia completo de port: **[prototype-porting.md](../prototype-porting.md)** — m
 
 ---
 
+## Fase 5 — Internacionalização (pós-v1)
+
+> **Entregável:** loja e admin em pt-BR, en e es — detecção pelo navegador + seletor no Header.
+
+| # | Arquivo | O que entrega |
+|---|---------|---------------|
+| 18 | [18-i18n.md](18-i18n.md) | `react-i18next`, namespaces, migração de strings |
+
+**✓ Resultado:** UI multilíngue sem alterar contratos da API.
+
+---
+
 ## Alinhamento cross-repo
 
 | Fase | O que o usuário vê | Infra | Backend | Frontend |
@@ -106,6 +118,7 @@ Guia completo de port: **[prototype-porting.md](../prototype-porting.md)** — m
 | 2 | Login admin | fase 2 | fase 2 | fase 2 |
 | 3 | Painel admin | fase 3 | fase 3 | fase 3 |
 | 4 | E-mail + testes | fase 4 | fase 4 | fase 4 |
+| 5 | i18n pt/en/es | — | — | fase 5 (pós-v1) |
 
 ## Ordem de deploy por fase
 

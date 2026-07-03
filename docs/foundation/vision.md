@@ -19,6 +19,7 @@ Implementar a **SPA React** do Afro90s: catálogo, checkout, integração WhatsA
 - API e lógica server-side → **afro90sBackend**
 - Provisionamento S3/CloudFront/Cognito → **afro90sInfra**
 - ADRs e decisões globais → **afro90sInfra**
+- Internacionalização (i18n) → **pós-v1**, task 18
 
 ## Contratos
 
@@ -44,6 +45,7 @@ Implementar a **SPA React** do Afro90s: catálogo, checkout, integração WhatsA
 - [ ] Fase 2 — admin login + CRUD
 - [ ] Fase 3 — polish, states, a11y
 - [ ] Fase 4 — e2e, aceite final
+- [ ] Fase 5 — i18n (pt-BR, en, es) — task 18
 
 Tasks: [docs/specs/frontend/tasks/](../specs/frontend/tasks/)
 
