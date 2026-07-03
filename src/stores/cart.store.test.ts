@@ -34,6 +34,27 @@ describe("useCartStore", () => {
     expect(useCartStore.getState().items).toHaveLength(0);
   });
 
+  it("keeps separate lines for same product with different options", () => {
+    useCartStore.getState().addItem({ ...sampleItem, selectedOption: "Preto" });
+    useCartStore.getState().addItem({ ...sampleItem, selectedOption: "Dourado" });
+    expect(useCartStore.getState().items).toHaveLength(2);
+  });
+
+  it("merges quantity for same product and selectedOption", () => {
+    useCartStore.getState().addItem({ ...sampleItem, selectedOption: "Preto", quantity: 1 });
+    useCartStore.getState().addItem({ ...sampleItem, selectedOption: "Preto", quantity: 2 });
+    expect(useCartStore.getState().items).toHaveLength(1);
+    expect(useCartStore.getState().items[0].quantity).toBe(3);
+  });
+
+  it("removes item matching productId and selectedOption", () => {
+    useCartStore.getState().addItem({ ...sampleItem, selectedOption: "Preto" });
+    useCartStore.getState().addItem({ ...sampleItem, selectedOption: "Dourado" });
+    useCartStore.getState().removeItem(sampleItem.productId, "Preto");
+    expect(useCartStore.getState().items).toHaveLength(1);
+    expect(useCartStore.getState().items[0].selectedOption).toBe("Dourado");
+  });
+
   it("clears cart", () => {
     useCartStore.getState().addItem(sampleItem);
     useCartStore.getState().clearCart();

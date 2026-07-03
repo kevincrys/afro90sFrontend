@@ -1,9 +1,10 @@
-import { useCallback, useEffect, useState, type ReactNode } from "react";
+import { useCallback, useEffect, useRef, useState, type ReactNode } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ArrowRight, CheckCircle, MessageCircle, Trash2, X } from "lucide-react";
-import { toast, Toaster } from "sonner";
+import { toast } from "sonner";
 import { useCreateOrder } from "@/hooks/useCreateOrder";
+import { useFocusTrap } from "@/hooks/useFocusTrap";
 import { checkoutFormSchema, type CheckoutFormValues } from "@/lib/checkout";
 import { getClientErrorMessage } from "@/lib/errorMessages";
 import { formatPrice } from "@/lib/format";
@@ -15,23 +16,26 @@ import { useCartStore } from "@/stores/cart.store";
 import { ApiError } from "@/types/errors";
 import type { Order } from "@/types/order";
 
-function FieldLabel({ children }: { children: ReactNode }) {
+function FieldLabel({ htmlFor, children }: { htmlFor: string; children: ReactNode }) {
   return (
-    <div
+    <label
+      htmlFor={htmlFor}
       style={{
         fontFamily: "'Courier Prime', monospace",
         fontSize: "0.58rem",
         letterSpacing: "var(--track-label)",
         color: "#7A004B",
         marginBottom: "6px",
+        display: "block",
       }}
     >
       {children}
-    </div>
+    </label>
   );
 }
 
 export function CartDrawer() {
+  const panelRef = useRef<HTMLDivElement>(null);
   const items = useCartStore((state) => state.items);
   const removeItem = useCartStore((state) => state.removeItem);
   const clearCart = useCartStore((state) => state.clearCart);
@@ -89,6 +93,7 @@ export function CartDrawer() {
         items: items.map((item) => ({
           productId: item.productId,
           quantity: item.quantity,
+          ...(item.selectedOption ? { selectedOption: item.selectedOption } : {}),
         })),
         customer: {
           name: values.name,
@@ -116,9 +121,10 @@ export function CartDrawer() {
   const customerSnapshot = completedOrder?.customer ?? getValues();
   const isDone = completedOrder !== null;
 
+  useFocusTrap(panelRef, true);
+
   return (
     <>
-      <Toaster theme="dark" position="top-center" richColors />
       <div
         className="fixed inset-0 z-50 flex justify-end"
         style={{ background: "rgba(0,0,0,0.75)", backdropFilter: "blur(3px)" }}
@@ -126,6 +132,7 @@ export function CartDrawer() {
         role="presentation"
       >
         <div
+          ref={panelRef}
           className="relative flex flex-col w-full max-w-xl h-full overflow-y-auto"
           style={{ background: "#0D0009", borderLeft: "1px solid rgba(255,210,31,0.18)" }}
           role="dialog"
@@ -155,7 +162,11 @@ export function CartDrawer() {
           </div>
 
           {isDone && completedOrder ? (
-            <div className="flex flex-col items-center justify-center flex-1 px-8 text-center gap-6">
+            <div
+              className="flex flex-col items-center justify-center flex-1 px-8 text-center gap-6"
+              aria-live="polite"
+              aria-atomic="true"
+            >
               <CheckCircle size={64} color="#FFD21F" strokeWidth={1.5} />
               <h2
                 style={{
@@ -246,7 +257,7 @@ export function CartDrawer() {
                 ) : (
                   items.map((item) => (
                     <div
-                      key={item.productId}
+                      key={`${item.productId}:${item.selectedOption ?? ""}`}
                       className="flex gap-4 border-b pb-4"
                       style={{ borderColor: "rgba(255,210,31,0.1)" }}
                     >
@@ -272,6 +283,19 @@ export function CartDrawer() {
                         >
                           {item.name}
                         </div>
+                        {item.selectedOption && (
+                          <div
+                            style={{
+                              fontFamily: "'Courier Prime', monospace",
+                              fontSize: "0.62rem",
+                              letterSpacing: "var(--track-ui-lg)",
+                              color: "#9A7085",
+                              marginTop: "4px",
+                            }}
+                          >
+                            {item.selectedOption}
+                          </div>
+                        )}
                         <div className="flex items-center justify-between mt-2">
                           <div
                             style={{
@@ -294,7 +318,7 @@ export function CartDrawer() {
                             </span>
                             <button
                               type="button"
-                              onClick={() => removeItem(item.productId)}
+                              onClick={() => removeItem(item.productId, item.selectedOption)}
                               className="text-muted-foreground hover:text-accent transition-colors"
                               aria-label={`Remover ${item.name}`}
                             >
@@ -326,9 +350,13 @@ export function CartDrawer() {
                   </div>
                   <div className="flex flex-col gap-2">
                     {items.map((item) => (
-                      <div key={item.productId} className="flex justify-between text-sm">
+                      <div
+                        key={`${item.productId}:${item.selectedOption ?? ""}`}
+                        className="flex justify-between text-sm"
+                      >
                         <span className="text-muted-foreground truncate max-w-[180px]">
-                          {item.name} × {item.quantity}
+                          {item.name}
+                          {item.selectedOption ? ` (${item.selectedOption})` : ""} × {item.quantity}
                         </span>
                         <span
                           style={{
@@ -387,15 +415,19 @@ export function CartDrawer() {
                   </div>
 
                   <div>
-                    <FieldLabel>NOME COMPLETO *</FieldLabel>
+                    <FieldLabel htmlFor="checkout-name">NOME COMPLETO *</FieldLabel>
                     <input
+                      id="checkout-name"
                       className={`w-full px-4 py-3 bg-muted border text-foreground placeholder:text-muted-foreground outline-none transition-colors text-sm ${errors.name ? "border-red-500" : "border-border focus:border-primary"}`}
                       placeholder="Seu nome completo"
                       style={{ fontFamily: "'Barlow', sans-serif" }}
+                      aria-invalid={Boolean(errors.name)}
+                      aria-describedby={errors.name ? "checkout-name-error" : undefined}
                       {...register("name")}
                     />
                     {errors.name && (
                       <p
+                        id="checkout-name-error"
                         className="text-red-400 text-xs mt-1"
                         style={{ fontFamily: "'Courier Prime', monospace" }}
                       >
@@ -405,15 +437,19 @@ export function CartDrawer() {
                   </div>
 
                   <div>
-                    <FieldLabel>ENDEREÇO *</FieldLabel>
+                    <FieldLabel htmlFor="checkout-address">ENDEREÇO *</FieldLabel>
                     <input
+                      id="checkout-address"
                       className={`w-full px-4 py-3 bg-muted border text-foreground placeholder:text-muted-foreground outline-none transition-colors text-sm ${errors.address ? "border-red-500" : "border-border focus:border-primary"}`}
                       placeholder="Rua, número, complemento"
                       style={{ fontFamily: "'Barlow', sans-serif" }}
+                      aria-invalid={Boolean(errors.address)}
+                      aria-describedby={errors.address ? "checkout-address-error" : undefined}
                       {...register("address")}
                     />
                     {errors.address && (
                       <p
+                        id="checkout-address-error"
                         className="text-red-400 text-xs mt-1"
                         style={{ fontFamily: "'Courier Prime', monospace" }}
                       >
@@ -424,15 +460,19 @@ export function CartDrawer() {
 
                   <div className="grid grid-cols-2 gap-4">
                     <div>
-                      <FieldLabel>CEP *</FieldLabel>
+                      <FieldLabel htmlFor="checkout-postal-code">CEP *</FieldLabel>
                       <input
+                        id="checkout-postal-code"
                         className={`w-full px-4 py-3 bg-muted border text-foreground placeholder:text-muted-foreground outline-none transition-colors text-sm ${errors.postalCode ? "border-red-500" : "border-border focus:border-primary"}`}
                         placeholder="00000-000"
                         style={{ fontFamily: "'Barlow', sans-serif" }}
+                        aria-invalid={Boolean(errors.postalCode)}
+                        aria-describedby={errors.postalCode ? "checkout-postal-code-error" : undefined}
                         {...register("postalCode")}
                       />
                       {errors.postalCode && (
                         <p
+                          id="checkout-postal-code-error"
                           className="text-red-400 text-xs mt-1"
                           style={{ fontFamily: "'Courier Prime', monospace" }}
                         >
@@ -441,16 +481,20 @@ export function CartDrawer() {
                       )}
                     </div>
                     <div>
-                      <FieldLabel>TELEFONE *</FieldLabel>
+                      <FieldLabel htmlFor="checkout-tel">TELEFONE *</FieldLabel>
                       <input
+                        id="checkout-tel"
                         type="tel"
                         className={`w-full px-4 py-3 bg-muted border text-foreground placeholder:text-muted-foreground outline-none transition-colors text-sm ${errors.tel ? "border-red-500" : "border-border focus:border-primary"}`}
                         placeholder="(11) 99999-9999"
                         style={{ fontFamily: "'Barlow', sans-serif" }}
+                        aria-invalid={Boolean(errors.tel)}
+                        aria-describedby={errors.tel ? "checkout-tel-error" : undefined}
                         {...register("tel")}
                       />
                       {errors.tel && (
                         <p
+                          id="checkout-tel-error"
                           className="text-red-400 text-xs mt-1"
                           style={{ fontFamily: "'Courier Prime', monospace" }}
                         >

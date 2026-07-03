@@ -9,6 +9,7 @@ export interface Product {
   quantity: number;
   photos: string[];
   category: ProductCategory;
+  options?: string[];
   createdAt: string;
   updatedAt: string;
 }

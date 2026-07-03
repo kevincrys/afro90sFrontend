@@ -2,6 +2,7 @@ import { useCallback, useRef } from "react";
 import { useNavigate, useOutletContext, useParams, useSearchParams } from "react-router-dom";
 import { CatalogGrid } from "@/components/layout/CatalogGrid";
 import type { CatalogOutletContext } from "@/components/layout/PublicLayout";
+import { CatalogSkeleton } from "@/components/product/CatalogSkeleton";
 import { ProductCard } from "@/components/product/ProductCard";
 import { ProductCardSkeleton } from "@/components/product/ProductCardSkeleton";
 import { ProductDetailModal } from "@/components/product/ProductDetailModal";
@@ -50,7 +51,7 @@ export default function CatalogPage() {
 
   return (
     <>
-      <main className="flex-1 max-w-7xl mx-auto w-full px-6 py-16">
+      <main id="main-content" className="flex-1 max-w-7xl mx-auto w-full px-6 py-16">
       {!isLoading && !isError && (
         <div
           className="mb-8 flex justify-end"
@@ -87,13 +88,7 @@ export default function CatalogPage() {
         </div>
       )}
 
-      {isLoading && (
-        <CatalogGrid>
-          {Array.from({ length: 6 }).map((_, index) => (
-            <ProductCardSkeleton key={index} />
-          ))}
-        </CatalogGrid>
-      )}
+      {isLoading && <CatalogSkeleton />}
 
       {!isLoading && !isError && products.length === 0 && (
         <div className="text-center space-y-2 py-12">

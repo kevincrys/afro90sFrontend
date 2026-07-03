@@ -1,7 +1,7 @@
 # Task 09 — Estados de UI e acessibilidade
 
 **Fase:** 1 — Site público  
-**Status:** pendente  
+**Status:** concluída  
 **Arquivos alvo:** [`ui-ux.md`](../ui-ux.md), [`prototype-porting.md`](../prototype-porting.md)
 
 ## Objetivo
@@ -21,24 +21,24 @@ Ligar skeletons/toasts do protótipo à API e completar a11y **sem alterar o vis
 
 ### Toasts (Sonner)
 
-- [ ] `<Toaster />` em `App.tsx` — componente já copiado do protótipo
-- [ ] Sucesso/erro de pedido e API
+- [x] `<Toaster />` em `App.tsx` — componente já copiado do protótipo
+- [x] Sucesso/erro de pedido e API
 
 ### `src/lib/errorMessages.ts`
 
 - [x] Mapear códigos API para pt-BR *(implementado na task 03 — ver [integration.md](../integration.md#tratamento-de-erros))*
-- [ ] Revisar mensagens ao adicionar novos `code` em `api-routes.md`
+- [x] Revisar mensagens ao adicionar novos `code` em `api-routes.md`
 
 ### Skeletons
 
-- [ ] `CatalogSkeleton` — imitar layout do grid de cards do protótipo
-- [ ] `ProductDetailModalSkeleton` — imitar modal L255+
+- [x] `CatalogSkeleton` — imitar layout do grid de cards do protótipo
+- [x] `ProductDetailModalSkeleton` — imitar modal L255+
 
 ### Acessibilidade (incremental sobre protótipo)
 
-- [ ] Skip link "Ir para o conteúdo"
-- [ ] `aria-live="polite"` na confirmação do drawer
-- [ ] Focus trap em `ProductDetailModal` e `CartDrawer`
+- [x] Skip link "Ir para o conteúdo"
+- [x] `aria-live="polite"` na confirmação do drawer
+- [x] Focus trap em `ProductDetailModal` e `CartDrawer`
 
 ## Pré-requisitos
 
@@ -46,6 +46,6 @@ Ligar skeletons/toasts do protótipo à API e completar a11y **sem alterar o vis
 
 ## Critérios de conclusão
 
-- [ ] Loading/empty/error no catálogo e modal
-- [ ] Toasts funcionam
-- [ ] Atualizar **Status** para `concluída`
+- [x] Loading/empty/error no catálogo e modal
+- [x] Toasts funcionam
+- [x] Atualizar **Status** para `concluída`

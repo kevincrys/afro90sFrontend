@@ -24,6 +24,13 @@ export function PublicLayout() {
       className="min-h-screen bg-background text-foreground flex flex-col overflow-x-hidden"
       style={{ fontFamily: "'Barlow', sans-serif" }}
     >
+      <a
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:absolute focus:z-[100] focus:top-4 focus:left-4 focus:px-4 focus:py-2 focus:bg-primary focus:text-primary-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+        style={{ fontFamily: "'Courier Prime', monospace", fontSize: "0.75rem" }}
+      >
+        Ir para o conteúdo
+      </a>
       <Header
         activeCategory={activeCategory}
         onCategoryChange={setActiveCategory}

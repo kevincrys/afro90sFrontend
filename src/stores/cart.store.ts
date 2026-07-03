@@ -8,13 +8,21 @@ export interface CartItem {
   quantity: number;
   photo: string;
   maxQuantity: number;
+  selectedOption?: string;
+}
+
+function isSameCartLine(
+  a: Pick<CartItem, "productId" | "selectedOption">,
+  b: Pick<CartItem, "productId" | "selectedOption">,
+): boolean {
+  return a.productId === b.productId && (a.selectedOption ?? "") === (b.selectedOption ?? "");
 }
 
 interface CartState {
   items: CartItem[];
   isOpen: boolean;
   addItem: (item: CartItem) => void;
-  removeItem: (productId: string) => void;
+  removeItem: (productId: string, selectedOption?: string) => void;
   clearCart: () => void;
   openCart: () => void;
   closeCart: () => void;
@@ -30,11 +38,11 @@ export const useCartStore = create<CartState>()(
 
       addItem: (item) => {
         set((state) => {
-          const existing = state.items.find((entry) => entry.productId === item.productId);
+          const existing = state.items.find((entry) => isSameCartLine(entry, item));
           if (existing) {
             return {
               items: state.items.map((entry) =>
-                entry.productId === item.productId
+                isSameCartLine(entry, item)
                   ? {
                       ...entry,
                       quantity: Math.min(entry.quantity + item.quantity, entry.maxQuantity),
@@ -47,9 +55,11 @@ export const useCartStore = create<CartState>()(
         });
       },
 
-      removeItem: (productId) => {
+      removeItem: (productId, selectedOption) => {
         set((state) => ({
-          items: state.items.filter((entry) => entry.productId !== productId),
+          items: state.items.filter(
+            (entry) => !isSameCartLine(entry, { productId, selectedOption }),
+          ),
         }));
       },
 

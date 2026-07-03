@@ -13,6 +13,7 @@ const API_ERROR_MESSAGES: Record<string, string> = {
   INVALID_IMAGE: "Imagem inválida. Use JPEG, PNG ou WebP.",
   PAYLOAD_TOO_LARGE: "Arquivo muito grande. Máximo 5 MB por imagem e 10 MB no total.",
   INVALID_STATUS_TRANSITION: "Não foi possível atualizar o status do pedido.",
+  INVALID_OPTION: "Selecione uma opção válida para o produto.",
   PRODUCT_NOT_FOUND: "Um dos produtos do pedido não está mais disponível.",
   INTERNAL_ERROR: "Erro interno. Tente novamente em instantes.",
 

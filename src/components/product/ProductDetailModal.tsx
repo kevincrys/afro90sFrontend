@@ -1,6 +1,9 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ChevronLeft, ChevronRight, Minus, Plus, ShoppingBag, X } from "lucide-react";
+import { toast } from "sonner";
 import { ProductDetailModalSkeleton } from "@/components/product/ProductDetailModalSkeleton";
+import { ProductOptionPicker } from "@/components/product/ProductOptionPicker";
+import { useFocusTrap } from "@/hooks/useFocusTrap";
 import { useProduct } from "@/hooks/useProduct";
 import { getCategoryLabel } from "@/lib/categoryLabels";
 import { getClientErrorMessage } from "@/lib/errorMessages";
@@ -17,20 +20,35 @@ export interface ProductDetailModalProps {
 
 export function ProductDetailModal({ productId, onClose }: ProductDetailModalProps) {
   const panelRef = useRef<HTMLDivElement>(null);
+  const loadingRef = useRef<HTMLDivElement>(null);
   const { data: product, isLoading, isError, error } = useProduct(productId);
   const addItem = useCartStore((state) => state.addItem);
 
+  useFocusTrap(loadingRef, isLoading);
+  useFocusTrap(panelRef, !isLoading);
+
   const [photoIdx, setPhotoIdx] = useState(0);
   const [quantity, setQuantity] = useState(1);
+  const [selectedOption, setSelectedOption] = useState<string | undefined>(undefined);
 
   const photos = product?.photos ?? [];
+  const productOptions = product?.options?.length ? product.options : [];
   const maxQuantity = product?.quantity ?? 0;
   const isSoldOut = maxQuantity === 0;
 
   useEffect(() => {
     setPhotoIdx(0);
     setQuantity(1);
+    setSelectedOption(undefined);
   }, [productId]);
+
+  useEffect(() => {
+    if (product?.options?.length) {
+      setSelectedOption(product.options[0]);
+    } else {
+      setSelectedOption(undefined);
+    }
+  }, [product?.id, product?.options]);
 
   useEffect(() => {
     function onKey(event: KeyboardEvent) {
@@ -56,39 +74,6 @@ export function ProductDetailModal({ productId, onClose }: ProductDetailModalPro
     };
   }, [product]);
 
-  const trapFocus = useCallback(() => {
-    const panel = panelRef.current;
-    if (!panel) return;
-
-    const focusable = panel.querySelectorAll<HTMLElement>(
-      'button:not([disabled]), [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
-    );
-    if (focusable.length === 0) return;
-
-    const first = focusable[0];
-    const last = focusable[focusable.length - 1];
-    first.focus();
-
-    function onKeyDown(event: KeyboardEvent) {
-      if (event.key !== "Tab") return;
-      if (event.shiftKey && document.activeElement === first) {
-        event.preventDefault();
-        last.focus();
-      } else if (!event.shiftKey && document.activeElement === last) {
-        event.preventDefault();
-        first.focus();
-      }
-    }
-
-    panel.addEventListener("keydown", onKeyDown);
-    return () => panel.removeEventListener("keydown", onKeyDown);
-  }, []);
-
-  useEffect(() => {
-    if (isLoading || isError || !product) return;
-    return trapFocus();
-  }, [isLoading, isError, product, trapFocus]);
-
   function prevPhoto() {
     if (photos.length === 0) return;
     setPhotoIdx((index) => (index - 1 + photos.length) % photos.length);
@@ -102,6 +87,11 @@ export function ProductDetailModal({ productId, onClose }: ProductDetailModalPro
   function handleAddToCart() {
     if (!product || isSoldOut) return;
 
+    if (productOptions.length > 0 && !selectedOption) {
+      toast.error("Selecione uma opção do produto.");
+      return;
+    }
+
     addItem({
       productId: product.id,
       name: product.name,
@@ -109,7 +99,9 @@ export function ProductDetailModal({ productId, onClose }: ProductDetailModalPro
       quantity,
       photo: product.photos[0] ?? "",
       maxQuantity: product.quantity,
+      selectedOption: productOptions.length > 0 ? selectedOption : undefined,
     });
+    toast.success("Produto adicionado ao carrinho");
     onClose();
   }
 
@@ -121,7 +113,7 @@ export function ProductDetailModal({ productId, onClose }: ProductDetailModalPro
       role="presentation"
     >
       {isLoading && (
-        <div className="relative w-full max-w-4xl">
+        <div ref={loadingRef} className="relative w-full max-w-4xl">
           <button
             type="button"
             onClick={onClose}
@@ -327,6 +319,14 @@ export function ProductDetailModal({ productId, onClose }: ProductDetailModalPro
 
             <div className="border-t border-border" />
 
+            {productOptions.length > 0 && (
+              <ProductOptionPicker
+                options={productOptions}
+                value={selectedOption}
+                onChange={setSelectedOption}
+              />
+            )}
+
             {!isSoldOut && (
               <div>
                 <div
@@ -390,7 +390,7 @@ export function ProductDetailModal({ productId, onClose }: ProductDetailModalPro
               <button
                 type="button"
                 onClick={handleAddToCart}
-                disabled={isSoldOut}
+                disabled={isSoldOut || (productOptions.length > 0 && !selectedOption)}
                 className="w-full py-4 bg-primary text-primary-foreground uppercase tracking-widest hover:opacity-90 transition-opacity flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
                 style={{
                   fontFamily: "'Anton', sans-serif",

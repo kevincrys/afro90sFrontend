@@ -11,6 +11,7 @@ export interface OrderItem {
   productId: string;
   quantity: number;
   unitPrice: number;
+  selectedOption?: string;
 }
 
 export interface Customer {
@@ -33,6 +34,7 @@ export interface Order {
 export interface CreateOrderItemInput {
   productId: string;
   quantity: number;
+  selectedOption?: string;
 }
 
 export interface CreateOrderInput {
