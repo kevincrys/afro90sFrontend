@@ -33,6 +33,21 @@ Implementação: `src/routes/index.tsx`.
 | `VITE_COGNITO_CLIENT_ID` | Login admin |
 | `VITE_COGNITO_REGION` | Região Cognito |
 
+### Origem no deploy (CI/CD)
+
+Workflows `deploy-dev.yml` / `deploy-prod.yml` leem **todas** as `VITE_*` do SSM após OIDC (`/afro90s/{env}/…`). Não usar GitHub Variables para build config.
+
+| Variável | Parâmetro SSM |
+|----------|---------------|
+| `VITE_API_BASE_URL` | `/afro90s/{env}/api-base-url` |
+| `VITE_ASSETS_CDN_URL` | `/afro90s/{env}/assets-cdn-url` |
+| `VITE_WHATSAPP_NUMBER` | `/afro90s/{env}/whatsapp-number` |
+| `VITE_COGNITO_USER_POOL_ID` | `/afro90s/{env}/cognito-user-pool-id` |
+| `VITE_COGNITO_CLIENT_ID` | `/afro90s/{env}/cognito-client-id` |
+| `VITE_COGNITO_REGION` | `/afro90s/{env}/cognito-region` |
+
+Local: `.env` manual. CI (`ci.yml`): placeholders vazios.
+
 ## Cliente HTTP
 
 Implementação: `src/api/client.ts` (Axios + interceptor).

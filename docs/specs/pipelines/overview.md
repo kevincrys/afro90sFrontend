@@ -17,12 +17,14 @@ Pipelines de **CI** (validação) e **CD** (deploy da SPA para S3 + invalidaçã
 
 ## Variáveis de build
 
-| Variável | Origem (fase 1) |
+| Variável | Origem (deploy) |
 |----------|-----------------|
 | `VITE_API_BASE_URL` | SSM `/afro90s/{env}/api-base-url` |
 | `VITE_ASSETS_CDN_URL` | SSM `/afro90s/{env}/assets-cdn-url` |
 | `VITE_WHATSAPP_NUMBER` | SSM `/afro90s/{env}/whatsapp-number` |
-| `VITE_COGNITO_*` | GitHub vars ou placeholder (fase 2+) |
+| `VITE_COGNITO_USER_POOL_ID` | SSM `/afro90s/{env}/cognito-user-pool-id` |
+| `VITE_COGNITO_CLIENT_ID` | SSM `/afro90s/{env}/cognito-client-id` |
+| `VITE_COGNITO_REGION` | SSM `/afro90s/{env}/cognito-region` |
 
 Detalhes: [integration.md](../frontend/integration.md) · workflow: [04-cicd-deploy.md](../frontend/tasks/04-cicd-deploy.md)
 
@@ -33,7 +35,7 @@ Guia: [github-pipeline-setup.md](../../foundation/github-pipeline-setup.md)
 - **Environments:** `dev`, `prod`
 - **Auth:** OIDC — roles `afro90s-github-frontend-dev` / `-prod`
 - **Policy deploy:** S3 bucket web do ambiente + `CreateInvalidation` na distribuição **daquele env** + SSM read
-- **Variables por environment:** `AWS_ROLE_ARN`, `AWS_REGION`, `S3_BUCKET`, `CLOUDFRONT_DISTRIBUTION_ID` — **sem** `VITE_*` (fase 1)
+- **Variables por environment:** `AWS_ROLE_ARN`, `AWS_REGION`, `S3_BUCKET`, `CLOUDFRONT_DISTRIBUTION_ID` — **sem** `VITE_*`
 
 ## Tasks de implementação
 
@@ -47,7 +49,7 @@ Guia: [github-pipeline-setup.md](../../foundation/github-pipeline-setup.md)
 | Dependência | Repo |
 |-------------|------|
 | S3 bucket + CloudFront | afro90sInfra task 06 |
-| SSM api-base-url, whatsapp, … | afro90sInfra task 10 |
+| SSM api-base-url, whatsapp, cognito, … | afro90sInfra tasks 09–13 |
 | OIDC roles frontend | afro90sInfra — template OIDC + distribution IDs por env |
 
 ## Critérios de aceite (fase 0)

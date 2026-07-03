@@ -81,7 +81,7 @@ Parâmetros OIDC obrigatórios ao aplicar o template: `FrontendDevCloudFrontDist
 | `S3_BUCKET` | `afro90s-dev-s3-web` |
 | `CLOUDFRONT_DISTRIBUTION_ID` | CloudFront web dev (console) |
 
-**SSM (workflow, não GitHub):** `api-base-url`, `assets-cdn-url`, `whatsapp-number` em `/afro90s/dev/*`.
+**SSM (workflow, não GitHub):** `api-base-url`, `assets-cdn-url`, `whatsapp-number`, `cognito-user-pool-id`, `cognito-client-id`, `cognito-region` em `/afro90s/dev/*`.
 
 ### `prod`
 
@@ -105,7 +105,7 @@ Mesmas 4 variables com valores prod (bucket `afro90s-prod-s3-web`, distribution 
 ## Pré-requisitos
 
 - [ ] Infra task 06 (frontend hosting) deployada
-- [ ] Infra task 10 (SSM api-base-url, whatsapp-number, …)
+- [ ] Infra: task 09–13 (SSM incl. `cognito-*` após AuthStack)
 - [ ] Roles IAM frontend criadas/atualizadas no stack OIDC (IDs CloudFront por env)
 - [ ] Distribution ID dev ≠ prod na policy IAM e no GitHub
 

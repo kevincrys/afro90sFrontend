@@ -29,6 +29,9 @@ jobs:
           echo "VITE_API_BASE_URL=$(aws ssm get-parameter --name "${PREFIX}/api-base-url" --query Parameter.Value --output text)" >> "$GITHUB_ENV"
           echo "VITE_ASSETS_CDN_URL=$(aws ssm get-parameter --name "${PREFIX}/assets-cdn-url" --query Parameter.Value --output text)" >> "$GITHUB_ENV"
           echo "VITE_WHATSAPP_NUMBER=$(aws ssm get-parameter --name "${PREFIX}/whatsapp-number" --query Parameter.Value --output text)" >> "$GITHUB_ENV"
+          echo "VITE_COGNITO_USER_POOL_ID=$(aws ssm get-parameter --name "${PREFIX}/cognito-user-pool-id" --query Parameter.Value --output text)" >> "$GITHUB_ENV"
+          echo "VITE_COGNITO_CLIENT_ID=$(aws ssm get-parameter --name "${PREFIX}/cognito-client-id" --query Parameter.Value --output text)" >> "$GITHUB_ENV"
+          echo "VITE_COGNITO_REGION=$(aws ssm get-parameter --name "${PREFIX}/cognito-region" --query Parameter.Value --output text)" >> "$GITHUB_ENV"
 
       - uses: actions/setup-node@v4
         with:
@@ -39,10 +42,6 @@ jobs:
 
       - name: Build
         run: npm run build
-        env:
-          VITE_COGNITO_USER_POOL_ID: ${{ vars.VITE_COGNITO_USER_POOL_ID }}
-          VITE_COGNITO_CLIENT_ID: ${{ vars.VITE_COGNITO_CLIENT_ID }}
-          VITE_COGNITO_REGION: ${{ vars.VITE_COGNITO_REGION || 'us-east-1' }}
 
       - name: Sync to S3
         run: aws s3 sync dist/ "s3://${{ vars.S3_BUCKET }}" --delete

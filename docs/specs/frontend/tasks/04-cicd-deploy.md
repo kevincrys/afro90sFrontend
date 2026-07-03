@@ -17,7 +17,7 @@ Criar workflows GitHub Actions que fazem **build da SPA** e **deploy** no bucket
 | Deploy dev | Push em `dev` → environment `dev` |
 | Deploy prod | Push em `main` → environment **`prod`** (approval) |
 | Deploy | `aws s3 sync dist/` + `cloudfront:CreateInvalidation` |
-| Build config (`VITE_*` fase 1) | **SSM em runtime** após OIDC |
+| Build config (`VITE_*`) | **SSM em runtime** após OIDC (inclui Cognito fase 2) |
 | Deploy destino (bucket + CF ID) | **GitHub Environment variables** |
 | `base` Vite | `/` (raiz do CloudFront) |
 | Preview deployments | Fora de escopo v1 |
@@ -60,15 +60,16 @@ Configurar em **Settings → Environments** (ver [github-pipeline-setup.md](../.
 | `S3_BUCKET` | `afro90s-dev-s3-web` |
 | `CLOUDFRONT_DISTRIBUTION_ID` | CloudFront web dev (console ou CF stack `afro90s-dev-stack-frontend` → `WebDistribution`) |
 
-**Não configurar no GitHub (fase 1):** `VITE_API_BASE_URL`, `VITE_ASSETS_CDN_URL`, `VITE_WHATSAPP_NUMBER` — lidos via SSM no workflow.
+**Não configurar no GitHub:** nenhuma `VITE_*` — todas lidas via SSM no workflow.
 
 | SSM (workflow lê) | → build |
 |-------------------|---------|
 | `/afro90s/dev/api-base-url` | `VITE_API_BASE_URL` |
 | `/afro90s/dev/assets-cdn-url` | `VITE_ASSETS_CDN_URL` |
 | `/afro90s/dev/whatsapp-number` | `VITE_WHATSAPP_NUMBER` |
-
-`VITE_COGNITO_*`: placeholder GitHub ou vazio até fase 2.
+| `/afro90s/dev/cognito-user-pool-id` | `VITE_COGNITO_USER_POOL_ID` |
+| `/afro90s/dev/cognito-client-id` | `VITE_COGNITO_CLIENT_ID` |
+| `/afro90s/dev/cognito-region` | `VITE_COGNITO_REGION` |
 
 ### Environment `prod`
 
@@ -136,16 +137,15 @@ jobs:
           echo "VITE_API_BASE_URL=$(aws ssm get-parameter --name "${PREFIX}/api-base-url" --query Parameter.Value --output text)" >> "$GITHUB_ENV"
           echo "VITE_ASSETS_CDN_URL=$(aws ssm get-parameter --name "${PREFIX}/assets-cdn-url" --query Parameter.Value --output text)" >> "$GITHUB_ENV"
           echo "VITE_WHATSAPP_NUMBER=$(aws ssm get-parameter --name "${PREFIX}/whatsapp-number" --query Parameter.Value --output text)" >> "$GITHUB_ENV"
+          echo "VITE_COGNITO_USER_POOL_ID=$(aws ssm get-parameter --name "${PREFIX}/cognito-user-pool-id" --query Parameter.Value --output text)" >> "$GITHUB_ENV"
+          echo "VITE_COGNITO_CLIENT_ID=$(aws ssm get-parameter --name "${PREFIX}/cognito-client-id" --query Parameter.Value --output text)" >> "$GITHUB_ENV"
+          echo "VITE_COGNITO_REGION=$(aws ssm get-parameter --name "${PREFIX}/cognito-region" --query Parameter.Value --output text)" >> "$GITHUB_ENV"
       - uses: actions/setup-node@v4
         with:
           node-version: 24
           cache: npm
       - run: npm ci
       - run: npm run build
-        env:
-          VITE_COGNITO_USER_POOL_ID: ${{ vars.VITE_COGNITO_USER_POOL_ID }}
-          VITE_COGNITO_CLIENT_ID: ${{ vars.VITE_COGNITO_CLIENT_ID }}
-          VITE_COGNITO_REGION: ${{ vars.VITE_COGNITO_REGION || 'us-east-1' }}
       - run: aws s3 sync dist/ s3://${{ vars.S3_BUCKET }} --delete
       - run: aws cloudfront create-invalidation --distribution-id ${{ vars.CLOUDFRONT_DISTRIBUTION_ID }} --paths "/*"
 ```
