@@ -177,7 +177,7 @@ export function CartDrawer() {
                   ? whatsAppBlocked
                     ? " O navegador bloqueou a abertura automática — use o botão abaixo para abrir o WhatsApp e enviar o resumo à loja."
                     : " Abrimos o WhatsApp para você enviar o resumo à loja e concluir a compra."
-                  : " Guarde o número do pedido — em breve a loja entrará em contato."}
+                  : " Não foi possível abrir o WhatsApp. Entre em contato com a loja e informe o número do pedido acima para concluir a compra."}
               </p>
               <div className="border border-border px-6 py-4 text-left w-full max-w-xs">
                 <div
