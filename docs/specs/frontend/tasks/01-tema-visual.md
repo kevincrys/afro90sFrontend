@@ -1,7 +1,7 @@
 # Task 01 — Tema visual anos 90
 
 **Fase:** 0 — Fundação  
-**Status:** pendente  
+**Status:** concluída  
 **Arquivos alvo:** [`ui-ux.md`](../ui-ux.md), [`prototype-porting.md`](../prototype-porting.md)
 
 ## Objetivo
@@ -22,11 +22,11 @@ Garantir design system Afro90s **copiando o tema do protótipo** e extrair Heade
 
 ### Adaptar no Header (extraído do protótipo)
 
-- [ ] Logo/texto: **Afro90s** (substituir "DA CROWN")
-- [ ] Categorias: `Todos`, `Óculos`, `Acessórios`, `Maquiagem` → valores API `oculos`, `acessorios`, `maquiagem`
-- [ ] Manter ícone carrinho + badge (wire com Zustand na task 07)
+- [x] Logo/texto: **Afro90s** (substituir "DA CROWN")
+- [x] Categorias: `Todos`, `Óculos`, `Acessórios`, `Maquiagem` → valores API `oculos`, `acessorios`, `maquiagem`
+- [x] Manter ícone carrinho + badge (wire com Zustand na task 07)
 - [ ] Busca: transformar ícone decorativo em input funcional (task 05)
-- [ ] **Remover** links "New Drops", "Sale" se não existirem na API
+- [x] **Remover** links "New Drops", "Sale" se não existirem na API
 
 ## Configurações já definidas
 
@@ -41,22 +41,22 @@ Garantir design system Afro90s **copiando o tema do protótipo** e extrair Heade
 
 ### Tokens (já no protótipo — validar)
 
-- [ ] `--primary: #FFD21F`, `--secondary/#accent: #7A004B`, `--background: #0D0009`
-- [ ] Grid responsivo no catálogo: classes do protótipo `grid-cols-1 … lg:grid-cols-4`
+- [x] `--primary: #FFD21F`, `--secondary/#accent: #7A004B`, `--background: #0D0009`
+- [x] Grid responsivo no catálogo: classes do protótipo `grid-cols-1 … lg:grid-cols-4`
 
 ### Componentes base
 
-- [ ] Usar `components/ui/` copiados — **não duplicar** se shadcn já atende
-- [ ] `Badge` para "Esgotado" — reutilizar `badge.tsx` + estilo inline do protótipo
+- [x] Usar `components/ui/` copiados — **não duplicar** se shadcn já atende
+- [x] `Badge` para "Esgotado" — reutilizar `badge.tsx` + estilo inline do protótipo
 
 ### Layout
 
-- [ ] `Header.tsx` — extraído do nav do `StorePage`
-- [ ] `Footer.tsx` — extraído do footer do `StorePage` (simplificar links)
+- [x] `Header.tsx` — extraído do nav do `StorePage`
+- [x] `Footer.tsx` — extraído do footer do `StorePage` (simplificar links)
 
 ### Meta
 
-- [ ] `index.html`: favicon, `<title>Afro90s</title>`, meta viewport, fonts do protótipo
+- [x] `index.html`: favicon, `<title>Afro90s</title>`, meta viewport, fonts do protótipo
 
 ## Pré-requisitos
 
@@ -64,6 +64,6 @@ Garantir design system Afro90s **copiando o tema do protótipo** e extrair Heade
 
 ## Critérios de conclusão
 
-- [ ] Header/Footer renderizam com visual idêntico ao protótipo (cores e tipografia)
-- [ ] Grid responsivo: 1 col mobile → 4 cols desktop
-- [ ] Atualizar **Status** para `concluída`
+- [x] Header/Footer renderizam com visual idêntico ao protótipo (cores e tipografia)
+- [x] Grid responsivo: 1 col mobile → 4 cols desktop
+- [x] Atualizar **Status** para `concluída`
