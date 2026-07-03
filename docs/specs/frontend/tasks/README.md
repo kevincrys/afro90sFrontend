@@ -36,7 +36,7 @@ Guia completo de port: **[prototype-porting.md](../prototype-porting.md)** — m
 | 01 | [01-tema-visual.md](01-tema-visual.md) | `theme.css` + Header/Footer do `StorePage` |
 | 02 | [02-roteamento-layout.md](02-roteamento-layout.md) | Rotas (adaptar `routes.tsx` do protótipo) |
 | 03 | [03-api-client.md](03-api-client.md) | Axios + React Query + tipos |
-| 04 | [04-cicd-deploy.md](04-cicd-deploy.md) | GitHub Actions → S3 + CloudFront |
+| 04 | [04-cicd-deploy.md](04-cicd-deploy.md) | Actions OIDC `afro90s-github-frontend-dev/prod` → S3 + CF |
 
 ---
 
