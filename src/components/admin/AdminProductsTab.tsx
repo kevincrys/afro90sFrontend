@@ -212,18 +212,6 @@ export default function AdminProductsTab() {
                     >
                       {product.name}
                     </div>
-                    {product.description && (
-                      <p
-                        className="line-clamp-2 leading-snug mt-1.5"
-                        style={{
-                          fontFamily: ADMIN_FONT.body,
-                          fontSize: "0.72rem",
-                          color: "#9A7085",
-                        }}
-                      >
-                        {product.description}
-                      </p>
-                    )}
                   </div>
 
                   <div className="flex items-baseline gap-2">
