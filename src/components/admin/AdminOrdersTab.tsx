@@ -1,6 +1,7 @@
 import { useCallback, useRef, useState } from "react";
 import { AlertCircle, Eye, Loader2 } from "lucide-react";
 import OrderDetailDrawer from "@/components/admin/OrderDetailDrawer";
+import AdminFilterCarousel from "@/components/admin/AdminFilterCarousel";
 import OrderStatusBadge from "@/components/admin/OrderStatusBadge";
 import { ADMIN_FONT } from "@/components/admin/AdminLabel";
 import { flattenAdminOrders, useAdminOrders } from "@/hooks/useAdminOrders";
@@ -45,13 +46,16 @@ export default function AdminOrdersTab() {
 
   useIntersectionObserver(loadMoreRef, loadMore, Boolean(hasNextPage));
 
+  const activeFilterIndex =
+    filterStatus === "ALL" ? 0 : STATUS_ORDER.indexOf(filterStatus) + 1;
+
   return (
     <div>
-      <div className="flex gap-2 flex-wrap mb-6">
+      <AdminFilterCarousel activeIndex={activeFilterIndex} ariaLabel="Filtros de status do pedido">
         <button
           type="button"
           onClick={() => setFilterStatus("ALL")}
-          className="px-4 py-2 border text-xs uppercase transition-colors"
+          className="shrink-0 px-4 py-2 border text-xs uppercase transition-colors whitespace-nowrap"
           style={filterButtonStyle(filterStatus === "ALL")}
         >
           TODOS
@@ -63,14 +67,14 @@ export default function AdminOrdersTab() {
               key={status}
               type="button"
               onClick={() => setFilterStatus(status)}
-              className="px-4 py-2 border text-xs uppercase transition-colors"
+              className="shrink-0 px-4 py-2 border text-xs uppercase transition-colors whitespace-nowrap"
               style={filterButtonStyle(filterStatus === status, cfg.color, cfg.bg)}
             >
               {cfg.label}
             </button>
           );
         })}
-      </div>
+      </AdminFilterCarousel>
 
       {isLoading && (
         <div
