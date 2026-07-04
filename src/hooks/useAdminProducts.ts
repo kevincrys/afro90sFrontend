@@ -3,7 +3,7 @@ import {
   createAdminProductPayload,
   deleteAdminProduct,
   getAdminProducts,
-  patchAdminProductStock,
+  putAdminProductStock,
   updateAdminProductPayload,
 } from "@/api/admin/products";
 import { invalidateAllProductCaches } from "@/lib/adminProductCache";
@@ -76,7 +76,7 @@ export function useAdminProductMutations() {
   });
 
   const adjustStock = useMutation({
-    mutationFn: ({ id, delta }: { id: string; delta: number }) => patchAdminProductStock(id, delta),
+    mutationFn: ({ id, delta }: { id: string; delta: number }) => putAdminProductStock(id, delta),
     onSuccess: (_data, { id }) => {
       invalidateAllProductCaches(queryClient, id);
     },

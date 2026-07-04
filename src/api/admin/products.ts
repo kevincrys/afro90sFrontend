@@ -74,7 +74,7 @@ export async function deleteAdminProduct(id: string): Promise<void> {
   await apiClient.delete(`/admin/products/${id}`);
 }
 
-export async function patchAdminProductStock(
+export async function putAdminProductStock(
   id: string,
   delta: number,
 ): Promise<{ id: string; quantity: number }> {
