@@ -130,6 +130,11 @@ export function ProductCard({ product }: ProductCardProps) {
         >
           {product.name}
         </h3>
+        {product.description && (
+          <p className="mb-2 text-foreground/65 text-sm leading-relaxed line-clamp-2">
+            {product.description}
+          </p>
+        )}
         <div className="flex items-baseline gap-3">
           <span
             style={{

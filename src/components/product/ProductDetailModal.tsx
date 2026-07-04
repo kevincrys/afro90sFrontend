@@ -318,6 +318,10 @@ export function ProductDetailModal({ productId, onClose }: ProductDetailModalPro
 
             <div className="border-t border-border" />
 
+            {product.description && (
+              <p className="text-foreground/65 text-sm leading-relaxed">{product.description}</p>
+            )}
+
             {productOptions.length > 0 && (
               <ProductOptionPicker
                 options={productOptions}
