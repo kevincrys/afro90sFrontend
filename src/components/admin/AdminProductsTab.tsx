@@ -2,7 +2,6 @@ import { useCallback, useRef, useState } from "react";
 import {
   AlertCircle,
   Loader2,
-  Minus,
   Package,
   Pencil,
   Plus,
@@ -10,6 +9,7 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import ProductFormModal from "@/components/admin/ProductFormModal";
+import AdminProductStockControl from "@/components/admin/AdminProductStockControl";
 import { ADMIN_FONT } from "@/components/admin/AdminLabel";
 import {
   flattenAdminProducts,
@@ -226,44 +226,12 @@ export default function AdminProductsTab() {
                     </span>
                   </div>
 
-                  <div className="flex items-center gap-2">
-                    <span
-                      style={{
-                        fontFamily: ADMIN_FONT.mono,
-                        fontSize: "0.58rem",
-                        letterSpacing: "0.12em",
-                        color: "#9A7085",
-                      }}
-                    >
-                      ESTOQUE:
-                    </span>
-                    <div className="flex items-center gap-1 ml-auto">
-                      <button
-                        type="button"
-                        onClick={() => handleAdjustStock(product.id, -1)}
-                        disabled={product.quantity <= 0 || adjustStock.isPending}
-                        className="w-6 h-6 flex items-center justify-center border border-border hover:border-primary text-muted-foreground hover:text-primary transition-colors disabled:opacity-40"
-                        aria-label="Diminuir estoque"
-                      >
-                        <Minus size={11} />
-                      </button>
-                      <span
-                        className="w-10 text-center text-sm font-semibold text-foreground"
-                        style={{ fontFamily: ADMIN_FONT.mono }}
-                      >
-                        {product.quantity}
-                      </span>
-                      <button
-                        type="button"
-                        onClick={() => handleAdjustStock(product.id, 1)}
-                        disabled={adjustStock.isPending}
-                        className="w-6 h-6 flex items-center justify-center border border-border hover:border-primary text-muted-foreground hover:text-primary transition-colors disabled:opacity-40"
-                        aria-label="Aumentar estoque"
-                      >
-                        <Plus size={11} />
-                      </button>
-                    </div>
-                  </div>
+                  <AdminProductStockControl
+                    productId={product.id}
+                    quantity={product.quantity}
+                    isPending={adjustStock.isPending && adjustStock.variables?.id === product.id}
+                    onAdjust={(delta) => handleAdjustStock(product.id, delta)}
+                  />
 
                   <div className="flex gap-2 pt-2 border-t border-border mt-auto">
                     <button

@@ -6,7 +6,7 @@ import {
   putAdminProductStock,
   updateAdminProductPayload,
 } from "@/api/admin/products";
-import { invalidateAllProductCaches } from "@/lib/adminProductCache";
+import { invalidateAllProductCaches, applyAdminProductQuantityDeltaInCache, restoreAdminProductCaches, setAdminProductQuantityInCache, snapshotAdminProductCaches } from "@/lib/adminProductCache";
 import type { PhotoFormItem } from "@/lib/adminProductSubmit";
 import { buildProductSubmitPayload } from "@/lib/adminProductSubmit";
 import type { AdminProductFormValues } from "@/lib/adminProductSchema";
@@ -77,7 +77,21 @@ export function useAdminProductMutations() {
 
   const adjustStock = useMutation({
     mutationFn: ({ id, delta }: { id: string; delta: number }) => putAdminProductStock(id, delta),
-    onSuccess: (_data, { id }) => {
+    onMutate: async ({ id, delta }) => {
+      await queryClient.cancelQueries({ queryKey: ["admin", "products"] });
+      const snapshots = snapshotAdminProductCaches(queryClient);
+      applyAdminProductQuantityDeltaInCache(queryClient, id, delta);
+      return { snapshots };
+    },
+    onError: (_error, _variables, context) => {
+      if (context?.snapshots) {
+        restoreAdminProductCaches(queryClient, context.snapshots);
+      }
+    },
+    onSuccess: (data) => {
+      setAdminProductQuantityInCache(queryClient, data.id, data.quantity);
+    },
+    onSettled: (_data, _error, { id }) => {
       invalidateAllProductCaches(queryClient, id);
     },
   });
