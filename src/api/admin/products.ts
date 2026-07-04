@@ -78,7 +78,7 @@ export async function patchAdminProductStock(
   id: string,
   delta: number,
 ): Promise<{ id: string; quantity: number }> {
-  const { data } = await apiClient.patch<{ id: string; quantity: number }>(
+  const { data } = await apiClient.put<{ id: string; quantity: number }>(
     `/admin/products/${id}/stock`,
     { delta },
   );

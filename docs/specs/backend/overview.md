@@ -67,7 +67,7 @@ Ver [outputs da infra](../infra/outputs.md). Injetadas pelo CDK no deploy da Lam
 ## Regras de negócio v1
 
 - `POST /orders` valida estoque mas **não decrementa** automaticamente
-- Decremento de estoque via `PATCH /admin/products/{id}/stock` (admin)
+- Decremento de estoque via `PUT /admin/products/{id}/stock` (admin)
 - Pedido criado sempre com status `SOLICITADO`
 - Imagens admin: suportar `url`, `base64` e `stream` (ver api-routes.md)
 
