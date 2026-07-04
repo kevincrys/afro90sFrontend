@@ -6,7 +6,7 @@ import {
   putAdminProductStock,
   updateAdminProductPayload,
 } from "@/api/admin/products";
-import { invalidateAllProductCaches, applyAdminProductQuantityDeltaInCache, restoreAdminProductCaches, setAdminProductQuantityInCache, snapshotAdminProductCaches } from "@/lib/adminProductCache";
+import { invalidateAllProductCaches, invalidateProductCatalogCaches, applyAdminProductQuantityDeltaInCache, restoreAdminProductCaches, setAdminProductQuantityInCache, snapshotAdminProductCaches } from "@/lib/adminProductCache";
 import type { PhotoFormItem } from "@/lib/adminProductSubmit";
 import { buildProductSubmitPayload } from "@/lib/adminProductSubmit";
 import type { AdminProductFormValues } from "@/lib/adminProductSchema";
@@ -90,9 +90,12 @@ export function useAdminProductMutations() {
     },
     onSuccess: (data) => {
       setAdminProductQuantityInCache(queryClient, data.id, data.quantity);
+      invalidateProductCatalogCaches(queryClient);
     },
-    onSettled: (_data, _error, { id }) => {
-      invalidateAllProductCaches(queryClient, id);
+    onSettled: (_data, error, { id }) => {
+      if (error) {
+        invalidateAllProductCaches(queryClient, id);
+      }
     },
   });
 

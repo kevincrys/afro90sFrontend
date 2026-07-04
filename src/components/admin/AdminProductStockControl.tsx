@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { Loader2, Minus, Plus } from "lucide-react";
+import { Minus, Plus } from "lucide-react";
 import { toast } from "sonner";
 import { ADMIN_FONT } from "@/components/admin/AdminLabel";
 import { useHoldRepeat } from "@/hooks/useHoldRepeat";
@@ -25,22 +25,24 @@ export default function AdminProductStockControl({
   const [editValue, setEditValue] = useState("");
 
   useEffect(() => {
-    sessionDeltaRef.current = sessionDelta;
-  }, [sessionDelta]);
-
-  useEffect(() => {
     setSessionDelta(0);
+    sessionDeltaRef.current = 0;
     setIsEditing(false);
-  }, [productId, quantity]);
+  }, [productId]);
 
   const displayQuantity = Math.max(0, quantity + sessionDelta);
   const canDecrease = displayQuantity > 0 && !disabled && !isPending;
 
   const commitDelta = useCallback(
-    async (delta: number) => {
+    (delta: number) => {
       if (delta === 0) return;
+
+      // onAdjust dispara onMutate de forma síncrona antes de retornar a promise
+      void onAdjust(delta).catch(() => {
+        // toast + rollback tratados no pai
+      });
       setSessionDelta(0);
-      await onAdjust(delta);
+      sessionDeltaRef.current = 0;
     },
     [onAdjust],
   );
@@ -50,6 +52,7 @@ export default function AdminProductStockControl({
       setSessionDelta((prev) => {
         const next = prev + direction;
         if (quantity + next < 0) return prev;
+        sessionDeltaRef.current = next;
         return next;
       });
     },
@@ -92,7 +95,8 @@ export default function AdminProductStockControl({
     const delta = parsed - quantity;
     setIsEditing(false);
     setEditValue("");
-    await commitDelta(delta);
+    if (delta === 0) return;
+    commitDelta(delta);
   }
 
   function handleEditKeyDown(event: React.KeyboardEvent<HTMLInputElement>) {
@@ -154,11 +158,7 @@ export default function AdminProductStockControl({
             style={{ fontFamily: ADMIN_FONT.mono }}
             aria-label="Editar estoque"
           >
-            {isPending && sessionDelta === 0 ? (
-              <Loader2 size={12} className="animate-spin text-muted-foreground" />
-            ) : (
-              displayQuantity
-            )}
+            {displayQuantity}
           </button>
         )}
 
