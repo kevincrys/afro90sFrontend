@@ -54,7 +54,7 @@ Documentação: [integration.md — Tratamento de erros](../integration.md#trata
 - [x] `src/api/products.ts` — `getProducts`, `getProductById`
 - [x] `src/api/orders.ts` — `createOrder`
 - [x] `src/api/admin/products.ts` — CRUD (stubs fase 3)
-- [x] `src/api/admin/orders.ts` — list, get, updateStatus (stubs fase 3)
+- [x] `src/api/admin/orders.ts` — list, get, `updateStatus` via `PUT /admin/orders/{id}`
 
 ### `src/types/` — espelhar backend (não protótipo)
 

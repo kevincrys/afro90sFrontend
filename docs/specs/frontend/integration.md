@@ -157,7 +157,7 @@ Requer token Cognito em `Authorization: Bearer <access_token>`.
 | Ajustar estoque | `PUT` | `/admin/products/{id}/stock` |
 | Listar pedidos | `GET` | `/admin/orders` |
 | Detalhe pedido | `GET` | `/admin/orders/{id}` |
-| Atualizar status | `PATCH` | `/admin/orders/{id}/status` |
+| Atualizar status | `PUT` | `/admin/orders/{id}` |
 
 Detalhes de payload: [api-routes.md](../backend/api-routes.md).
 

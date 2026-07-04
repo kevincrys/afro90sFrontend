@@ -87,7 +87,7 @@ Ecommerce Store Prototype (3)/
 | `amazon-cognito-identity-js` | **Amplify Auth SRP** (task 11) |
 | `setDone(true)` no checkout | `POST /orders` → 201 |
 | CRUD local `onSave` | `POST/PUT/DELETE /admin/products` |
-| Status change local | `PATCH /admin/orders/{id}/status` |
+| Status change local | `PUT /admin/orders/{id}` |
 | Login fallback sem Cognito | Remover — exigir env Cognito em prod |
 
 ### Remover do protótipo (não portar)

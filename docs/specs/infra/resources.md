@@ -58,7 +58,7 @@ Catalogar recursos AWS provisionados pelo CDK para o Afro90s.
 | `lambda-products-public` | `GET /products`, `GET /products/{id}` | DynamoDB products read |
 | `lambda-orders-public` | `POST /orders` | DynamoDB orders write, products read, SES send |
 | `lambda-products-admin` | `/admin/products*` | DynamoDB products CRUD, S3 assets write |
-| `lambda-orders-admin` | `/admin/orders*` | DynamoDB orders read/update |
+| `lambda-orders-admin` | `GET /admin/orders`, `GET /admin/orders/{id}`, `PUT /admin/orders/{id}` | DynamoDB orders read/update |
 
 Runtime: **Node.js 20.x**. Bundling: esbuild.
 

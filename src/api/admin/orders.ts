@@ -31,7 +31,7 @@ export async function updateAdminOrderStatus(
   id: string,
   input: UpdateOrderStatusInput,
 ): Promise<Order> {
-  const { data } = await apiClient.patch<Order>(`/admin/orders/${id}/status`, input);
+  const { data } = await apiClient.put<Order>(`/admin/orders/${id}`, input);
   return data;
 }
 

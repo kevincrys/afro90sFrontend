@@ -24,7 +24,7 @@ Copiar `STATUS_CONFIG` quase intacto — labels e cores já batem com `data-mode
 
 ### Adaptar
 
-- [x] `onStatusChange` local → `PATCH /admin/orders/{id}/status`
+- [x] `onStatusChange` local → `PUT /admin/orders/{id}`
 - [x] Lista de **todos** os status no drawer (L342–355): mostrar só **transições válidas** (`ALLOWED_TRANSITIONS`)
 - [x] `customer.postal` → `postalCode`
 - [x] Paginação: adicionar cursor (protótipo lista mock fixo)

@@ -69,7 +69,7 @@ describe("apiClient admin Authorization interceptor", () => {
     getAdminBearerToken.mockResolvedValue(null);
     const calls = captureAdapter();
 
-    await apiClient.patch("/admin/orders/order-1/status", { status: "ENVIADO" });
+    await apiClient.put("/admin/orders/order-1", { status: "ENVIADO" });
 
     expect(getAdminBearerToken).toHaveBeenCalledOnce();
     expect(calls[0]?.headers.Authorization).toBeUndefined();

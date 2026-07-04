@@ -1,7 +1,7 @@
 # Task 14 — Rotas admin de pedidos
 
 **Fase:** 3 — Rotas admin  
-**Status:** pendente  
+**Status:** concluída  
 **Arquivos alvo:** [`api-routes.md`](../api-routes.md)
 
 ## Objetivo
@@ -15,29 +15,30 @@ Implementar listagem e atualização de status de pedidos nas rotas `/admin/orde
 | Transições de status | `SOLICITADO→CONFIRMADO→ENVIADO→ENTREGUE` / qualquer→`CANCELADO` |
 | Pular estados | Não permitido |
 | Ordenação default | Mais recentes primeiro (`createdAt` desc) |
+| Mutação de pedido | Apenas `PUT /admin/orders/{id}` com body `{ "status": "..." }` |
 
 ## O que implementar
 
-### `src/routes/admin/orders.ts`
+### `resources/orders-admin/`
 
-- [ ] `GET /admin/orders` — listagem com `status?`, `cursor`, `limit`
-- [ ] `GET /admin/orders/{id}` — detalhe completo com `customer` e `items`
-- [ ] `PUT /admin/orders/{id}` — atualizar status
+- [x] `GET /admin/orders` — listagem com `status?`, `cursor`, `limit`
+- [x] `GET /admin/orders/{id}` — detalhe completo com `customer`, `items`
+- [x] `PUT /admin/orders/{id}` — atualizar status
 
 Todas com middleware auth.
 
-### `src/services/order.service.ts` (expandir)
+### `resources/orders-admin/src/services/order.service.ts`
 
-- [ ] `listOrders(filters)` — query em `gsi-status-createdAt`
-- [ ] `getOrder(id)`
-- [ ] `updateOrderStatus(id, newStatus)` — validar transição; `409 INVALID_STATUS_TRANSITION` se inválida
+- [x] `listOrders(filters)` — query em `gsi-status-createdAt` ou scan sem filtro
+- [x] `getOrder(id)`
+- [x] `updateOrderStatus(id, newStatus)` — validar transição; `409 INVALID_STATUS_TRANSITION` se inválida
 
 ### Testes
 
-- [ ] Listagem com filtro `status`
-- [ ] Transição válida → `200`
-- [ ] Transição inválida → `409`
-- [ ] Pedido inexistente → `404`
+- [x] Listagem com filtro `status`
+- [x] Transição válida → `200`
+- [x] Transição inválida → `409`
+- [x] Pedido inexistente → `404`
 
 ## Pré-requisitos
 
@@ -45,6 +46,6 @@ Todas com middleware auth.
 
 ## Critérios de conclusão
 
-- [ ] 3 rotas admin de pedidos funcionais em dev
-- [ ] Transições de status validadas
-- [ ] Atualizar **Status** para `concluída`
+- [x] 3 rotas admin de pedidos funcionais em dev
+- [x] Transições de status validadas
+- [x] Atualizar **Status** para `concluída`
