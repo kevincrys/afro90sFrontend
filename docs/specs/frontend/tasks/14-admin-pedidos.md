@@ -1,7 +1,7 @@
 # Task 14 — Admin — Gestão de pedidos (tab Pedidos)
 
 **Fase:** 3 — Painel admin  
-**Status:** pendente  
+**Status:** concluída  
 **Arquivos alvo:** [`integration.md`](../integration.md), [`prototype-porting.md`](../prototype-porting.md), [`data-models.md`](../../backend/data-models.md)
 
 ## Objetivo
@@ -24,29 +24,29 @@ Copiar `STATUS_CONFIG` quase intacto — labels e cores já batem com `data-mode
 
 ### Adaptar
 
-- [ ] `onStatusChange` local → `PATCH /admin/orders/{id}/status`
-- [ ] Lista de **todos** os status no drawer (L342–355): mostrar só **transições válidas** (`ALLOWED_TRANSITIONS`)
-- [ ] `customer.postal` → `postalCode`
-- [ ] Paginação: adicionar cursor (protótipo lista mock fixo)
-- [ ] `order.fullPrice` → `formatPrice` BRL
+- [x] `onStatusChange` local → `PATCH /admin/orders/{id}/status`
+- [x] Lista de **todos** os status no drawer (L342–355): mostrar só **transições válidas** (`ALLOWED_TRANSITIONS`)
+- [x] `customer.postal` → `postalCode`
+- [x] Paginação: adicionar cursor (protótipo lista mock fixo)
+- [x] `order.fullPrice` → `formatPrice` BRL
 
 ## O que implementar
 
 ### `src/components/admin/AdminOrdersTab.tsx`
 
-- [ ] **Copiar** tabs de filtro + cards de `OrdersTab`
-- [ ] `useAdminOrders({ status, cursor })`
-- [ ] Reset cursor ao trocar tab
+- [x] **Copiar** tabs de filtro + cards de `OrdersTab`
+- [x] `useAdminOrders({ status, cursor })`
+- [x] Reset cursor ao trocar tab
 
 ### `src/components/admin/OrderDetailDrawer.tsx`
 
-- [ ] **Copiar** `OrderDetailPanel` (drawer lateral direito)
-- [ ] Seletor de status filtrado por `ALLOWED_TRANSITIONS`
-- [ ] Toast em `INVALID_STATUS_TRANSITION`
+- [x] **Copiar** `OrderDetailPanel` (drawer lateral direito)
+- [x] Seletor de status filtrado por `ALLOWED_TRANSITIONS`
+- [x] Toast em `INVALID_STATUS_TRANSITION`
 
 ### `src/lib/orderStatus.ts`
 
-- [ ] Portar `STATUS_CONFIG` do protótipo + `ALLOWED_TRANSITIONS` de `data-models.md`
+- [x] Portar `STATUS_CONFIG` do protótipo + `ALLOWED_TRANSITIONS` de `data-models.md`
 
 ## Pré-requisitos
 
@@ -54,6 +54,6 @@ Copiar `STATUS_CONFIG` quase intacto — labels e cores já batem com `data-mode
 
 ## Critérios de conclusão
 
-- [ ] Tab Pedidos **visual igual** ao protótipo, dados da API
-- [ ] Transições válidas enforced
-- [ ] Atualizar **Status** para `concluída`
+- [x] Tab Pedidos **visual igual** ao protótipo, dados da API
+- [x] Transições válidas enforced
+- [x] Atualizar **Status** para `concluída`

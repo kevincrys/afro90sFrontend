@@ -1,5 +1,6 @@
 import { LogOut, Package, ShoppingCart } from "lucide-react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import AdminOrdersTab from "@/components/admin/AdminOrdersTab";
 import AdminProductsTab from "@/components/admin/AdminProductsTab";
 import { adminSignOut, getAdminEmail } from "@/lib/auth";
 
@@ -116,20 +117,7 @@ export default function AdminPage() {
       </div>
 
       <main className="max-w-7xl mx-auto px-6 py-10">
-        {tab === "orders" ? (
-          <p
-            className="text-muted-foreground"
-            style={{
-              fontFamily: "'Courier Prime', monospace",
-              fontSize: "0.75rem",
-              letterSpacing: "0.12em",
-            }}
-          >
-            Lista de pedidos — task 14
-          </p>
-        ) : (
-          <AdminProductsTab />
-        )}
+        {tab === "orders" ? <AdminOrdersTab /> : <AdminProductsTab />}
       </main>
     </div>
   );
