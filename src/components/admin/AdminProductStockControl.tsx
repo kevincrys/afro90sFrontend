@@ -21,6 +21,7 @@ export default function AdminProductStockControl({
 }: AdminProductStockControlProps) {
   const serverQuantity = Number.isFinite(quantity) ? quantity : 0;
   const [displayQty, setDisplayQty] = useState(serverQuantity);
+  const [isInteracting, setIsInteracting] = useState(false);
   const displayQtyRef = useRef(serverQuantity);
   const baselineQtyRef = useRef(serverQuantity);
   const isInteractingRef = useRef(false);
@@ -33,12 +34,22 @@ export default function AdminProductStockControl({
     setDisplayQty(normalized);
   }, []);
 
-  useEffect(() => {
+  const endInteraction = useCallback(() => {
     isInteractingRef.current = false;
+    setIsInteracting(false);
+  }, []);
+
+  const beginInteraction = useCallback(() => {
+    isInteractingRef.current = true;
+    setIsInteracting(true);
+  }, []);
+
+  useEffect(() => {
+    endInteraction();
     baselineQtyRef.current = serverQuantity;
     syncDisplayQty(serverQuantity);
     setIsEditing(false);
-  }, [productId, syncDisplayQty]);
+  }, [productId, endInteraction, syncDisplayQty]);
 
   useEffect(() => {
     if (isInteractingRef.current || isPending) return;
@@ -46,12 +57,14 @@ export default function AdminProductStockControl({
     syncDisplayQty(serverQuantity);
   }, [serverQuantity, isPending, syncDisplayQty]);
 
-  const canDecrease = displayQty > 0 && !disabled && !isPending;
+  const controlsLocked = disabled || isPending;
+  const minusDisabled = controlsLocked || (displayQty <= 0 && !isInteracting);
+  const minusPointerActive = !controlsLocked;
 
   const commitDelta = useCallback(
     async (delta: number) => {
       if (delta === 0) {
-        isInteractingRef.current = false;
+        endInteraction();
         return;
       }
 
@@ -64,15 +77,11 @@ export default function AdminProductStockControl({
       } catch {
         syncDisplayQty(rollbackQty);
       } finally {
-        isInteractingRef.current = false;
+        endInteraction();
       }
     },
-    [onAdjust, syncDisplayQty],
+    [onAdjust, syncDisplayQty, endInteraction],
   );
-
-  const beginInteraction = useCallback(() => {
-    isInteractingRef.current = true;
-  }, []);
 
   const step = useCallback(
     (direction: 1 | -1) => {
@@ -101,7 +110,7 @@ export default function AdminProductStockControl({
   });
 
   function startEdit() {
-    if (disabled || isPending) return;
+    if (controlsLocked) return;
     beginInteraction();
     setEditValue(String(displayQtyRef.current));
     setIsEditing(true);
@@ -110,7 +119,7 @@ export default function AdminProductStockControl({
   function cancelEdit() {
     setIsEditing(false);
     setEditValue("");
-    isInteractingRef.current = false;
+    endInteraction();
     syncDisplayQty(baselineQtyRef.current);
   }
 
@@ -155,19 +164,20 @@ export default function AdminProductStockControl({
       <div className="ml-auto flex items-center gap-1">
         <button
           type="button"
-          disabled={!canDecrease}
+          disabled={minusDisabled}
           aria-label="Diminuir estoque"
           className="flex h-6 w-6 items-center justify-center border border-border text-muted-foreground transition-colors hover:border-primary hover:text-primary disabled:opacity-40 select-none touch-none"
           onPointerDown={
-            canDecrease
+            minusPointerActive
               ? (event) => {
+                  if (displayQtyRef.current <= 0 && !isInteractingRef.current) return;
                   beginInteraction();
                   minusHold.handlePointerDown(event);
                 }
               : undefined
           }
-          onPointerUp={canDecrease ? minusHold.handlePointerUp : undefined}
-          onPointerCancel={canDecrease ? minusHold.handlePointerUp : undefined}
+          onPointerUp={minusPointerActive ? minusHold.handlePointerUp : undefined}
+          onPointerCancel={minusPointerActive ? minusHold.handlePointerUp : undefined}
         >
           <Minus size={11} />
         </button>
@@ -190,7 +200,7 @@ export default function AdminProductStockControl({
         ) : (
           <button
             type="button"
-            disabled={disabled || isPending}
+            disabled={controlsLocked}
             onClick={startEdit}
             className="relative flex h-6 min-w-10 items-center justify-center px-1 text-sm font-semibold text-foreground transition-colors hover:text-primary disabled:opacity-40"
             style={{ fontFamily: ADMIN_FONT.mono }}
@@ -202,19 +212,19 @@ export default function AdminProductStockControl({
 
         <button
           type="button"
-          disabled={disabled || isPending}
+          disabled={controlsLocked}
           aria-label="Aumentar estoque"
           className="flex h-6 w-6 items-center justify-center border border-border text-muted-foreground transition-colors hover:border-primary hover:text-primary disabled:opacity-40 select-none touch-none"
           onPointerDown={
-            disabled || isPending
-              ? undefined
-              : (event) => {
+            minusPointerActive
+              ? (event) => {
                   beginInteraction();
                   plusHold.handlePointerDown(event);
                 }
+              : undefined
           }
-          onPointerUp={disabled || isPending ? undefined : plusHold.handlePointerUp}
-          onPointerCancel={disabled || isPending ? undefined : plusHold.handlePointerUp}
+          onPointerUp={minusPointerActive ? plusHold.handlePointerUp : undefined}
+          onPointerCancel={minusPointerActive ? plusHold.handlePointerUp : undefined}
         >
           <Plus size={11} />
         </button>
