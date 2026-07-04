@@ -77,10 +77,10 @@ export function useAdminProductMutations() {
 
   const adjustStock = useMutation({
     mutationFn: ({ id, delta }: { id: string; delta: number }) => putAdminProductStock(id, delta),
-    onMutate: async ({ id, delta }) => {
-      await queryClient.cancelQueries({ queryKey: ["admin", "products"] });
+    onMutate: ({ id, delta }) => {
       const snapshots = snapshotAdminProductCaches(queryClient);
       applyAdminProductQuantityDeltaInCache(queryClient, id, delta);
+      void queryClient.cancelQueries({ queryKey: ["admin", "products"] });
       return { snapshots };
     },
     onError: (_error, _variables, context) => {

@@ -56,7 +56,8 @@ export function applyAdminProductQuantityDeltaInCache(
         ...page,
         items: page.items.map((product) => {
           if (product.id !== productId) return product;
-          nextQuantity = Math.max(0, product.quantity + delta);
+          const currentQuantity = Number.isFinite(product.quantity) ? product.quantity : 0;
+          nextQuantity = Math.max(0, currentQuantity + delta);
           return { ...product, quantity: nextQuantity };
         }),
       })),

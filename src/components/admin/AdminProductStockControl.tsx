@@ -19,52 +19,79 @@ export default function AdminProductStockControl({
   isPending = false,
   onAdjust,
 }: AdminProductStockControlProps) {
-  const [sessionDelta, setSessionDelta] = useState(0);
-  const sessionDeltaRef = useRef(0);
+  const serverQuantity = Number.isFinite(quantity) ? quantity : 0;
+  const [displayQty, setDisplayQty] = useState(serverQuantity);
+  const displayQtyRef = useRef(serverQuantity);
+  const baselineQtyRef = useRef(serverQuantity);
+  const isInteractingRef = useRef(false);
   const [isEditing, setIsEditing] = useState(false);
   const [editValue, setEditValue] = useState("");
 
-  useEffect(() => {
-    setSessionDelta(0);
-    sessionDeltaRef.current = 0;
-    setIsEditing(false);
-  }, [productId]);
+  const syncDisplayQty = useCallback((next: number) => {
+    const normalized = Math.max(0, next);
+    displayQtyRef.current = normalized;
+    setDisplayQty(normalized);
+  }, []);
 
-  const displayQuantity = Math.max(0, quantity + sessionDelta);
-  const canDecrease = displayQuantity > 0 && !disabled && !isPending;
+  useEffect(() => {
+    isInteractingRef.current = false;
+    baselineQtyRef.current = serverQuantity;
+    syncDisplayQty(serverQuantity);
+    setIsEditing(false);
+  }, [productId, syncDisplayQty]);
+
+  useEffect(() => {
+    if (isInteractingRef.current || isPending) return;
+    baselineQtyRef.current = serverQuantity;
+    syncDisplayQty(serverQuantity);
+  }, [serverQuantity, isPending, syncDisplayQty]);
+
+  const canDecrease = displayQty > 0 && !disabled && !isPending;
 
   const commitDelta = useCallback(
-    (delta: number) => {
-      if (delta === 0) return;
+    async (delta: number) => {
+      if (delta === 0) {
+        isInteractingRef.current = false;
+        return;
+      }
 
-      // onAdjust dispara onMutate de forma síncrona antes de retornar a promise
-      void onAdjust(delta).catch(() => {
-        // toast + rollback tratados no pai
-      });
-      setSessionDelta(0);
-      sessionDeltaRef.current = 0;
+      const rollbackQty = baselineQtyRef.current;
+
+      try {
+        await onAdjust(delta);
+        baselineQtyRef.current = rollbackQty + delta;
+        syncDisplayQty(baselineQtyRef.current);
+      } catch {
+        syncDisplayQty(rollbackQty);
+      } finally {
+        isInteractingRef.current = false;
+      }
     },
-    [onAdjust],
+    [onAdjust, syncDisplayQty],
   );
+
+  const beginInteraction = useCallback(() => {
+    isInteractingRef.current = true;
+  }, []);
 
   const step = useCallback(
     (direction: 1 | -1) => {
-      setSessionDelta((prev) => {
-        const next = prev + direction;
-        if (quantity + next < 0) return prev;
-        sessionDeltaRef.current = next;
-        return next;
-      });
+      beginInteraction();
+      syncDisplayQty(displayQtyRef.current + direction);
     },
-    [quantity],
+    [beginInteraction, syncDisplayQty],
   );
 
   const commitSession = useCallback(() => {
-    void commitDelta(sessionDeltaRef.current);
+    const delta = displayQtyRef.current - baselineQtyRef.current;
+    void commitDelta(delta);
   }, [commitDelta]);
 
   const minusHold = useHoldRepeat({
-    onStep: () => step(-1),
+    onStep: () => {
+      if (displayQtyRef.current <= 0) return;
+      step(-1);
+    },
     onEnd: commitSession,
   });
 
@@ -75,13 +102,16 @@ export default function AdminProductStockControl({
 
   function startEdit() {
     if (disabled || isPending) return;
-    setEditValue(String(displayQuantity));
+    beginInteraction();
+    setEditValue(String(displayQtyRef.current));
     setIsEditing(true);
   }
 
   function cancelEdit() {
     setIsEditing(false);
     setEditValue("");
+    isInteractingRef.current = false;
+    syncDisplayQty(baselineQtyRef.current);
   }
 
   async function commitEdit() {
@@ -92,11 +122,12 @@ export default function AdminProductStockControl({
       return;
     }
 
-    const delta = parsed - quantity;
     setIsEditing(false);
     setEditValue("");
-    if (delta === 0) return;
-    commitDelta(delta);
+    syncDisplayQty(parsed);
+
+    const delta = parsed - baselineQtyRef.current;
+    await commitDelta(delta);
   }
 
   function handleEditKeyDown(event: React.KeyboardEvent<HTMLInputElement>) {
@@ -127,7 +158,14 @@ export default function AdminProductStockControl({
           disabled={!canDecrease}
           aria-label="Diminuir estoque"
           className="flex h-6 w-6 items-center justify-center border border-border text-muted-foreground transition-colors hover:border-primary hover:text-primary disabled:opacity-40 select-none touch-none"
-          onPointerDown={canDecrease ? minusHold.handlePointerDown : undefined}
+          onPointerDown={
+            canDecrease
+              ? (event) => {
+                  beginInteraction();
+                  minusHold.handlePointerDown(event);
+                }
+              : undefined
+          }
           onPointerUp={canDecrease ? minusHold.handlePointerUp : undefined}
           onPointerCancel={canDecrease ? minusHold.handlePointerUp : undefined}
         >
@@ -158,7 +196,7 @@ export default function AdminProductStockControl({
             style={{ fontFamily: ADMIN_FONT.mono }}
             aria-label="Editar estoque"
           >
-            {displayQuantity}
+            {displayQty}
           </button>
         )}
 
@@ -167,7 +205,14 @@ export default function AdminProductStockControl({
           disabled={disabled || isPending}
           aria-label="Aumentar estoque"
           className="flex h-6 w-6 items-center justify-center border border-border text-muted-foreground transition-colors hover:border-primary hover:text-primary disabled:opacity-40 select-none touch-none"
-          onPointerDown={disabled || isPending ? undefined : plusHold.handlePointerDown}
+          onPointerDown={
+            disabled || isPending
+              ? undefined
+              : (event) => {
+                  beginInteraction();
+                  plusHold.handlePointerDown(event);
+                }
+          }
           onPointerUp={disabled || isPending ? undefined : plusHold.handlePointerUp}
           onPointerCancel={disabled || isPending ? undefined : plusHold.handlePointerUp}
         >

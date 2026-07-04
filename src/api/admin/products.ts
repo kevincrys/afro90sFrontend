@@ -74,13 +74,28 @@ export async function deleteAdminProduct(id: string): Promise<void> {
   await apiClient.delete(`/admin/products/${id}`);
 }
 
+type StockUpdateResponse = {
+  id: string;
+  quantity?: number;
+  stock?: number;
+};
+
+function normalizeStockUpdateResponse(data: StockUpdateResponse): { id: string; quantity: number } {
+  const quantity = data.quantity ?? data.stock;
+  if (typeof quantity !== "number" || !Number.isFinite(quantity) || quantity < 0) {
+    throw new Error("InvalidStockResponse");
+  }
+
+  return { id: data.id, quantity };
+}
+
 export async function putAdminProductStock(
   id: string,
   delta: number,
 ): Promise<{ id: string; quantity: number }> {
-  const { data } = await apiClient.put<{ id: string; quantity: number }>(
+  const { data } = await apiClient.put<StockUpdateResponse>(
     `/admin/products/${id}/stock`,
     { delta },
   );
-  return data;
+  return normalizeStockUpdateResponse(data);
 }
