@@ -13,3 +13,12 @@ export interface ProductsQueryFilters {
 export function productsQueryKey(filters: ProductsQueryFilters = {}) {
   return ["products", filters] as const;
 }
+
+export interface AdminProductsQueryFilters {
+  category?: ProductCategory;
+  limit?: number;
+}
+
+export function adminProductsQueryKey(filters: AdminProductsQueryFilters = {}) {
+  return ["admin", "products", filters] as const;
+}

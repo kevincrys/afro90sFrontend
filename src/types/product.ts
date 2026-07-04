@@ -5,6 +5,7 @@ export type { ProductCategory as Category };
 export interface Product {
   id: string;
   name: string;
+  description?: string;
   price: number;
   quantity: number;
   photos: string[];
@@ -41,17 +42,21 @@ export type PhotoInput = PhotoInputUrl | PhotoInputBase64 | PhotoInputStream;
 
 export interface CreateProductInput {
   name: string;
+  description?: string;
   price: number;
   quantity: number;
   category: ProductCategory;
+  options?: string[];
   photos?: PhotoInput[];
 }
 
 export interface UpdateProductInput {
   name?: string;
+  description?: string;
   price?: number;
   quantity?: number;
   category?: ProductCategory;
+  options?: string[];
   photos?: PhotoInput[];
 }
 

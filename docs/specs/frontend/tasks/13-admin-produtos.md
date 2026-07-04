@@ -1,7 +1,7 @@
 # Task 13 — Admin — CRUD de produtos (tab Produtos)
 
 **Fase:** 3 — Painel admin  
-**Status:** pendente  
+**Status:** concluída  
 **Arquivos alvo:** [`ui-ux.md`](../ui-ux.md), [`prototype-porting.md`](../prototype-porting.md)
 
 ## Objetivo
@@ -21,34 +21,34 @@
 
 | Manter (API) | Remover do protótipo |
 |--------------|----------------------|
-| `name`, `price`, `stock`→`quantity`, `category` | `description`, `badge`, `badgeColor` |
+| `name`, `price`, `stock`→`quantity`, `category`, `description`, `options` | `badge`, `badgeColor` |
 | `images` → `photos` (URL + upload L608–660) | `rating`, `reviews`, `originalPrice` |
 | Upload URL + arquivo | `options` / variantes L664–673 |
 
 ### Adaptar
 
-- [ ] `saveProduct` local → `POST/PUT /admin/products` multipart
-- [ ] `DELETE` com dialog (protótipo já tem confirmação — manter)
-- [ ] Categorias select → enum `oculos`, `acessorios`, `maquiagem`
-- [ ] Preço USD → BRL `formatPrice`
+- [x] `saveProduct` local → `POST/PUT /admin/products` multipart
+- [x] `DELETE` com dialog (protótipo já tem confirmação — manter)
+- [x] Categorias select → enum `oculos`, `acessorios`, `maquiagem`
+- [x] Preço USD → BRL `formatPrice`
 
 ## O que implementar
 
 ### `src/pages/admin/AdminPage.tsx`
 
-- [ ] **Copiar** `AdminDashboard` (header + tabs Pedidos/Produtos)
-- [ ] Renderizar `AdminProductsTab` na tab Produtos
+- [x] **Copiar** `AdminDashboard` (header + tabs Pedidos/Produtos)
+- [x] Renderizar `AdminProductsTab` na tab Produtos
 
 ### `src/components/admin/AdminProductsTab.tsx`
 
-- [ ] **Copiar** grid de cards de `ProductsTab`
-- [ ] Paginação cursor API
+- [x] **Copiar** grid de cards de `ProductsTab`
+- [x] Paginação cursor API
 
 ### `src/components/admin/ProductFormModal.tsx`
 
-- [ ] **Copiar** `ProductFormModal` do protótipo
-- [ ] Remover campos fora da API
-- [ ] Zod + `POST/PUT` multipart
+- [x] **Copiar** `ProductFormModal` do protótipo
+- [x] Remover campos fora da API
+- [x] Zod + validação de formato (nome, preço, estoque, URLs e imagens)
 
 ## Pré-requisitos
 
@@ -56,6 +56,6 @@
 
 ## Critérios de conclusão
 
-- [ ] Tab Produtos **visual igual** ao protótipo, dados da API
-- [ ] Upload → produto no catálogo público
-- [ ] Atualizar **Status** para `concluída`
+- [x] Tab Produtos **visual igual** ao protótipo, dados da API
+- [x] Upload → produto no catálogo público (invalidação cache catálogo pós-mutation)
+- [x] Atualizar **Status** para `concluída`

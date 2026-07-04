@@ -1,5 +1,6 @@
 import { LogOut, Package, ShoppingCart } from "lucide-react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import AdminProductsTab from "@/components/admin/AdminProductsTab";
 import { adminSignOut, getAdminEmail } from "@/lib/auth";
 
 type AdminTab = "orders" | "products";
@@ -29,7 +30,7 @@ export default function AdminPage() {
 
   async function handleLogout() {
     await adminSignOut();
-    navigate("/admin/login", { replace: true });
+    navigate("/", { replace: true });
   }
 
   return (
@@ -127,16 +128,7 @@ export default function AdminPage() {
             Lista de pedidos — task 14
           </p>
         ) : (
-          <p
-            className="text-muted-foreground"
-            style={{
-              fontFamily: "'Courier Prime', monospace",
-              fontSize: "0.75rem",
-              letterSpacing: "0.12em",
-            }}
-          >
-            Gestão de produtos — task 13
-          </p>
+          <AdminProductsTab />
         )}
       </main>
     </div>

@@ -1,4 +1,5 @@
 import { apiClient, buildQueryString } from "@/api/client";
+import type { ProductSubmitPayload } from "@/lib/adminProductSubmit";
 import type {
   CreateProductInput,
   PaginatedResponse,
@@ -7,7 +8,27 @@ import type {
   UpdateProductInput,
 } from "@/types/product";
 
-/** Admin products API — fase 3 (tasks 13+). */
+/** Admin products API — fase 3 (task 13). */
+
+function multipartHeaders() {
+  return { "Content-Type": "multipart/form-data" };
+}
+
+async function submitProductPayload(
+  method: "post" | "put",
+  url: string,
+  payload: ProductSubmitPayload,
+): Promise<Product> {
+  if (payload.mode === "multipart") {
+    const { data } = await apiClient[method]<Product>(url, payload.formData, {
+      headers: multipartHeaders(),
+    });
+    return data;
+  }
+
+  const { data } = await apiClient[method]<Product>(url, payload.body);
+  return data;
+}
 
 export async function getAdminProducts(
   params: ProductsQueryParams = {},
@@ -33,9 +54,20 @@ export async function createAdminProduct(input: CreateProductInput): Promise<Pro
   return data;
 }
 
+export async function createAdminProductPayload(payload: ProductSubmitPayload): Promise<Product> {
+  return submitProductPayload("post", "/admin/products", payload);
+}
+
 export async function updateAdminProduct(id: string, input: UpdateProductInput): Promise<Product> {
   const { data } = await apiClient.put<Product>(`/admin/products/${id}`, input);
   return data;
+}
+
+export async function updateAdminProductPayload(
+  id: string,
+  payload: ProductSubmitPayload,
+): Promise<Product> {
+  return submitProductPayload("put", `/admin/products/${id}`, payload);
 }
 
 export async function deleteAdminProduct(id: string): Promise<void> {
