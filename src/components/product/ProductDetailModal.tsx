@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { ChevronLeft, ChevronRight, Minus, Plus, ShoppingBag, X } from "lucide-react";
+import { ChevronLeft, ChevronRight, ShoppingBag, X } from "lucide-react";
 import { toast } from "sonner";
 import { ProductDetailModalSkeleton } from "@/components/product/ProductDetailModalSkeleton";
 import { ProductOptionPicker } from "@/components/product/ProductOptionPicker";
@@ -29,7 +29,6 @@ export function ProductDetailModal({ productId, onClose }: ProductDetailModalPro
   useFocusTrap(panelRef, !showSkeleton);
 
   const [photoIdx, setPhotoIdx] = useState(0);
-  const [quantity, setQuantity] = useState(1);
   const [selectedOption, setSelectedOption] = useState<string | undefined>(undefined);
 
   const photos = product?.photos ?? [];
@@ -39,7 +38,6 @@ export function ProductDetailModal({ productId, onClose }: ProductDetailModalPro
 
   useEffect(() => {
     setPhotoIdx(0);
-    setQuantity(1);
     setSelectedOption(undefined);
   }, [productId]);
 
@@ -97,7 +95,7 @@ export function ProductDetailModal({ productId, onClose }: ProductDetailModalPro
       productId: product.id,
       name: product.name,
       price: product.price,
-      quantity,
+      quantity: 1,
       photo: product.photos[0] ?? "",
       maxQuantity: product.quantity,
       selectedOption: productOptions.length > 0 ? selectedOption : undefined,
@@ -328,63 +326,6 @@ export function ProductDetailModal({ productId, onClose }: ProductDetailModalPro
                 value={selectedOption}
                 onChange={setSelectedOption}
               />
-            )}
-
-            {!isSoldOut && (
-              <div>
-                <div
-                  className="mb-3"
-                  style={{
-                    fontFamily: "'Courier Prime', monospace",
-                    fontSize: "0.6rem",
-                    letterSpacing: "var(--track-label)",
-                    color: "#9A7085",
-                  }}
-                >
-                  QUANTIDADE
-                </div>
-                <div className="flex items-center gap-4">
-                  <button
-                    type="button"
-                    onClick={() => setQuantity((value) => Math.max(1, value - 1))}
-                    disabled={quantity <= 1}
-                    className="w-9 h-9 flex items-center justify-center border border-border hover:border-primary text-muted-foreground hover:text-primary transition-colors disabled:opacity-40"
-                    aria-label="Diminuir quantidade"
-                  >
-                    <Minus size={14} />
-                  </button>
-                  <span
-                    style={{
-                      fontFamily: "'Anton', sans-serif",
-                      fontSize: "1.25rem",
-                      color: "#FFF8E7",
-                      minWidth: "1.5rem",
-                      textAlign: "center",
-                    }}
-                  >
-                    {quantity}
-                  </span>
-                  <button
-                    type="button"
-                    onClick={() => setQuantity((value) => Math.min(maxQuantity, value + 1))}
-                    disabled={quantity >= maxQuantity}
-                    className="w-9 h-9 flex items-center justify-center border border-border hover:border-primary text-muted-foreground hover:text-primary transition-colors disabled:opacity-40"
-                    aria-label="Aumentar quantidade"
-                  >
-                    <Plus size={14} />
-                  </button>
-                  <span
-                    style={{
-                      fontFamily: "'Courier Prime', monospace",
-                      fontSize: "0.62rem",
-                      letterSpacing: "var(--track-ui-lg)",
-                      color: "#9A7085",
-                    }}
-                  >
-                    {maxQuantity} em estoque
-                  </span>
-                </div>
-              </div>
             )}
 
             <div className="hidden md:block flex-1" />

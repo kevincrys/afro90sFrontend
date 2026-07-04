@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState, type ReactNode } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ArrowRight, CheckCircle, MessageCircle, Trash2, X } from "lucide-react";
+import { ArrowRight, CheckCircle, MessageCircle, Minus, Plus, Trash2, X } from "lucide-react";
 import { toast } from "sonner";
 import { useCreateOrder } from "@/hooks/useCreateOrder";
 import { useFocusTrap } from "@/hooks/useFocusTrap";
@@ -66,6 +66,7 @@ function FieldLabel({ htmlFor, children }: { htmlFor: string; children: ReactNod
 export function CartDrawer() {
   const panelRef = useRef<HTMLDivElement>(null);
   const items = useCartStore((state) => state.items);
+  const updateItemQuantity = useCartStore((state) => state.updateItemQuantity);
   const removeItem = useCartStore((state) => state.removeItem);
   const clearCart = useCartStore((state) => state.clearCart);
   const closeCart = useCartStore((state) => state.closeCart);
@@ -345,20 +346,43 @@ export function CartDrawer() {
                           >
                             {formatPrice(item.price * item.quantity)}
                           </div>
-                          <div className="flex items-center gap-3">
+                          <div className="flex items-center gap-2">
+                            <button
+                              type="button"
+                              onClick={() =>
+                                updateItemQuantity(item.productId, -1, item.selectedOption)
+                              }
+                              className="w-7 h-7 flex items-center justify-center border border-border hover:border-primary text-muted-foreground hover:text-primary transition-colors"
+                              aria-label={`Diminuir quantidade de ${item.name}`}
+                            >
+                              <Minus size={12} />
+                            </button>
                             <span
                               style={{
                                 fontFamily: "'Courier Prime', monospace",
-                                fontSize: "0.65rem",
-                                color: "#9A7085",
+                                fontSize: "0.72rem",
+                                color: "#FFF8E7",
+                                minWidth: "1.25rem",
+                                textAlign: "center",
                               }}
                             >
-                              QTD {item.quantity}
+                              {item.quantity}
                             </span>
                             <button
                               type="button"
+                              onClick={() =>
+                                updateItemQuantity(item.productId, 1, item.selectedOption)
+                              }
+                              disabled={item.quantity >= item.maxQuantity}
+                              className="w-7 h-7 flex items-center justify-center border border-border hover:border-primary text-muted-foreground hover:text-primary transition-colors disabled:opacity-40"
+                              aria-label={`Aumentar quantidade de ${item.name}`}
+                            >
+                              <Plus size={12} />
+                            </button>
+                            <button
+                              type="button"
                               onClick={() => removeItem(item.productId, item.selectedOption)}
-                              className="text-muted-foreground hover:text-accent transition-colors"
+                              className="ml-1 text-muted-foreground hover:text-accent transition-colors"
                               aria-label={`Remover ${item.name}`}
                             >
                               <Trash2 size={13} />

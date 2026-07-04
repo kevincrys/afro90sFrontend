@@ -22,6 +22,7 @@ interface CartState {
   items: CartItem[];
   isOpen: boolean;
   addItem: (item: CartItem) => void;
+  updateItemQuantity: (productId: string, delta: number, selectedOption?: string) => void;
   removeItem: (productId: string, selectedOption?: string) => void;
   clearCart: () => void;
   openCart: () => void;
@@ -52,6 +53,32 @@ export const useCartStore = create<CartState>()(
             };
           }
           return { items: [...state.items, item] };
+        });
+      },
+
+      updateItemQuantity: (productId, delta, selectedOption) => {
+        set((state) => {
+          const target = { productId, selectedOption };
+          const existing = state.items.find((entry) => isSameCartLine(entry, target));
+          if (!existing) return state;
+
+          const nextQuantity = existing.quantity + delta;
+          if (nextQuantity <= 0) {
+            return {
+              items: state.items.filter((entry) => !isSameCartLine(entry, target)),
+            };
+          }
+
+          return {
+            items: state.items.map((entry) =>
+              isSameCartLine(entry, target)
+                ? {
+                    ...entry,
+                    quantity: Math.min(nextQuantity, entry.maxQuantity),
+                  }
+                : entry,
+            ),
+          };
         });
       },
 

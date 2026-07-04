@@ -34,6 +34,32 @@ describe("useCartStore", () => {
     expect(useCartStore.getState().items).toHaveLength(0);
   });
 
+  it("increases item quantity up to maxQuantity", () => {
+    useCartStore.getState().addItem(sampleItem);
+    useCartStore.getState().updateItemQuantity(sampleItem.productId, 2);
+    expect(useCartStore.getState().items[0].quantity).toBe(3);
+    useCartStore.getState().updateItemQuantity(sampleItem.productId, 10);
+    expect(useCartStore.getState().items[0].quantity).toBe(5);
+  });
+
+  it("decreases item quantity and removes at zero", () => {
+    useCartStore.getState().addItem(sampleItem);
+    useCartStore.getState().updateItemQuantity(sampleItem.productId, -1);
+    expect(useCartStore.getState().items).toHaveLength(0);
+  });
+
+  it("updates quantity for matching selectedOption only", () => {
+    useCartStore.getState().addItem({ ...sampleItem, selectedOption: "Preto", quantity: 2 });
+    useCartStore.getState().addItem({ ...sampleItem, selectedOption: "Dourado", quantity: 1 });
+    useCartStore.getState().updateItemQuantity(sampleItem.productId, 1, "Preto");
+    expect(useCartStore.getState().items.find((i) => i.selectedOption === "Preto")?.quantity).toBe(
+      3,
+    );
+    expect(useCartStore.getState().items.find((i) => i.selectedOption === "Dourado")?.quantity).toBe(
+      1,
+    );
+  });
+
   it("keeps separate lines for same product with different options", () => {
     useCartStore.getState().addItem({ ...sampleItem, selectedOption: "Preto" });
     useCartStore.getState().addItem({ ...sampleItem, selectedOption: "Dourado" });
