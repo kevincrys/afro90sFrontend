@@ -159,15 +159,17 @@ export default function OrderDetailDrawer({ orderId, onClose }: OrderDetailDrawe
                 {order.items.map((item, index) => (
                   <div key={`${item.productId}:${index}`} className="bg-card border border-border p-4">
                     <div className="flex justify-between items-start mb-1 gap-3">
-                      <div
-                        style={{
-                          fontFamily: ADMIN_FONT.display,
-                          fontSize: "0.9rem",
-                          color: "#FFF8E7",
-                          wordBreak: "break-all",
-                        }}
-                      >
-                        {item.productId}
+                      <div className="min-w-0">
+                        <div
+                          style={{
+                            fontFamily: ADMIN_FONT.display,
+                            fontSize: "0.9rem",
+                            color: "#FFF8E7",
+                            wordBreak: "break-word",
+                          }}
+                        >
+                          {item.productName}
+                        </div>
                       </div>
                       <div
                         style={{

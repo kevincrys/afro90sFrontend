@@ -7,6 +7,7 @@ import { ADMIN_FONT } from "@/components/admin/AdminLabel";
 import { flattenAdminOrders, useAdminOrders } from "@/hooks/useAdminOrders";
 import { useIntersectionObserver } from "@/hooks/useIntersectionObserver";
 import { formatPrice } from "@/lib/format";
+import { formatOrderItemsPreview } from "@/lib/orderItems";
 import { STATUS_CONFIG, STATUS_ORDER } from "@/lib/orderStatus";
 import type { OrderStatus } from "@/types/order";
 
@@ -21,14 +22,6 @@ function filterButtonStyle(active: boolean, color?: string, bg?: string) {
     color: active ? (color ?? "#FFD21F") : "#9A7085",
     background: active ? (bg ?? "rgba(255,210,31,0.08)") : "transparent",
   } as const;
-}
-
-function formatItemsPreview(items: { productId: string; selectedOption?: string }[]): string {
-  if (items.length === 0) return "—";
-  const preview = items
-    .map((item) => item.selectedOption ?? item.productId.slice(0, 8))
-    .join(", ");
-  return preview.length > 30 ? `${preview.slice(0, 30)}…` : preview;
 }
 
 export default function AdminOrdersTab() {
@@ -231,7 +224,7 @@ export default function AdminOrdersTab() {
                           color: "#9A7085",
                         }}
                       >
-                        {formatItemsPreview(order.items)}
+                        {formatOrderItemsPreview(order.items)}
                       </div>
                     </td>
                     <td className="py-4 pr-4">

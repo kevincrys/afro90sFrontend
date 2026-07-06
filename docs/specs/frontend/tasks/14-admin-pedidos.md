@@ -59,3 +59,5 @@ Copiar `STATUS_CONFIG` quase intacto — labels e cores já batem com `data-mode
 - [x] Atualizar **Status** para `concluída`
 
 > **Extensão (task 20):** barra de busca por ID/nome do cliente — ver [20-busca-admin-pedidos.md](20-busca-admin-pedidos.md).
+
+> **Extensão (task 21):** exibir nome do produto nos itens do pedido — ver [21-nome-produto-no-pedido.md](21-nome-produto-no-pedido.md).

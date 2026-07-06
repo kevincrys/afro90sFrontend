@@ -80,6 +80,7 @@ Guia completo de port: **[prototype-porting.md](../prototype-porting.md)** — m
 | 13 | [13-admin-produtos.md](13-admin-produtos.md) | Extrair `ProductsTab` + `ProductFormModal` |
 | 14 | [14-admin-pedidos.md](14-admin-pedidos.md) | Extrair `OrdersTab` + `OrderDetailPanel` |
 | 20 | [20-busca-admin-pedidos.md](20-busca-admin-pedidos.md) | Barra de busca na tab Pedidos (`q`) |
+| 21 | [21-nome-produto-no-pedido.md](21-nome-produto-no-pedido.md) | Nome do produto na admin + WhatsApp |
 | 15 | [15-aceite-fase3.md](15-aceite-fase3.md) | Checklist aceite fase 3 |
 
 **✓ Resultado:** admin gerencia produtos e pedidos.

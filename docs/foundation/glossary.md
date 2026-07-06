@@ -9,6 +9,7 @@ Termos usados neste repositório e no ecossistema Afro90s.
 | **afro90s-api** | Repositório futuro do backend (Lambda handlers). |
 | **afro90s-web** | Repositório futuro do frontend (React SPA). |
 | **Product** | Item do catálogo: nome, preço, estoque, fotos, categoria. |
+| **productName** | Snapshot do nome do produto em `OrderItem`; gravado no `POST /orders` a partir de `Product.name`. |
 | **Order** | Pedido de compra criado pelo cliente no checkout. |
 | **OrderStatus** | Estado do pedido: `SOLICITADO`, `EM_ATENDIMENTO`, `AGUARDANDO_PAGAMENTO`, `EM_PREPARACAO`, `ENVIADO`, `CONCLUIDO`, `CANCELADO`. |
 | **Category** | Categoria de produto: `oculos`, `acessorios`, `maquiagem`. |

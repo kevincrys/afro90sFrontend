@@ -10,7 +10,7 @@ import {
 const sampleOrder = {
   id: "550e8400-e29b-41d4-a716-446655440000",
   fullPrice: 99.8,
-  items: [{ productId: "p1", quantity: 2, unitPrice: 49.9 }],
+  items: [{ productId: "p1", productName: "Óculos Vintage", quantity: 2, unitPrice: 49.9 }],
   customer: {
     name: "Maria Silva",
     address: "Rua A, 1",
@@ -41,6 +41,12 @@ describe("whatsapp", () => {
     const message = buildWhatsAppOrderMessage(sampleOrder);
     expect(message).toContain("Maria Silva");
     expect(message).toContain("11999999999");
+  });
+
+  it("buildWhatsAppOrderMessage lists item names", () => {
+    const message = buildWhatsAppOrderMessage(sampleOrder);
+    expect(message).toContain("Óculos Vintage");
+    expect(message).toContain("x2");
   });
 
   it("buildWhatsAppContactUrl opens wa.me with default message", () => {

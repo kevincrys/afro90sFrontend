@@ -1,5 +1,5 @@
 import { formatPrice } from "@/lib/format";
-import type { Order } from "@/types/order";
+import type { Order, OrderItem } from "@/types/order";
 
 export function getWhatsAppNumber(): string | undefined {
   const raw = import.meta.env.VITE_WHATSAPP_NUMBER?.trim();
@@ -21,16 +21,28 @@ export function warnIfWhatsAppNumberMissing(): void {
   }
 }
 
+function formatWhatsAppItems(items: OrderItem[] | undefined): string {
+  if (!items?.length) return "";
+  return items
+    .map((item) => {
+      const option = item.selectedOption ? ` (${item.selectedOption})` : "";
+      return `- ${item.productName}${option} x${item.quantity}`;
+    })
+    .join("\n");
+}
+
 export function buildWhatsAppOrderMessage(
   order: Pick<Order, "id" | "fullPrice"> & Partial<Pick<Order, "items" | "customer">>,
 ): string {
-  return [
+  const itemsBlock = formatWhatsAppItems(order.items);
+  const lines = [
     `Olá! Novo pedido #${order.id}`,
     `Total: ${formatPrice(order.fullPrice)}`,
-    `Itens: ${order.items?.length ?? 0}`,
+    itemsBlock ? `Itens:\n${itemsBlock}` : `Itens: ${order.items?.length ?? 0}`,
     `Nome: ${order.customer?.name ?? ""}`,
     `Tel: ${order.customer?.tel ?? ""}`,
-  ].join("\n");
+  ];
+  return lines.join("\n");
 }
 
 export function buildWhatsAppOrderUrl(

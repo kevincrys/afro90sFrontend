@@ -30,6 +30,7 @@ function buildOrderSnapshot(
     fullPrice: response.fullPrice,
     items: cartItems.map((item) => ({
       productId: item.productId,
+      productName: item.name,
       quantity: item.quantity,
       unitPrice: item.price,
       ...(item.selectedOption ? { selectedOption: item.selectedOption } : {}),
