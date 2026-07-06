@@ -29,7 +29,7 @@ export function Footer({ onCategorySelect }: FooterProps) {
             className="inline-block hover:opacity-90 transition-opacity mb-2.5"
             aria-label="Afro90s — ir para o início"
           >
-            <BrandLogo className="h-10 w-auto" />
+            <BrandLogo size="footer" />
           </Link>
           <p className="text-muted-foreground text-sm leading-relaxed mb-5">
             Moda e acessórios com alma anos 90.

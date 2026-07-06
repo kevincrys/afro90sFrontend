@@ -71,7 +71,7 @@ export function Header({
           className="select-none hover:opacity-90 transition-opacity"
           aria-label="Afro90s — ir para o início"
         >
-          <BrandLogo className="h-9 w-auto" />
+          <BrandLogo size="header" />
         </Link>
 
         <div className="hidden md:flex items-center gap-8">

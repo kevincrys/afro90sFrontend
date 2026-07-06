@@ -167,7 +167,7 @@ export default function AdminLoginPage() {
     >
       <div className="w-full max-w-sm">
         <div className="text-center mb-10">
-          <BrandLogo className="h-14 w-auto mx-auto" />
+          <BrandLogo size="admin-login" className="mx-auto" />
           <div
             style={{
               fontFamily: "'Courier Prime', monospace",

@@ -44,7 +44,7 @@ export default function AdminPage() {
         <div className="max-w-7xl mx-auto px-6 flex items-center justify-between h-16">
           <div className="flex items-center gap-6">
             <Link to="/" className="hover:opacity-90 transition-opacity" aria-label="Afro90s — ir para o início">
-              <BrandLogo className="h-8 w-auto" />
+              <BrandLogo size="admin" />
             </Link>
             <div className="w-px h-6 bg-border" />
             <div
