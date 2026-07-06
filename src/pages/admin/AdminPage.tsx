@@ -1,4 +1,5 @@
 import { LogOut, Package, ShoppingCart } from "lucide-react";
+import { BrandLogo } from "@/components/layout/BrandLogo";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import AdminOrdersTab from "@/components/admin/AdminOrdersTab";
 import AdminProductsTab from "@/components/admin/AdminProductsTab";
@@ -42,17 +43,8 @@ export default function AdminPage() {
       <header className="sticky top-0 z-40 border-b border-border bg-background/95 backdrop-blur-sm">
         <div className="max-w-7xl mx-auto px-6 flex items-center justify-between h-16">
           <div className="flex items-center gap-6">
-            <Link
-              to="/"
-              style={{
-                fontFamily: "'Anton', sans-serif",
-                fontSize: "1.3rem",
-                color: "#FFD21F",
-                letterSpacing: "0.04em",
-                lineHeight: 1,
-              }}
-            >
-              AFRO<span style={{ color: "#7A004B" }}>90s</span>
+            <Link to="/" className="hover:opacity-90 transition-opacity" aria-label="Afro90s — ir para o início">
+              <BrandLogo className="h-8 w-auto" />
             </Link>
             <div className="w-px h-6 bg-border" />
             <div

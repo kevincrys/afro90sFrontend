@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { BrandLogo } from "@/components/layout/BrandLogo";
 import { getInstagramUrl } from "@/lib/siteLinks";
 import { buildWhatsAppContactUrl } from "@/lib/whatsapp";
 import { CATEGORIES, type CategoryFilter } from "@/types/category";
@@ -25,19 +26,10 @@ export function Footer({ onCategorySelect }: FooterProps) {
         <div className="col-span-2 md:col-span-1">
           <Link
             to="/"
-            className="inline-block hover:opacity-90 transition-opacity"
-            style={{
-              fontFamily: "'Anton', sans-serif",
-              fontSize: "1.7rem",
-              color: "#FFD21F",
-              letterSpacing: "var(--track-logo)",
-              marginBottom: "10px",
-              lineHeight: 1,
-              textDecoration: "none",
-            }}
+            className="inline-block hover:opacity-90 transition-opacity mb-2.5"
             aria-label="Afro90s — ir para o início"
           >
-            AFRO<span style={{ color: "#7A004B" }}>90s</span>
+            <BrandLogo className="h-10 w-auto" />
           </Link>
           <p className="text-muted-foreground text-sm leading-relaxed mb-5">
             Moda e acessórios com alma anos 90.

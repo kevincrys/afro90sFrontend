@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { AlertCircle } from "lucide-react";
 import { Link, Navigate, useLocation, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
+import { BrandLogo } from "@/components/layout/BrandLogo";
 import { isCognitoConfigured } from "@/lib/amplify";
 import {
   adminConfirmNewPassword,
@@ -166,16 +167,7 @@ export default function AdminLoginPage() {
     >
       <div className="w-full max-w-sm">
         <div className="text-center mb-10">
-          <div
-            style={{
-              fontFamily: "'Anton', sans-serif",
-              fontSize: "2rem",
-              color: "#FFD21F",
-              letterSpacing: "0.05em",
-            }}
-          >
-            AFRO<span style={{ color: "#7A004B" }}>90s</span>
-          </div>
+          <BrandLogo className="h-14 w-auto mx-auto" />
           <div
             style={{
               fontFamily: "'Courier Prime', monospace",

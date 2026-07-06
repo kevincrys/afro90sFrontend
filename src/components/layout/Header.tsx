@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState, type KeyboardEvent } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { Menu, Search, ShoppingBag, X } from "lucide-react";
+import { BrandLogo } from "@/components/layout/BrandLogo";
 import { CATEGORIES, type CategoryFilter } from "@/types/category";
 
 const SEARCH_DEBOUNCE_MS = 350;
@@ -68,17 +69,9 @@ export function Header({
         <Link
           to="/"
           className="select-none hover:opacity-90 transition-opacity"
-          style={{
-            fontFamily: "'Anton', sans-serif",
-            fontSize: "1.55rem",
-            letterSpacing: "var(--track-logo)",
-            color: "#FFD21F",
-            lineHeight: 1,
-            textDecoration: "none",
-          }}
           aria-label="Afro90s — ir para o início"
         >
-          AFRO<span style={{ color: "#7A004B" }}>90s</span>
+          <BrandLogo className="h-9 w-auto" />
         </Link>
 
         <div className="hidden md:flex items-center gap-8">

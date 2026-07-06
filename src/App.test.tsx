@@ -31,7 +31,7 @@ describe("routing", () => {
     );
 
     renderWithProviders(router);
-    expect(screen.getByRole("navigation")).toHaveTextContent("AFRO90s");
+    expect(screen.getByRole("navigation").querySelector('img[alt="Afro90s"]')).toBeInTheDocument();
     expect(screen.getAllByRole("button", { name: "Óculos" }).length).toBeGreaterThanOrEqual(1);
   });
 
