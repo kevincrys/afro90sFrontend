@@ -16,6 +16,7 @@ export async function getAdminOrders(
     limit: params.limit,
     cursor: params.cursor,
     status: params.status,
+    q: params.q,
   });
 
   const { data } = await apiClient.get<PaginatedResponse<Order>>(`/admin/orders${query}`);

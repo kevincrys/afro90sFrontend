@@ -23,6 +23,10 @@ Validar painel admin completo em `/admin`: CRUD produtos + gestão de pedidos.
 - [ ] Alterar status com transição válida
 - [ ] Drawer exibe customer e itens
 - [ ] Paginação por cursor funciona
+- [ ] Buscar por ID de pedido (completo ou prefixo)
+- [ ] Buscar por prefixo do nome do cliente
+- [ ] Limpar busca restaura listagem padrão
+- [ ] Busca combina com filtro de status (tabs)
 
 ### Regressão
 

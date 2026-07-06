@@ -46,6 +46,7 @@ export interface OrdersQueryParams {
   limit?: number;
   cursor?: string;
   status?: OrderStatus;
+  q?: string;
 }
 
 export interface UpdateOrderStatusInput {

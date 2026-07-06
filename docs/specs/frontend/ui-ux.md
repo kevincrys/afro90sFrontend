@@ -39,7 +39,7 @@ Rota `/admin` com header simplificado (logo + e-mail + logout) e **duas tabs pri
 
 | Tab | UI |
 |-----|-----|
-| **Pedidos** | Tabs de filtro por status + cards de pedido + **drawer** de detalhe |
+| **Pedidos** | Barra de busca (ID ou nome do cliente) + tabs de filtro por status + tabela de pedidos + **drawer** de detalhe; ordenação default por data (mais recente primeiro) |
 | **Produtos** | Grid de cards + botão "Novo produto" + **modal** de formulário |
 
 Tab **Pedidos** é a padrão após login.

@@ -26,6 +26,7 @@ export function adminProductsQueryKey(filters: AdminProductsQueryFilters = {}) {
 
 export interface AdminOrdersQueryFilters {
   status?: OrderStatus;
+  q?: string;
   limit?: number;
 }
 

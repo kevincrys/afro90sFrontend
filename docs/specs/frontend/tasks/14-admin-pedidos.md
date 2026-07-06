@@ -57,3 +57,5 @@ Copiar `STATUS_CONFIG` quase intacto — labels e cores já batem com `data-mode
 - [x] Tab Pedidos **visual igual** ao protótipo, dados da API
 - [x] Transições válidas enforced
 - [x] Atualizar **Status** para `concluída`
+
+> **Extensão (task 20):** barra de busca por ID/nome do cliente — ver [20-busca-admin-pedidos.md](20-busca-admin-pedidos.md).

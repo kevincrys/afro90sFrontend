@@ -117,10 +117,18 @@ interface Order {
   items: OrderItem[];
   fullPrice: number;
   customer: Customer;
+  customerNameLower?: string;  // interno (filtro de busca admin); não exposto em GET
   createdAt: string;
   updatedAt: string;
 }
 ```
+
+### Regras — `Order`
+
+| Campo | Regra |
+|-------|-------|
+| `customerNameLower` | Gerado no servidor ao criar pedido: `normalizeNameLower(customer.name)` — lowercase + remoção de acentos (`NFD`). Optional no schema para pedidos legados sem o campo |
+| Leitura admin | `GET /admin/orders*` retorna `Order` **sem** `customerNameLower` (mapper `toPublicOrder`) |
 
 ## Tipos auxiliares de resposta
 
