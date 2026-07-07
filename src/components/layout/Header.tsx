@@ -63,6 +63,11 @@ export function Header({
     }
   }
 
+  function clearSearch() {
+    setSearchQuery("");
+    applySearch("");
+  }
+
   return (
     <nav className="sticky top-0 z-40 border-b border-border bg-background/95 backdrop-blur-sm">
       <div className="max-w-7xl mx-auto px-6 flex items-center justify-between h-16">
@@ -97,24 +102,36 @@ export function Header({
         <div className="flex items-center gap-4">
           <div className="hidden md:flex items-center gap-2">
             {searchOpen ? (
-              <input
-                type="search"
-                value={searchQuery}
-                onChange={(event) => setSearchQuery(event.target.value)}
-                onKeyDown={handleSearchKeyDown}
-                onBlur={() => {
-                  if (!searchQuery.trim() && !searchParams.get("name")) setSearchOpen(false);
-                }}
-                placeholder="Buscar produtos…"
-                autoFocus
-                className="w-44 bg-transparent border-b border-primary/50 py-1 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary"
-                style={{
-                  fontFamily: "'Courier Prime', monospace",
-                  fontSize: "0.65rem",
-                  letterSpacing: "var(--track-ui)",
-                }}
-                aria-label="Buscar produtos"
-              />
+              <>
+                <input
+                  type="search"
+                  value={searchQuery}
+                  onChange={(event) => setSearchQuery(event.target.value)}
+                  onKeyDown={handleSearchKeyDown}
+                  onBlur={() => {
+                    if (!searchQuery.trim() && !searchParams.get("name")) setSearchOpen(false);
+                  }}
+                  placeholder="Buscar produtos…"
+                  autoFocus
+                  className="w-44 bg-transparent border-b border-primary/50 py-1 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary"
+                  style={{
+                    fontFamily: "'Courier Prime', monospace",
+                    fontSize: "0.65rem",
+                    letterSpacing: "var(--track-ui)",
+                  }}
+                  aria-label="Buscar produtos"
+                />
+                {searchQuery.length > 0 && (
+                  <button
+                    type="button"
+                    onClick={clearSearch}
+                    className="text-muted-foreground hover:text-foreground transition-colors"
+                    aria-label="Limpar busca"
+                  >
+                    <X size={16} />
+                  </button>
+                )}
+              </>
             ) : (
               <button
                 type="button"
@@ -162,7 +179,7 @@ export function Header({
 
       {menuOpen && (
         <div className="md:hidden border-t border-border bg-card px-6 py-5 flex flex-col gap-5">
-          <div className="flex gap-2">
+          <div className="flex gap-2 items-center">
             <input
               type="search"
               value={searchQuery}
@@ -177,6 +194,16 @@ export function Header({
               }}
               aria-label="Buscar produtos"
             />
+            {searchQuery.length > 0 && (
+              <button
+                type="button"
+                onClick={clearSearch}
+                className="shrink-0 text-muted-foreground hover:text-foreground transition-colors"
+                aria-label="Limpar busca"
+              >
+                <X size={16} />
+              </button>
+            )}
             <button
               type="button"
               onClick={() => {
