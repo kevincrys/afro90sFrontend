@@ -127,7 +127,6 @@ export function Header({
                   value={searchQuery}
                   onChange={(event) => setSearchQuery(event.target.value)}
                   onKeyDown={handleSearchKeyDown}
-                  onSearch={submitSearch}
                   enterKeyHint="search"
                   onBlur={() => {
                     if (!searchQuery.trim() && !searchParams.get("name")) setSearchOpen(false);
@@ -210,7 +209,6 @@ export function Header({
               value={searchQuery}
               onChange={(event) => setSearchQuery(event.target.value)}
               onKeyDown={handleSearchKeyDown}
-              onSearch={submitSearch}
               enterKeyHint="search"
               placeholder="Buscar produtos…"
               className="flex-1 bg-background border border-border px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary"
