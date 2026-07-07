@@ -17,7 +17,9 @@
 | 1 | Abro `/admin` (tab Pedidos) sem digitar nada | Lista todos os pedidos, **mais recentes primeiro** (`GET /admin/orders`) |
 | 2 | Digito prefixo do nome (ex.: `mar`) | Após debounce, chama `GET /admin/orders?q=mar` e exibe só pedidos compatíveis |
 | 3 | Coleo UUID completo do pedido | Chama `GET /admin/orders?q={uuid}` e exibe o pedido (ou vazio se não existir) |
-| 4 | Digito prefixo do ID (≥ 8 chars hex) | Chama `GET /admin/orders?q={prefixo}` |
+| 4 | Coleo prefixo do ID (ex.: `550e`, `55`) | Chama `GET /admin/orders?q={prefixo}` — backend detecta busca por ID |
+| 4b | Digito termo ambíguo hex (ex.: `dead`) | Backend busca ID **ou** nome (OR) |
+| 10 | Checkout com nome contendo dígitos | Formulário rejeita antes do POST (`checkoutFormSchema`) |
 | 5 | Combino busca + tab de status | Repete `status` e `q` na mesma requisição: `GET /admin/orders?status=SOLICITADO&q=maria` |
 | 6 | Rolo até o fim com busca ativa | Próxima página: `GET /admin/orders?q=...&cursor=...` (mesmos filtros) |
 | 7 | Clico em limpar (X) ou Escape | Para de enviar `q`; volta à listagem padrão |
@@ -48,7 +50,7 @@ sequenceDiagram
 
 ## O que implementar
 
-### Tipos e API client
+- [x] `checkoutFormSchema`: `customer.name` sem dígitos (`^[\p{L}\s'-]+$`) — [`src/lib/checkout.ts`](../../../../src/lib/checkout.ts)
 
 - [x] `OrdersQueryParams.q?: string` — [`src/types/order.ts`](../../../../src/types/order.ts)
 - [x] `AdminOrdersQueryFilters.q?: string` — [`src/lib/query-keys.ts`](../../../../src/lib/query-keys.ts)

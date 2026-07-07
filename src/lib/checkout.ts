@@ -1,8 +1,14 @@
 import { z } from "zod";
 import { sanitizePostalCode } from "@/lib/postalCode";
 
+const CUSTOMER_NAME_PATTERN = /^[\p{L}\s'-]+$/u;
+
 export const checkoutFormSchema = z.object({
-  name: z.string().trim().min(2, "Informe seu nome completo"),
+  name: z
+    .string()
+    .trim()
+    .min(2, "Informe seu nome completo")
+    .regex(CUSTOMER_NAME_PATTERN, "Nome não pode conter números"),
   address: z.string().trim().min(5, "Informe o endereço de entrega"),
   postalCode: z
     .string()

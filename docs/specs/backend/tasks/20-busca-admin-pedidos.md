@@ -8,8 +8,8 @@ Espelho de [`afro90sBackend/docs/specs/backend/tasks/20-busca-admin-pedidos.md`]
 
 ## Resumo
 
-- `GET /admin/orders?q=` — busca por ID ou prefixo de nome do cliente
-- `POST /orders` grava `customerNameLower` (padrão `nameLower` de produtos)
+- `GET /admin/orders?q=` — heurística automática: UUID / ID / nome / OR (`dead`, `ace`)
+- `POST /orders` grava `customerNameLower`; `customer.name` sem dígitos
 - Resposta admin omite `customerNameLower` via `toPublicOrder()`
 - Sem mudança de infra/CDK
 

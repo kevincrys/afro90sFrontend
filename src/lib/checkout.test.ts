@@ -34,4 +34,24 @@ describe("checkoutFormSchema", () => {
     });
     expect(result.success).toBe(false);
   });
+
+  it("rejects name with digits", () => {
+    const result = checkoutFormSchema.safeParse({
+      name: "Maria123",
+      address: "Rua Exemplo, 123",
+      postalCode: "01310-100",
+      tel: "11999999999",
+    });
+    expect(result.success).toBe(false);
+  });
+
+  it("accepts name with accents and apostrophe", () => {
+    const result = checkoutFormSchema.safeParse({
+      name: "José D'Avila",
+      address: "Rua Exemplo, 123",
+      postalCode: "01310-100",
+      tel: "11999999999",
+    });
+    expect(result.success).toBe(true);
+  });
 });
