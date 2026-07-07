@@ -40,7 +40,7 @@ describe("admin auth (fase 2)", () => {
       </MemoryRouter>,
     );
 
-    expect(await screen.findByRole("button", { name: "ENTRAR" })).toBeInTheDocument();
+    expect(await screen.findByRole("button", { name: "Entrar" })).toBeInTheDocument();
     expect(screen.getByPlaceholderText("admin@afro90s.com")).toBeInTheDocument();
   });
 
@@ -81,7 +81,7 @@ describe("admin auth (fase 2)", () => {
       </MemoryRouter>,
     );
 
-    await screen.findByRole("button", { name: "ENTRAR" });
+    await screen.findByRole("button", { name: "Entrar" });
 
     fireEvent.change(screen.getByPlaceholderText("admin@afro90s.com"), {
       target: { value: "admin@test.com" },
@@ -89,7 +89,7 @@ describe("admin auth (fase 2)", () => {
     fireEvent.change(screen.getByPlaceholderText("••••••••"), {
       target: { value: "wrong" },
     });
-    fireEvent.click(screen.getByRole("button", { name: "ENTRAR" }));
+    fireEvent.click(screen.getByRole("button", { name: "Entrar" }));
 
     await waitFor(() => {
       expect(screen.getByRole("alert")).toHaveTextContent("E-mail ou senha incorretos.");
@@ -108,7 +108,7 @@ describe("admin auth (fase 2)", () => {
       </MemoryRouter>,
     );
 
-    await screen.findByRole("button", { name: "ENTRAR" });
+    await screen.findByRole("button", { name: "Entrar" });
 
     fireEvent.change(screen.getByPlaceholderText("admin@afro90s.com"), {
       target: { value: "admin@test.com" },
@@ -116,7 +116,7 @@ describe("admin auth (fase 2)", () => {
     fireEvent.change(screen.getByPlaceholderText("••••••••"), {
       target: { value: "secret" },
     });
-    fireEvent.click(screen.getByRole("button", { name: "ENTRAR" }));
+    fireEvent.click(screen.getByRole("button", { name: "Entrar" }));
 
     await waitFor(() => {
       expect(adminSignIn).toHaveBeenCalledWith("admin@test.com", "secret");
