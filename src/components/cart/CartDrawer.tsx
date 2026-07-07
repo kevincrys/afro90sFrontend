@@ -70,6 +70,7 @@ export function CartDrawer() {
   const panelRef = useRef<HTMLDivElement>(null);
   const whatsAppAutoOpenTimerRef = useRef<number | null>(null);
   const whatsAppCountdownIntervalRef = useRef<number | null>(null);
+  const whatsAppOpenedForOrderRef = useRef<string | null>(null);
   const items = useCartStore((state) => state.items);
   const updateItemQuantity = useCartStore((state) => state.updateItemQuantity);
   const removeItem = useCartStore((state) => state.removeItem);
@@ -97,7 +98,16 @@ export function CartDrawer() {
     (order: Order) => {
       clearWhatsAppAutoOpen();
       setWhatsAppCountdown(null);
-      setWhatsAppBlocked(!openWhatsAppOrder(order));
+
+      if (whatsAppOpenedForOrderRef.current === order.id) {
+        return;
+      }
+
+      const opened = openWhatsAppOrder(order);
+      if (opened) {
+        whatsAppOpenedForOrderRef.current = order.id;
+      }
+      setWhatsAppBlocked(!opened);
     },
     [clearWhatsAppAutoOpen],
   );
@@ -121,6 +131,7 @@ export function CartDrawer() {
 
   const handleClose = useCallback(() => {
     clearWhatsAppAutoOpen();
+    whatsAppOpenedForOrderRef.current = null;
     setCompletedOrder(null);
     setWhatsAppBlocked(false);
     setWhatsAppCountdown(null);

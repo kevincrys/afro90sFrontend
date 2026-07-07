@@ -63,6 +63,9 @@ export function buildWhatsAppContactUrl(message = "Olá! Vim pelo site Afro90s."
 
 /**
  * Abre WhatsApp com resumo do pedido. Retorna false se popup bloqueado ou número ausente.
+ *
+ * Não usar `noopener` em window.open features — isso faz retornar null mesmo quando
+ * a aba abre, e o fallback abria uma segunda aba.
  */
 export function openWhatsAppOrder(
   order: Pick<Order, "id" | "fullPrice"> & Partial<Pick<Order, "items" | "customer">>,
@@ -70,8 +73,11 @@ export function openWhatsAppOrder(
   const url = buildWhatsAppOrderUrl(order);
   if (!url) return false;
 
-  const popup = window.open(url, "_blank", "noopener,noreferrer");
-  if (popup) return true;
+  const popup = window.open(url, "_blank");
+  if (popup) {
+    popup.opener = null;
+    return true;
+  }
 
   const link = document.createElement("a");
   link.href = url;

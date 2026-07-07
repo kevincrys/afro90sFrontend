@@ -5,6 +5,7 @@ import {
   buildWhatsAppContactUrl,
   getWhatsAppNumber,
   isWhatsAppConfigured,
+  openWhatsAppOrder,
 } from "@/lib/whatsapp";
 
 const sampleOrder = {
@@ -53,5 +54,27 @@ describe("whatsapp", () => {
     vi.stubEnv("VITE_WHATSAPP_NUMBER", "5511999999999");
     const url = buildWhatsAppContactUrl();
     expect(url).toMatch(/^https:\/\/wa\.me\/5511999999999\?text=/);
+  });
+
+  it("openWhatsAppOrder opens only one tab when window.open succeeds", () => {
+    vi.stubEnv("VITE_WHATSAPP_NUMBER", "5511999999999");
+    const popup = { opener: window } as Window;
+    const openSpy = vi.spyOn(window, "open").mockReturnValue(popup);
+    const clickSpy = vi.spyOn(HTMLAnchorElement.prototype, "click");
+
+    expect(openWhatsAppOrder(sampleOrder)).toBe(true);
+    expect(openSpy).toHaveBeenCalledTimes(1);
+    expect(clickSpy).not.toHaveBeenCalled();
+    expect(popup.opener).toBeNull();
+  });
+
+  it("openWhatsAppOrder falls back to anchor click when popup is blocked", () => {
+    vi.stubEnv("VITE_WHATSAPP_NUMBER", "5511999999999");
+    const openSpy = vi.spyOn(window, "open").mockReturnValue(null);
+    const clickSpy = vi.spyOn(HTMLAnchorElement.prototype, "click").mockImplementation(() => {});
+
+    expect(openWhatsAppOrder(sampleOrder)).toBe(true);
+    expect(openSpy).toHaveBeenCalledTimes(1);
+    expect(clickSpy).toHaveBeenCalledTimes(1);
   });
 });
