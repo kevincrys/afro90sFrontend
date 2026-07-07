@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState, type KeyboardEvent } from "react";
+import { useCallback, useEffect, useState, type FormEvent, type KeyboardEvent } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { Menu, Search, ShoppingBag, X } from "lucide-react";
 import { BrandLogo } from "@/components/layout/BrandLogo";
@@ -47,6 +47,12 @@ export function Header({
     [searchParams, setSearchParams],
   );
 
+  const submitSearch = useCallback(() => {
+    applySearch(searchQuery);
+    setSearchOpen(false);
+    setMenuOpen(false);
+  }, [applySearch, searchQuery]);
+
   useEffect(() => {
     const current = searchParams.get("name") ?? "";
     if (searchQuery.trim() === current.trim()) return;
@@ -56,11 +62,20 @@ export function Header({
   }, [applySearch, searchQuery, searchParams]);
 
   function handleSearchKeyDown(event: KeyboardEvent<HTMLInputElement>) {
-    if (event.key === "Enter") applySearch(searchQuery);
+    if (event.key === "Enter") {
+      event.preventDefault();
+      submitSearch();
+    }
     if (event.key === "Escape") {
       setSearchOpen(false);
+      setMenuOpen(false);
       setSearchQuery(searchParams.get("name") ?? "");
     }
+  }
+
+  function handleSearchSubmit(event: FormEvent) {
+    event.preventDefault();
+    submitSearch();
   }
 
   function clearSearch() {
@@ -102,12 +117,18 @@ export function Header({
         <div className="flex items-center gap-4">
           <div className="hidden md:flex items-center gap-2">
             {searchOpen ? (
-              <>
+              <form
+                onSubmit={handleSearchSubmit}
+                className="flex items-center gap-2"
+                role="search"
+              >
                 <input
                   type="search"
                   value={searchQuery}
                   onChange={(event) => setSearchQuery(event.target.value)}
                   onKeyDown={handleSearchKeyDown}
+                  onSearch={submitSearch}
+                  enterKeyHint="search"
                   onBlur={() => {
                     if (!searchQuery.trim() && !searchParams.get("name")) setSearchOpen(false);
                   }}
@@ -131,7 +152,7 @@ export function Header({
                     <X size={16} />
                   </button>
                 )}
-              </>
+              </form>
             ) : (
               <button
                 type="button"
@@ -179,12 +200,18 @@ export function Header({
 
       {menuOpen && (
         <div className="md:hidden border-t border-border bg-card px-6 py-5 flex flex-col gap-5">
-          <div className="flex gap-2 items-center">
+          <form
+            onSubmit={handleSearchSubmit}
+            className="flex gap-2 items-center"
+            role="search"
+          >
             <input
               type="search"
               value={searchQuery}
               onChange={(event) => setSearchQuery(event.target.value)}
               onKeyDown={handleSearchKeyDown}
+              onSearch={submitSearch}
+              enterKeyHint="search"
               placeholder="Buscar produtos…"
               className="flex-1 bg-background border border-border px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary"
               style={{
@@ -205,17 +232,13 @@ export function Header({
               </button>
             )}
             <button
-              type="button"
-              onClick={() => {
-                applySearch(searchQuery);
-                setMenuOpen(false);
-              }}
+              type="submit"
               className="border border-primary px-3 text-primary"
               aria-label="Buscar"
             >
               <Search size={16} />
             </button>
-          </div>
+          </form>
           {CATEGORIES.map(({ label, value }) => (
             <button
               key={value}
