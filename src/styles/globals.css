@@ -17,6 +17,15 @@ body {
   letter-spacing: var(--track-body);
 }
 
+/* Botões de ação principal — Barlow legível (frases longas em pt-BR) */
+.btn-cta-primary {
+  font-family: "Barlow", sans-serif;
+  font-size: 1.0625rem;
+  font-weight: 600;
+  letter-spacing: 0.025em;
+  line-height: 1.4;
+}
+
 @keyframes ticker {
   from {
     transform: translateX(0);

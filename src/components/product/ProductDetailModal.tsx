@@ -150,11 +150,11 @@ export function ProductDetailModal({ productId, onClose }: ProductDetailModalPro
           <button
             type="button"
             onClick={onClose}
-            className="w-full py-3 border border-border text-muted-foreground uppercase tracking-widest hover:border-primary/40 hover:text-foreground transition-colors"
+            className="w-full py-3 border border-border text-muted-foreground hover:border-primary/40 hover:text-foreground transition-colors"
             style={{
               fontFamily: "'Courier Prime', monospace",
-              fontSize: "0.65rem",
-              letterSpacing: "var(--track-label-sm)",
+              fontSize: "0.72rem",
+              letterSpacing: "var(--track-caption)",
             }}
           >
             Voltar ao catálogo
@@ -317,7 +317,7 @@ export function ProductDetailModal({ productId, onClose }: ProductDetailModalPro
             <div className="border-t border-border" />
 
             {product.description && (
-              <p className="text-foreground/65 text-sm leading-relaxed">{product.description}</p>
+              <p className="text-foreground/80 text-sm leading-relaxed">{product.description}</p>
             )}
 
             {productOptions.length > 0 && (
@@ -335,12 +335,7 @@ export function ProductDetailModal({ productId, onClose }: ProductDetailModalPro
                 type="button"
                 onClick={handleAddToCart}
                 disabled={isSoldOut || (productOptions.length > 0 && !selectedOption)}
-                className="w-full py-4 bg-primary text-primary-foreground uppercase tracking-widest hover:opacity-90 transition-opacity flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
-                style={{
-                  fontFamily: "'Anton', sans-serif",
-                  fontSize: "1rem",
-                  letterSpacing: "var(--track-ui-lg)",
-                }}
+                className="btn-cta-primary w-full py-4 px-4 bg-primary text-primary-foreground hover:opacity-90 transition-opacity flex items-center justify-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <ShoppingBag size={18} />
                 {isSoldOut ? "Indisponível" : "Adicionar ao carrinho"}
@@ -348,11 +343,11 @@ export function ProductDetailModal({ productId, onClose }: ProductDetailModalPro
               <button
                 type="button"
                 onClick={onClose}
-                className="w-full py-3 border border-border text-muted-foreground uppercase tracking-widest hover:border-primary/40 hover:text-foreground transition-colors"
+                className="w-full py-3 border border-border text-muted-foreground hover:border-primary/40 hover:text-foreground transition-colors"
                 style={{
                   fontFamily: "'Courier Prime', monospace",
-                  fontSize: "0.65rem",
-                  letterSpacing: "var(--track-label-sm)",
+                  fontSize: "0.72rem",
+                  letterSpacing: "var(--track-caption)",
                 }}
               >
                 Continuar navegando

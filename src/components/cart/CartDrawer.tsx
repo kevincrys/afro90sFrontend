@@ -18,6 +18,8 @@ import { ApiError } from "@/types/errors";
 import type { Order } from "@/types/order";
 import type { CartItem } from "@/stores/cart.store";
 
+const WHATSAPP_AUTO_OPEN_DELAY_MS = 4_000;
+
 function buildOrderSnapshot(
   response: Pick<Order, "id" | "status" | "fullPrice"> & Partial<Order>,
   cartItems: CartItem[],
@@ -66,6 +68,8 @@ function FieldLabel({ htmlFor, children }: { htmlFor: string; children: ReactNod
 
 export function CartDrawer() {
   const panelRef = useRef<HTMLDivElement>(null);
+  const whatsAppAutoOpenTimerRef = useRef<number | null>(null);
+  const whatsAppCountdownIntervalRef = useRef<number | null>(null);
   const items = useCartStore((state) => state.items);
   const updateItemQuantity = useCartStore((state) => state.updateItemQuantity);
   const removeItem = useCartStore((state) => state.removeItem);
@@ -76,6 +80,27 @@ export function CartDrawer() {
   const createOrder = useCreateOrder();
   const [completedOrder, setCompletedOrder] = useState<Order | null>(null);
   const [whatsAppBlocked, setWhatsAppBlocked] = useState(false);
+  const [whatsAppCountdown, setWhatsAppCountdown] = useState<number | null>(null);
+
+  const clearWhatsAppAutoOpen = useCallback(() => {
+    if (whatsAppAutoOpenTimerRef.current) {
+      window.clearTimeout(whatsAppAutoOpenTimerRef.current);
+      whatsAppAutoOpenTimerRef.current = null;
+    }
+    if (whatsAppCountdownIntervalRef.current) {
+      window.clearInterval(whatsAppCountdownIntervalRef.current);
+      whatsAppCountdownIntervalRef.current = null;
+    }
+  }, []);
+
+  const attemptOpenWhatsApp = useCallback(
+    (order: Order) => {
+      clearWhatsAppAutoOpen();
+      setWhatsAppCountdown(null);
+      setWhatsAppBlocked(!openWhatsAppOrder(order));
+    },
+    [clearWhatsAppAutoOpen],
+  );
 
   const {
     register,
@@ -95,11 +120,17 @@ export function CartDrawer() {
   });
 
   const handleClose = useCallback(() => {
+    clearWhatsAppAutoOpen();
     setCompletedOrder(null);
     setWhatsAppBlocked(false);
+    setWhatsAppCountdown(null);
     reset();
     closeCart();
-  }, [closeCart, reset]);
+  }, [clearWhatsAppAutoOpen, closeCart, reset]);
+
+  useEffect(() => {
+    return () => clearWhatsAppAutoOpen();
+  }, [clearWhatsAppAutoOpen]);
 
   useEffect(() => {
     function onKey(event: KeyboardEvent) {
@@ -108,6 +139,27 @@ export function CartDrawer() {
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, [handleClose]);
+
+  useEffect(() => {
+    if (!completedOrder || !isWhatsAppConfigured()) {
+      setWhatsAppCountdown(null);
+      return;
+    }
+
+    const totalSeconds = WHATSAPP_AUTO_OPEN_DELAY_MS / 1000;
+    setWhatsAppBlocked(false);
+    setWhatsAppCountdown(totalSeconds);
+
+    whatsAppCountdownIntervalRef.current = window.setInterval(() => {
+      setWhatsAppCountdown((current) => (current !== null && current > 1 ? current - 1 : current));
+    }, 1000);
+
+    whatsAppAutoOpenTimerRef.current = window.setTimeout(() => {
+      attemptOpenWhatsApp(completedOrder);
+    }, WHATSAPP_AUTO_OPEN_DELAY_MS);
+
+    return () => clearWhatsAppAutoOpen();
+  }, [attemptOpenWhatsApp, clearWhatsAppAutoOpen, completedOrder]);
 
   useEffect(() => {
     const previousOverflow = document.body.style.overflow;
@@ -142,12 +194,6 @@ export function CartDrawer() {
 
       clearCart();
       setCompletedOrder(orderSnapshot);
-
-      if (isWhatsAppConfigured()) {
-        setWhatsAppBlocked(!openWhatsAppOrder(orderSnapshot));
-      } else {
-        setWhatsAppBlocked(false);
-      }
     } catch (error) {
       toast.error(
         error instanceof ApiError
@@ -221,13 +267,36 @@ export function CartDrawer() {
                 <span style={{ color: "#FFD21F" }}>REGISTRADO!</span>
               </h2>
               <p className="text-muted-foreground text-sm leading-relaxed max-w-xs">
-                Pedido <span className="text-foreground">{completedOrder.id}</span> registrado com
-                sucesso.
-                {isWhatsAppConfigured()
-                  ? whatsAppBlocked
-                    ? " O navegador bloqueou a abertura automática — use o botão abaixo para abrir o WhatsApp Web e enviar o resumo à loja."
-                    : " Use o botão abaixo para abrir o WhatsApp Web e enviar o resumo à loja."
-                  : " Entre em contato com a loja e informe o número do pedido acima para concluir a compra."}
+                Pedido <span className="text-foreground">{completedOrder.id}</span> recebido.{" "}
+                <span className="text-foreground">O pagamento ainda não foi realizado.</span>
+                {isWhatsAppConfigured() ? (
+                  <>
+                    {" "}
+                    Pelo WhatsApp, a loja calcula o frete, combina a forma de pagamento e finaliza sua
+                    compra.
+                    {whatsAppCountdown !== null && !whatsAppBlocked ? (
+                      <>
+                        {" "}
+                        <span className="text-foreground">
+                          Abrindo o WhatsApp em {whatsAppCountdown}s…
+                        </span>
+                      </>
+                    ) : null}
+                    {whatsAppBlocked ? (
+                      <>
+                        {" "}
+                        O navegador bloqueou a abertura automática — toque em{" "}
+                        <span className="text-foreground">Finalizar no WhatsApp</span> abaixo.
+                      </>
+                    ) : null}
+                  </>
+                ) : (
+                  <>
+                    {" "}
+                    Entre em contato com a loja informando o número do pedido acima para calcular o
+                    frete e concluir a compra.
+                  </>
+                )}
               </p>
               <div className="border border-border px-6 py-4 text-left w-full max-w-xs">
                 <div
@@ -254,16 +323,11 @@ export function CartDrawer() {
               {isWhatsAppConfigured() && (
                 <button
                   type="button"
-                  onClick={() => openWhatsAppOrder(completedOrder)}
-                  className="w-full max-w-xs py-3 bg-primary text-primary-foreground uppercase tracking-widest hover:opacity-90 transition-opacity flex items-center justify-center gap-2"
-                  style={{
-                    fontFamily: "'Anton', sans-serif",
-                    fontSize: "0.9rem",
-                    letterSpacing: "var(--track-ui-lg)",
-                  }}
+                  onClick={() => attemptOpenWhatsApp(completedOrder)}
+                  className="btn-cta-primary w-full max-w-xs py-3.5 px-4 bg-primary text-primary-foreground hover:opacity-90 transition-opacity flex items-center justify-center gap-3"
                 >
                   <MessageCircle size={18} />
-                  Abrir WhatsApp
+                  Finalizar no WhatsApp
                 </button>
               )}
               <button
@@ -587,12 +651,7 @@ export function CartDrawer() {
                   <button
                     type="submit"
                     disabled={isSubmitting || createOrder.isPending}
-                    className="w-full py-4 bg-primary text-primary-foreground uppercase tracking-widest hover:opacity-90 transition-opacity mt-2 flex items-center justify-center gap-3 disabled:opacity-60"
-                    style={{
-                      fontFamily: "'Anton', sans-serif",
-                      fontSize: "1.1rem",
-                      letterSpacing: "var(--track-ui-lg)",
-                    }}
+                    className="btn-cta-primary w-full py-4 px-4 bg-primary text-primary-foreground hover:opacity-90 transition-opacity mt-2 flex items-center justify-center gap-3 disabled:opacity-60"
                   >
                     Finalizar pedido — {formatPrice(subtotal)}{" "}
                     <ArrowRight size={18} />

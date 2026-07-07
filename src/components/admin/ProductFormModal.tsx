@@ -526,19 +526,14 @@ export default function ProductFormModal({
               type="button"
               onClick={handleSave}
               disabled={isSubmitting}
-              className="flex-1 py-4 bg-primary text-primary-foreground uppercase tracking-widest hover:opacity-90 transition-opacity flex items-center justify-center gap-2 disabled:opacity-50"
-              style={{
-                fontFamily: ADMIN_FONT.display,
-                fontSize: "0.95rem",
-                letterSpacing: "0.1em",
-              }}
+              className="btn-cta-primary flex-1 py-4 px-4 bg-primary text-primary-foreground hover:opacity-90 transition-opacity flex items-center justify-center gap-3 disabled:opacity-50"
             >
               <Check size={16} />
               {isSubmitting
-                ? "SALVANDO..."
+                ? "Salvando…"
                 : isNew
-                  ? "CRIAR PRODUTO"
-                  : "SALVAR ALTERAÇÕES"}
+                  ? "Criar produto"
+                  : "Salvar alterações"}
             </button>
             <button
               type="button"

@@ -307,20 +307,15 @@ export default function AdminLoginPage() {
           <button
             type="submit"
             disabled={loading || !cognitoConfigured}
-            className="w-full py-4 bg-primary text-primary-foreground uppercase tracking-widest hover:opacity-90 transition-opacity disabled:opacity-50 flex items-center justify-center gap-2"
-            style={{
-              fontFamily: "'Anton', sans-serif",
-              fontSize: "1rem",
-              letterSpacing: "0.1em",
-            }}
+            className="btn-cta-primary w-full py-4 px-4 bg-primary text-primary-foreground hover:opacity-90 transition-opacity disabled:opacity-50 flex items-center justify-center gap-3"
           >
             {loading
               ? needsNewPassword
-                ? "SALVANDO..."
-                : "ENTRANDO..."
+                ? "Salvando…"
+                : "Entrando…"
               : needsNewPassword
-                ? "DEFINIR SENHA"
-                : "ENTRAR"}
+                ? "Definir senha"
+                : "Entrar"}
           </button>
         </form>
 
