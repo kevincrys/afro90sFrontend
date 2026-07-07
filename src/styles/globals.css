@@ -1,5 +1,9 @@
 :root {
   --track-body: 0.035em;
+  --track-product-title: 0.04em;
+  --track-product-price: 0.04em;
+  --track-product-category: 0.14em;
+  --color-product-category: #d4a0bc;
   --track-display-title: 0.07em;
   --track-logo: 0.08em;
   --track-heading: 0.1em;
@@ -30,13 +34,65 @@ input[type="search"]::-ms-clear {
   height: 0;
 }
 
-/* Botões de ação principal — Barlow legível (frases longas em pt-BR) */
+/* Títulos de produto — Anton com espaçamento e altura de linha mais legíveis */
+.product-title {
+  font-family: "Anton", sans-serif;
+  color: #fff8e7;
+  letter-spacing: var(--track-product-title);
+  line-height: 1.28;
+  text-wrap: balance;
+}
+
+.product-title--card {
+  font-size: 1.2rem;
+}
+
+.product-title--modal {
+  font-size: clamp(1.4rem, 4vw, 2.25rem);
+  line-height: 1.22;
+}
+
+/* Preço de produto — Anton com espaçamento e altura de linha mais legíveis */
+.product-price {
+  font-family: "Anton", sans-serif;
+  color: #ffd21f;
+  letter-spacing: var(--track-product-price);
+  line-height: 1.2;
+}
+
+.product-price--card {
+  font-size: 1.45rem;
+}
+
+.product-price--modal {
+  font-size: clamp(1.45rem, 4vw, 2.15rem);
+  line-height: 1.15;
+}
+
+/* Categoria do produto — Courier com mais contraste no fundo escuro */
+.product-category {
+  font-family: "Courier Prime", monospace;
+  font-weight: 700;
+  color: var(--color-product-category);
+  letter-spacing: var(--track-product-category);
+  line-height: 1.35;
+}
+
+.product-category--card {
+  font-size: 0.7rem;
+  margin-bottom: 6px;
+}
+
+.product-category--modal {
+  font-size: 0.75rem;
+}
+
+/* Botões de ação principal — Anton com espaçamento moderado (legível em pt-BR) */
 .btn-cta-primary {
-  font-family: "Barlow", sans-serif;
-  font-size: 1.0625rem;
-  font-weight: 600;
-  letter-spacing: 0.025em;
-  line-height: 1.4;
+  font-family: "Anton", sans-serif;
+  font-size: 1.125rem;
+  letter-spacing: 0.06em;
+  line-height: 1.3;
 }
 
 @keyframes ticker {

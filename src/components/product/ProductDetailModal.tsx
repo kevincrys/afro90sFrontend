@@ -277,41 +277,16 @@ export function ProductDetailModal({ productId, onClose }: ProductDetailModalPro
           </div>
 
           <div className="md:w-1/2 flex flex-col p-4 gap-3 md:p-7 md:gap-5 overflow-y-auto min-h-0">
-            <div
-              style={{
-                fontFamily: "'Courier Prime', monospace",
-                fontSize: "0.6rem",
-                letterSpacing: "var(--track-label-lg)",
-                color: "#7A004B",
-              }}
-            >
+            <div className="product-category product-category--modal">
               {getCategoryLabel(product.category)}
             </div>
 
-            <h2
-              id="product-modal-title"
-              style={{
-                fontFamily: "'Anton', sans-serif",
-                fontSize: "clamp(1.35rem, 4vw, 2.2rem)",
-                letterSpacing: "var(--track-display-title)",
-                color: "#FFF8E7",
-                lineHeight: 1.1,
-              }}
-            >
+            <h2 id="product-modal-title" className="product-title product-title--modal">
               {product.name}
             </h2>
 
             <div className="flex items-baseline gap-3">
-              <span
-                style={{
-                  fontFamily: "'Anton', sans-serif",
-                  fontSize: "clamp(1.35rem, 4vw, 2rem)",
-                  color: "#FFD21F",
-                  lineHeight: 1,
-                }}
-              >
-                {formatPrice(product.price)}
-              </span>
+              <span className="product-price product-price--modal">{formatPrice(product.price)}</span>
             </div>
 
             <div className="border-t border-border" />

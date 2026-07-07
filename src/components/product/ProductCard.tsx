@@ -105,25 +105,11 @@ export function ProductCard({ product }: ProductCardProps) {
       </div>
 
       <div className="p-5">
-        <div
-          style={{
-            fontFamily: "'Courier Prime', monospace",
-            fontSize: "0.58rem",
-            letterSpacing: "var(--track-label-lg)",
-            color: "#7A004B",
-            marginBottom: "6px",
-          }}
-        >
+        <div className="product-category product-category--card">
           {getCategoryLabel(product.category)}
         </div>
         <h3
-          className="mb-2 leading-tight cursor-pointer hover:text-primary transition-colors"
-          style={{
-            fontFamily: "'Anton', sans-serif",
-            fontSize: "1.15rem",
-            letterSpacing: "var(--track-display-title)",
-            color: "#FFF8E7",
-          }}
+          className="product-title product-title--card mb-2 cursor-pointer hover:text-primary transition-colors"
           onClick={openProduct}
           onMouseEnter={handlePrefetch}
           onFocus={handlePrefetch}
@@ -131,16 +117,7 @@ export function ProductCard({ product }: ProductCardProps) {
           {product.name}
         </h3>
         <div className="flex items-baseline gap-3">
-          <span
-            style={{
-              fontFamily: "'Anton', sans-serif",
-              fontSize: "1.4rem",
-              color: "#FFD21F",
-              letterSpacing: "var(--track-heading)",
-            }}
-          >
-            {formatPrice(product.price)}
-          </span>
+          <span className="product-price product-price--card">{formatPrice(product.price)}</span>
         </div>
       </div>
     </div>
