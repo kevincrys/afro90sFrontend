@@ -1,4 +1,6 @@
 import { Amplify } from "aws-amplify";
+import { cognitoUserPoolsTokenProvider } from "aws-amplify/auth/cognito";
+import { sessionStorage } from "aws-amplify/utils";
 
 const userPoolId = import.meta.env.VITE_COGNITO_USER_POOL_ID?.trim();
 const userPoolClientId = import.meta.env.VITE_COGNITO_CLIENT_ID?.trim();
@@ -20,6 +22,9 @@ export function configureAmplify(): void {
       },
     },
   });
+
+  // Tokens Cognito no sessionStorage (somem ao fechar a aba); default Amplify é localStorage.
+  cognitoUserPoolsTokenProvider.setKeyValueStorage(sessionStorage);
 
   configured = true;
 }

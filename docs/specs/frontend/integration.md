@@ -277,7 +277,7 @@ function openWhatsAppOrder(order: Order) {
 ## Autenticação admin (Cognito)
 
 - Login em `/admin/login` via Amplify Auth (`signIn` SRP) — `src/lib/amplify.ts`, `src/lib/auth.ts`
-- **Token de acesso:** gerenciado só pelo Amplify (`fetchAuthSession`) — **não** duplicar em `sessionStorage`
+- **Tokens Cognito:** Amplify com `sessionStorage` (`cognitoUserPoolsTokenProvider.setKeyValueStorage`) — fechar a aba encerra a sessão; **não** duplicar tokens à parte
 - E-mail do admin em `sessionStorage` (`admin_email`) — apenas para exibição no header
 - Interceptor Axios: `getAdminBearerToken()` → `Authorization: Bearer` em rotas `/admin/*`
 - `ProtectedRoute` e login: `checkAdminAuth()` valida usuário + token (inclui expiração/refresh via Amplify)

@@ -50,7 +50,7 @@ Amplify.configure({ Auth: { Cognito: { ... } } });
 
 ### Segurança da sessão (pós-implementação)
 
-- [x] Token **não** duplicado em `sessionStorage` — só Amplify (`fetchAuthSession`)
+- [x] Tokens só no Amplify via `sessionStorage` (`setKeyValueStorage`) — sem duplicar JWT à parte
 - [x] `checkAdminAuth()` valida sessão antes de renderizar `/admin`
 - [x] `401` em `/admin/*` → `signOut` + redirect `/admin/login`
 
