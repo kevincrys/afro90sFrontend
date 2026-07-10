@@ -282,7 +282,7 @@ function openWhatsAppOrder(order: Order) {
 - Interceptor Axios: `getAdminBearerToken()` → `Authorization: Bearer` em rotas `/admin/*`
 - `ProtectedRoute` e login: `checkAdminAuth()` valida usuário + token (inclui expiração/refresh via Amplify)
 - `401` em rota admin: `handleAdminUnauthorized()` → `signOut` + redirect `/admin/login`
-- Logout manual: `adminSignOut()` no header do painel
+- Logout manual: `adminSignOut()` → `signOut({ global: true })` (invalida refresh no Cognito; access JWT na API vale até `exp`, hoje 1h)
 
 ## React Query — chaves sugeridas
 

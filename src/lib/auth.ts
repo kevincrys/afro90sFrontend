@@ -155,7 +155,15 @@ export async function adminSignOut(): Promise<void> {
   configureAmplify();
   try {
     if (isCognitoConfigured()) {
+      // global: invalida refresh tokens no Cognito (access JWT na API segue até exp)
+      await signOut({ global: true });
+    }
+  } catch {
+    // fallback local se GlobalSignOut falhar (rede / token já inválido)
+    try {
       await signOut();
+    } catch {
+      // sessão já limpa no Cognito ou storage
     }
   } finally {
     clearAdminSession();
