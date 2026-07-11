@@ -81,6 +81,7 @@ Guia completo de port: **[prototype-porting.md](../prototype-porting.md)** — m
 | 14 | [14-admin-pedidos.md](14-admin-pedidos.md) | Extrair `OrdersTab` + `OrderDetailPanel` |
 | 20 | [20-busca-admin-pedidos.md](20-busca-admin-pedidos.md) | Barra de busca na tab Pedidos (`q`) |
 | 21 | [21-nome-produto-no-pedido.md](21-nome-produto-no-pedido.md) | Nome do produto na admin + WhatsApp |
+| 22 | [22-busca-admin-produtos.md](22-busca-admin-produtos.md) | Barra de busca na tab Produtos (`q`) |
 | 15 | [15-aceite-fase3.md](15-aceite-fase3.md) | Checklist aceite fase 3 |
 
 **✓ Resultado:** admin gerencia produtos e pedidos.
@@ -89,14 +90,15 @@ Guia completo de port: **[prototype-porting.md](../prototype-porting.md)** — m
 
 ## Fase 4 — Qualidade final
 
-> **Entregável:** testes E2E Cypress + regressão completa.
+> **Entregável:** testes E2E Cypress + regressão completa.  
+> **Estado:** aceite funcional (BDD) OK; Cypress (task 16) ainda pendente.
 
 | # | Arquivo | O que entrega |
 |---|---------|---------------|
-| 16 | [16-testes-e2e.md](16-testes-e2e.md) | Cypress specs por fase + Vitest unit |
-| 17 | [17-aceite-fase4.md](17-aceite-fase4.md) | Checklist aceite frontend v1 |
+| 16 | [16-testes-e2e.md](16-testes-e2e.md) | Cypress specs por fase + Vitest unit — **pendente** |
+| 17 | [17-aceite-fase4.md](17-aceite-fase4.md) | Checklist aceite frontend v1 — **parcial** |
 
-**✓ Resultado:** frontend v1 completo e testado.
+**✓ Resultado (parcial):** UI v1 validada manualmente; E2E Cypress em aberto.
 
 ---
 

@@ -1,7 +1,7 @@
 # Task 10 — Aceite Fase 1 (Site público)
 
 **Fase:** 1 — Site público  
-**Status:** pendente
+**Status:** concluída
 
 ## Objetivo
 
@@ -26,16 +26,12 @@ Validar que a loja pública está funcional end-to-end — sem login, sem admin.
 - [x] Responsivo em 375px (mobile) e 1280px (desktop)
 - [x] Deploy automático via CI (merge em `dev`)
 
-
-
 ## Pré-requisitos
 
 - Tasks 00–09 concluídas
 - Infra + backend fase 1 entregues
 
-
-
 ## Critérios de conclusão
 
-- [ ] Checklist completo
-- [ ] Atualizar **Status** para `concluída` — **fase 1 entregue**
+- [x] Checklist completo
+- [x] **Status** concluída — **fase 1 entregue**

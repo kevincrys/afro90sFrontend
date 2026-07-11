@@ -1,7 +1,7 @@
 # Frontend — Overview
 
 **Status:** Aprovado  
-**Última atualização:** 2026-07-03
+**Última atualização:** 2026-07-10
 
 ## Objetivo
 
@@ -66,10 +66,10 @@ afro90sFrontend/
 
 | Rota | Página / UI | Auth | Status |
 |------|-------------|------|--------|
-| `/` | Catálogo (grid + filtros) | Pública | Implementado (shell task 02/05) |
-| `/products/:id` | Deep link — abre `ProductDetailModal` sobre o catálogo | Pública | Rota + `useParams`; modal task 06 |
-| `/admin/login` | Login Cognito (placeholder local) | — | Implementado (shell) |
-| `/admin` | Painel admin com tabs **Pedidos** \| **Produtos** | Admin | Implementado (shell + `ProtectedRoute`) |
+| `/` | Catálogo (grid + filtros + busca) | Pública | Implementado |
+| `/products/:id` | Deep link — abre `ProductDetailModal` sobre o catálogo | Pública | Implementado |
+| `/admin/login` | Login Cognito (Amplify SRP) | — | Implementado |
+| `/admin` | Painel admin com tabs **Pedidos** \| **Produtos** | Admin | Implementado |
 | `*` | `NotFoundPage` | — | Implementado |
 
 > Checkout e detalhe do produto **não são rotas separadas**: formulário de pedido no **drawer** do carrinho; detalhe no **modal** com galeria.

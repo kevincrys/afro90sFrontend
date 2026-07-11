@@ -104,18 +104,18 @@ Mesmas 4 variables com valores prod (bucket `afro90s-prod-s3-web`, distribution 
 
 ## Pré-requisitos
 
-- [ ] Infra task 06 (frontend hosting) deployada
-- [ ] Infra: task 09–13 (SSM incl. `cognito-*` após AuthStack)
-- [ ] Roles IAM frontend criadas/atualizadas no stack OIDC (IDs CloudFront por env)
-- [ ] Distribution ID dev ≠ prod na policy IAM e no GitHub
+- [x] Infra task 06 (frontend hosting) deployada
+- [x] Infra: task 09–13 (SSM incl. `cognito-*` após AuthStack)
+- [x] Roles IAM frontend criadas/atualizadas no stack OIDC (IDs CloudFront por env)
+- [x] Distribution ID dev ≠ prod na policy IAM e no GitHub
 
 ## Checklist
 
-- [ ] Branch `dev` criada
-- [ ] Environments `dev` e `prod` com **4 variables** cada
+- [x] Branch `dev` criada
+- [x] Environments `dev` e `prod` com **4 variables** cada
 - [x] Workflows commitados
-- [ ] Push em `dev` publica SPA no CloudFront dev
-- [ ] Nenhum `AWS_ACCESS_KEY_ID` no repo
+- [x] Push em `dev` publica SPA no CloudFront dev
+- [x] Nenhum `AWS_ACCESS_KEY_ID` no repo
 
 ## Referências
 

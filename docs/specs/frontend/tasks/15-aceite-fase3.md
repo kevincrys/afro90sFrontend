@@ -1,7 +1,7 @@
 # Task 15 — Aceite Fase 3 (Painel admin)
 
 **Fase:** 3 — Painel admin  
-**Status:** pendente
+**Status:** concluída
 
 ## Objetivo
 
@@ -11,34 +11,35 @@ Validar painel admin completo em `/admin`: CRUD produtos + gestão de pedidos.
 
 ### Produtos (tab Produtos)
 
-- [ ] Criar produto com imagem → aparece no catálogo público
-- [ ] Editar nome/preço/estoque
-- [ ] Excluir produto → some do catálogo
-- [ ] Upload multipart funciona
+- [x] Criar produto com imagem → aparece no catálogo público
+- [x] Editar nome/preço/estoque
+- [x] Excluir produto → some do catálogo
+- [x] Upload multipart funciona
+- [x] Buscar por ID ou nome do produto (`q`, task 22)
 
 ### Pedidos (tab Pedidos)
 
-- [ ] Pedido do checkout aparece na tab Pedidos de `/admin`
-- [ ] Filtrar por status (tabs)
-- [ ] Alterar status com transição válida
-- [ ] Drawer exibe customer e itens
-- [ ] Paginação por cursor funciona
-- [ ] Buscar por ID de pedido (completo ou prefixo)
-- [ ] Buscar por prefixo do nome do cliente
-- [ ] Limpar busca restaura listagem padrão
-- [ ] Busca combina com filtro de status (tabs)
+- [x] Pedido do checkout aparece na tab Pedidos de `/admin`
+- [x] Filtrar por status (tabs)
+- [x] Alterar status com transição válida
+- [x] Drawer exibe customer e itens
+- [x] Paginação por cursor funciona
+- [x] Buscar por ID de pedido (completo ou prefixo)
+- [x] Buscar por prefixo do nome do cliente
+- [x] Limpar busca restaura listagem padrão
+- [x] Busca combina com filtro de status (tabs)
 
 ### Regressão
 
-- [ ] Login/logout funciona
-- [ ] Loja pública (catálogo, modal, carrinho drawer) continua OK
+- [x] Login/logout funciona
+- [x] Loja pública (catálogo, modal, carrinho drawer) continua OK
 
 ## Pré-requisitos
 
-- Tasks 13, 14 concluídas
+- Tasks 13, 14, 20 (backend), 22 concluídas
 - Backend + infra fase 3 entregues
 
 ## Critérios de conclusão
 
-- [ ] Checklist completo
-- [ ] Atualizar **Status** para `concluída` — **fase 3 entregue**
+- [x] Checklist completo
+- [x] **Status** concluída — **fase 3 entregue**

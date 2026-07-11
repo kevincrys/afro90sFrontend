@@ -39,13 +39,13 @@ Implementar a **SPA React** do Afro90s: catálogo, checkout, integração WhatsA
 
 ## Roadmap
 
-- [ ] Task 00 — setup repo
-- [ ] Task 04 — CI/CD e deploy
-- [ ] Fase 1 — catálogo, produto, carrinho, checkout
-- [ ] Fase 2 — admin login + CRUD
-- [ ] Fase 3 — polish, states, a11y
-- [ ] Fase 4 — e2e, aceite final
-- [ ] Fase 5 — i18n (pt-BR, en, es) — task 18
+- [x] Task 00 — setup repo
+- [x] Task 04 — CI/CD e deploy
+- [x] Fase 1 — catálogo, produto, carrinho, checkout
+- [x] Fase 2 — admin login + CRUD
+- [x] Fase 3 — polish, states, a11y + painel admin
+- [ ] Fase 4 — e2e Cypress, aceite final (parcial — BDD OK; Cypress pendente)
+- [ ] Fase 5 — i18n (pt-BR, en, es) — task 18 (pós-v1)
 
 Tasks: [docs/specs/frontend/tasks/](../specs/frontend/tasks/)
 
