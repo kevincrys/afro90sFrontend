@@ -8,6 +8,7 @@ import { useFocusTrap } from "@/hooks/useFocusTrap";
 import { checkoutFormSchema, type CheckoutFormValues } from "@/lib/checkout";
 import { getClientErrorMessage } from "@/lib/errorMessages";
 import { formatPrice } from "@/lib/format";
+import { formatPhoneDisplay, sanitizePhone } from "@/lib/phone";
 import { formatPostalCodeDisplay, sanitizePostalCode } from "@/lib/postalCode";
 import {
   isWhatsAppConfigured,
@@ -637,15 +638,29 @@ export function CartDrawer() {
                     </div>
                     <div>
                       <FieldLabel htmlFor="checkout-tel">TELEFONE *</FieldLabel>
-                      <input
-                        id="checkout-tel"
-                        type="tel"
-                        className={`w-full px-4 py-3 bg-muted border text-foreground placeholder:text-muted-foreground outline-none transition-colors text-sm ${errors.tel ? "border-red-500" : "border-border focus:border-primary"}`}
-                        placeholder="(11) 99999-9999"
-                        style={{ fontFamily: "'Barlow', sans-serif" }}
-                        aria-invalid={Boolean(errors.tel)}
-                        aria-describedby={errors.tel ? "checkout-tel-error" : undefined}
-                        {...register("tel")}
+                      <Controller
+                        name="tel"
+                        control={control}
+                        render={({ field }) => (
+                          <input
+                            id="checkout-tel"
+                            type="tel"
+                            inputMode="numeric"
+                            autoComplete="tel"
+                            className={`w-full px-4 py-3 bg-muted border text-foreground placeholder:text-muted-foreground outline-none transition-colors text-sm ${errors.tel ? "border-red-500" : "border-border focus:border-primary"}`}
+                            placeholder="(11) 99999-9999"
+                            style={{ fontFamily: "'Barlow', sans-serif" }}
+                            aria-invalid={Boolean(errors.tel)}
+                            aria-describedby={errors.tel ? "checkout-tel-error" : undefined}
+                            value={formatPhoneDisplay(field.value ?? "")}
+                            onChange={(event) =>
+                              field.onChange(sanitizePhone(event.target.value))
+                            }
+                            onBlur={field.onBlur}
+                            name={field.name}
+                            ref={field.ref}
+                          />
+                        )}
                       />
                       {errors.tel && (
                         <p

@@ -54,4 +54,37 @@ describe("checkoutFormSchema", () => {
     });
     expect(result.success).toBe(true);
   });
+
+  it("rejects phone with fewer than 10 digits", () => {
+    const result = checkoutFormSchema.safeParse({
+      name: "Maria Silva",
+      address: "Rua Exemplo, 123",
+      postalCode: "01310-100",
+      tel: "11999",
+    });
+    expect(result.success).toBe(false);
+  });
+
+  it("accepts formatted phone and stores digits only", () => {
+    const result = checkoutFormSchema.safeParse({
+      name: "Maria Silva",
+      address: "Rua Exemplo, 123",
+      postalCode: "01310-100",
+      tel: "(11) 99999-9999",
+    });
+    expect(result.success).toBe(true);
+    if (result.success) {
+      expect(result.data.tel).toBe("11999999999");
+    }
+  });
+
+  it("accepts 10-digit landline with DDD", () => {
+    const result = checkoutFormSchema.safeParse({
+      name: "Maria Silva",
+      address: "Rua Exemplo, 123",
+      postalCode: "01310-100",
+      tel: "1133334444",
+    });
+    expect(result.success).toBe(true);
+  });
 });
