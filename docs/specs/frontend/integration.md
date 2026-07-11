@@ -140,7 +140,7 @@ Ao adicionar um `code` em [api-routes.md](../backend/api-routes.md), incluir ent
 
 | Ação | Método | Rota | Spec |
 |------|--------|------|------|
-| Listar produtos | `GET` | `/products?limit=&cursor=&name=` | [api-routes](../backend/api-routes.md#get-products) |
+| Listar produtos | `GET` | `/products?limit=&cursor=&name=` (`name` máx. 120) | [api-routes](../backend/api-routes.md#get-products) |
 | Detalhe | `GET` | `/products/{id}` | [api-routes](../backend/api-routes.md#get-productsid) |
 | Criar pedido | `POST` | `/orders` | [api-routes](../backend/api-routes.md#post-orders) |
 
@@ -175,9 +175,9 @@ Task 20 — barra de busca na tab Pedidos (`AdminOrdersTab`).
 **Regras de chamada:**
 
 - Sem busca: `GET /admin/orders?limit=20` (+ `status` se tab ≠ TODOS)
-- Com busca (≥ 2 chars): incluir `q` — ex.: `GET /admin/orders?limit=20&q=maria`
+- Com busca (≥ 2 chars, ≤ 200): incluir `q` — ex.: `GET /admin/orders?limit=20&q=maria`
 - Paginação: repetir `status` e `q` + `cursor=nextCursor` da página anterior
-- Mínimo 2 caracteres em `q` (frontend não envia antes; backend retorna `400 INVALID_QUERY` se violado)
+- Mínimo 2 / máximo 200 caracteres em `q` (igual ao max de `customer.name`; frontend: `maxLength={200}`; backend: `400 INVALID_QUERY` se violado)
 
 ```typescript
 // useAdminOrders → getAdminOrders (trecho)

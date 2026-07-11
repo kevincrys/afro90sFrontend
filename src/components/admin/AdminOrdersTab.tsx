@@ -12,6 +12,8 @@ import { STATUS_CONFIG, STATUS_ORDER } from "@/lib/orderStatus";
 import type { OrderStatus } from "@/types/order";
 
 const SEARCH_DEBOUNCE_MS = 350;
+/** Alinhado ao backend / `customer.name` max 200: `GET /admin/orders?q=` máx. 200 caracteres. */
+const SEARCH_MAX_LENGTH = 200;
 
 function filterButtonStyle(active: boolean, color?: string, bg?: string) {
   return {
@@ -81,8 +83,9 @@ export default function AdminOrdersTab() {
         <input
           type="search"
           value={searchInput}
-          onChange={(event) => setSearchInput(event.target.value)}
+          onChange={(event) => setSearchInput(event.target.value.slice(0, SEARCH_MAX_LENGTH))}
           onKeyDown={handleSearchKeyDown}
+          maxLength={SEARCH_MAX_LENGTH}
           placeholder="Buscar por ID ou nome do cliente…"
           aria-label="Buscar pedidos por ID ou nome do cliente"
           className="flex-1 bg-transparent text-sm text-foreground placeholder:text-muted-foreground focus:outline-none"

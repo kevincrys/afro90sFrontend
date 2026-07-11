@@ -5,6 +5,8 @@ import { BrandLogo } from "@/components/layout/BrandLogo";
 import { CATEGORIES, type CategoryFilter } from "@/types/category";
 
 const SEARCH_DEBOUNCE_MS = 350;
+/** Alinhado ao backend / `product.name` max 120: `GET /products?name=` máx. 120 caracteres. */
+const SEARCH_MAX_LENGTH = 120;
 
 export interface HeaderProps {
   activeCategory?: CategoryFilter;
@@ -125,9 +127,12 @@ export function Header({
                 <input
                   type="search"
                   value={searchQuery}
-                  onChange={(event) => setSearchQuery(event.target.value)}
+                  onChange={(event) =>
+                    setSearchQuery(event.target.value.slice(0, SEARCH_MAX_LENGTH))
+                  }
                   onKeyDown={handleSearchKeyDown}
                   enterKeyHint="search"
+                  maxLength={SEARCH_MAX_LENGTH}
                   onBlur={() => {
                     if (!searchQuery.trim() && !searchParams.get("name")) setSearchOpen(false);
                   }}
@@ -207,9 +212,10 @@ export function Header({
             <input
               type="search"
               value={searchQuery}
-              onChange={(event) => setSearchQuery(event.target.value)}
+              onChange={(event) => setSearchQuery(event.target.value.slice(0, SEARCH_MAX_LENGTH))}
               onKeyDown={handleSearchKeyDown}
               enterKeyHint="search"
+              maxLength={SEARCH_MAX_LENGTH}
               placeholder="Buscar produtos…"
               className="flex-1 bg-background border border-border px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary"
               style={{
