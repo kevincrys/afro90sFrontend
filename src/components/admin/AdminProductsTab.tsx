@@ -1,11 +1,13 @@
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState, type KeyboardEvent } from "react";
 import {
   AlertCircle,
   Loader2,
   Package,
   Pencil,
   Plus,
+  Search,
   Trash2,
+  X,
 } from "lucide-react";
 import { toast } from "sonner";
 import ProductFormModal from "@/components/admin/ProductFormModal";
@@ -26,6 +28,9 @@ import type { ProductCategory } from "@/types/category";
 import type { Product } from "@/types/product";
 
 const FILTER_CATEGORIES: ProductCategory[] = ["oculos", "acessorios", "maquiagem"];
+const SEARCH_DEBOUNCE_MS = 350;
+/** Alinhado ao backend / `product.name` max 120: `GET /admin/products?q=` máx. 120 caracteres. */
+const SEARCH_MAX_LENGTH = 120;
 
 type EditingProduct = Product | "new" | null;
 
@@ -49,11 +54,36 @@ export default function AdminProductsTab() {
   const [filterCat, setFilterCat] = useState<ProductCategory | "ALL">("ALL");
   const [editingProduct, setEditingProduct] = useState<EditingProduct>(null);
   const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null);
+  const [searchInput, setSearchInput] = useState("");
+  const [debouncedQ, setDebouncedQ] = useState("");
   const loadMoreRef = useRef<HTMLDivElement>(null);
 
+  const applySearch = useCallback((query: string) => {
+    setDebouncedQ(query.trim());
+  }, []);
+
+  useEffect(() => {
+    const timer = window.setTimeout(() => applySearch(searchInput), SEARCH_DEBOUNCE_MS);
+    return () => window.clearTimeout(timer);
+  }, [applySearch, searchInput]);
+
+  function handleSearchKeyDown(event: KeyboardEvent<HTMLInputElement>) {
+    if (event.key === "Enter") applySearch(searchInput);
+    if (event.key === "Escape") {
+      setSearchInput("");
+      setDebouncedQ("");
+    }
+  }
+
+  function clearSearch() {
+    setSearchInput("");
+    setDebouncedQ("");
+  }
+
   const categoryFilter = filterCat === "ALL" ? undefined : filterCat;
+  const activeQuery = debouncedQ.length >= 2 ? debouncedQ : undefined;
   const { data, isLoading, isError, fetchNextPage, hasNextPage, isFetchingNextPage } =
-    useAdminProducts({ category: categoryFilter });
+    useAdminProducts({ category: categoryFilter, q: activeQuery });
 
   const { createProduct, updateProduct, deleteProduct, adjustStock } = useAdminProductMutations();
 
@@ -65,6 +95,10 @@ export default function AdminProductsTab() {
   }, [fetchNextPage, hasNextPage, isFetchingNextPage]);
 
   useIntersectionObserver(loadMoreRef, loadMore, Boolean(hasNextPage));
+
+  const emptyMessage = activeQuery
+    ? `Nenhum produto encontrado para "${activeQuery}".`
+    : "Nenhum produto encontrado.";
 
   async function handleSubmit(values: AdminProductFormValues, photos: PhotoFormItem[]) {
     try {
@@ -101,6 +135,31 @@ export default function AdminProductsTab() {
 
   return (
     <div>
+      <div className="mb-4 flex items-center gap-2 border border-border px-3 py-2">
+        <Search size={16} className="shrink-0 text-muted-foreground" aria-hidden />
+        <input
+          type="search"
+          value={searchInput}
+          onChange={(event) => setSearchInput(event.target.value.slice(0, SEARCH_MAX_LENGTH))}
+          onKeyDown={handleSearchKeyDown}
+          maxLength={SEARCH_MAX_LENGTH}
+          placeholder="Buscar por ID ou nome do produto…"
+          aria-label="Buscar produtos por ID ou nome"
+          className="flex-1 bg-transparent text-sm text-foreground placeholder:text-muted-foreground focus:outline-none"
+          style={{ fontFamily: ADMIN_FONT.body }}
+        />
+        {searchInput.length > 0 && (
+          <button
+            type="button"
+            onClick={clearSearch}
+            className="shrink-0 text-muted-foreground hover:text-foreground transition-colors"
+            aria-label="Limpar busca"
+          >
+            <X size={16} />
+          </button>
+        )}
+      </div>
+
       <div className="flex items-center justify-between mb-6 flex-wrap gap-4">
         <div className="flex gap-2 flex-wrap">
           <button
@@ -163,7 +222,7 @@ export default function AdminProductsTab() {
           className="text-muted-foreground py-12 text-center"
           style={{ fontFamily: ADMIN_FONT.mono, fontSize: "0.75rem", letterSpacing: "0.12em" }}
         >
-          Nenhum produto encontrado.
+          {emptyMessage}
         </p>
       )}
 

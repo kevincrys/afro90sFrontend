@@ -16,6 +16,7 @@ export function productsQueryKey(filters: ProductsQueryFilters = {}) {
 }
 
 export interface AdminProductsQueryFilters {
+  q?: string;
   category?: ProductCategory;
   limit?: number;
 }

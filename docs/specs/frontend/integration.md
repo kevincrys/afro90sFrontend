@@ -150,7 +150,7 @@ Requer token Cognito em `Authorization: Bearer <access_token>`.
 
 | Ação | Método | Rota |
 |------|--------|------|
-| Listar produtos | `GET` | `/admin/products` |
+| Listar produtos | `GET` | `/admin/products` — query opcional `q` (busca por ID ou prefixo do nome do produto) |
 | Criar produto | `POST` | `/admin/products` |
 | Editar produto | `PUT` | `/admin/products/{id}` |
 | Excluir produto | `DELETE` | `/admin/products/{id}` |
@@ -188,6 +188,24 @@ getAdminOrders({
   cursor: pageParam,
 });
 ```
+
+### Busca de produtos (admin)
+
+Task 22 — barra de busca na tab Produtos (`AdminProductsTab`), espelho da busca de pedidos.
+
+| Camada | Arquivo | Responsabilidade |
+|--------|---------|------------------|
+| UI | `src/components/admin/AdminProductsTab.tsx` | Input + debounce; passa `{ category, q }` ao hook |
+| Hook | `src/hooks/useAdminProducts.ts` | `useInfiniteQuery` com key `['admin', 'products', filters]` |
+| Client | `src/api/admin/products.ts` | `getAdminProducts({ category, q, limit, cursor })` |
+| API | `GET /admin/products` | Filtra por `q` (ID ou prefixo de nome) + `category` opcional |
+
+**Regras de chamada:**
+
+- Sem busca: `GET /admin/products?limit=20` (+ `category` se filtro ≠ TODOS)
+- Com busca (≥ 2 chars, ≤ 120): incluir `q` — ex.: `GET /admin/products?limit=20&q=oculos`
+- Paginação: repetir `category` e `q` + `cursor=nextCursor` da página anterior
+- Mínimo 2 / máximo 120 caracteres em `q` (igual ao max de `product.name`; frontend: `maxLength={120}`)
 
 ## Upload de imagens (admin)
 
@@ -290,7 +308,7 @@ function openWhatsAppOrder(order: Order) {
 |-------|-------|
 | `['products', { cursor, name }]` | `GET /products` |
 | `['product', id]` | `GET /products/{id}` |
-| `['admin', 'products', filters]` | `GET /admin/products` |
+| `['admin', 'products', filters]` | `GET /admin/products` — `filters` pode incluir `category`, `q` |
 | `['admin', 'orders', filters]` | `GET /admin/orders` — `filters` pode incluir `status`, `q` |
 
 ### Cache (implementado)

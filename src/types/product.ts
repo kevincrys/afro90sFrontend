@@ -63,6 +63,7 @@ export interface UpdateProductInput {
 export interface ProductsQueryParams {
   limit?: number;
   cursor?: string;
+  q?: string;
   name?: string;
   category?: ProductCategory;
 }

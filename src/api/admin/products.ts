@@ -36,7 +36,8 @@ export async function getAdminProducts(
   const query = buildQueryString({
     limit: params.limit,
     cursor: params.cursor,
-    name: params.name,
+    q: params.q,
+    name: params.q ? undefined : params.name,
     category: params.category,
   });
 
